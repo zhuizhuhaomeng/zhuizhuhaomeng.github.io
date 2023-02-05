@@ -10,18 +10,18 @@ There is a prevailing opinion that only structuring a web app as a Single Page A
 However at Ele.me, we’ve come to appreciate many advantages of a Multi-Page App model, and decided to refactor the mobile site from an Angular 1 SPA to a Multi-Paged app more than a year ago. The most important advantage we see is the isolation and decoupling between pages, which allows us to built different parts of the mobile site as “micro-services”. These services can then be independently iterated, embedded into 3rd-party apps, and even maintained by different teams.
 
 Meanwhile, we still leverage [Vue.js](http://vuejs.org/) to boost our productivity. You may have heard of Vue as a rival of React or Angular, but Vue's lightweight and performance make it also a perfect replacement of traditional "jQuery/Zepto + template engine" stack when engineering a Multi-page app. We built every component as [Single File Components](http://vuejs.org/v2/guide/single-file-components.html) so they can be easily shareable between pages. The declarative-ness plus reactivity Vue offered help us manage both code and data flow. Oh, did I mention that [Vue is progressive](https://www.youtube.com/watch?v=pBBSp_iIiVM)? So things like Vuex or Vue-Router can be incrementally adopted if our site's complexity scales up, like...migrating to SPA again? (Who knows...)
- 
+
 In 2017, PWA seems to be all the rage, so we embark on exploring how far can our Vue-based Multi-page PWAs actually go.
 
 ## Implementing "PRPL" with MPA
 
 I love [PRPL pattern][7] because it gives you a high-level abstraction of how to structure and design your own PWA systems. Since we are not rebuild everything from scratch, we decided taking implementing PRPL as our migration goal:
 
-### 1. PUSH critical resources for initial URL route. 
+### 1. PUSH critical resources for initial URL route.
 
 The key of pushing/preloading is to prioritize resources hidden in deep dependency graph and make browser's network stack busy ASAP. Let's say you have a SPA with code splitting by route, you can push/preload chunks for the current route before the "entry chunks" (e.g. webpack manifest, router) finish downloading and evaluating. So when the actual fetches happen, they might already be in caches.
 
-Routes in MPAs naturally fetch code for that route only, and tend to have a flattening dependency graph. Most scripts depended by Ele.me are just `<script>` elements, so they can be found and fetched by [good old browser preloader][8] in early parsing phase without explicit `<link rel="preload">`. 
+Routes in MPAs naturally fetch code for that route only, and tend to have a flattening dependency graph. Most scripts depended by Ele.me are just `<script>` elements, so they can be found and fetched by [good old browser preloader][8] in early parsing phase without explicit `<link rel="preload">`.
 
 ![](/img/in-post/post-eleme-pwa/PUSH-link-rel-preload.jpg)
 
@@ -32,7 +32,7 @@ To take benefits from HTTP2 Multiplexing, we currently serve all critical resour
 
 This one is essentially free (ridiculously obvious) in MPA since there's only one route at one time.
 
-A straightforward rendering is critical for metrics such as First-Meaningful-Paint and Time-To-Interactive. MPAs gain it for free due to the simplicity of traditional HTML navigation they used. 
+A straightforward rendering is critical for metrics such as First-Meaningful-Paint and Time-To-Interactive. MPAs gain it for free due to the simplicity of traditional HTML navigation they used.
 
 ### 3. **PRE-CACHE** remaining routes using Service Worker
 
@@ -40,27 +40,27 @@ This's the part [Service Worker][9] come to join the show. Service Worker is kno
 
 ![](/img/in-post/post-eleme-pwa/PRECACHE-future-routes.jpg)
 
-We already used [Webpack][10] in the build process to do `.vue` compilation and asset versioning, so we create a webpack plugin to help us collecting dependencies into a "precache manifest" and generating a new Service Worker file after each build. This is pretty much like [how SW-Precache works][11]. 
+We already used [Webpack][10] in the build process to do `.vue` compilation and asset versioning, so we create a webpack plugin to help us collecting dependencies into a "precache manifest" and generating a new Service Worker file after each build. This is pretty much like [how SW-Precache works][11].
 
 **In fact, we only collect dependencies of routes we flagged as "Critical Route".** You can think of them as ["App Shell"][12] or the "Installation Package" of our app. Once they are cached/installed successfully, our web app can boot up directly from cache and available offline. Routes that "not critical" would be incrementally cached at runtime during the first visit. Thanks to the LRU cache policies and TTL invalidation mechanisms provided by [SW-Toolbox][13], we have no worries of hitting the quota in a long run.
 
-### 4. LAZY-load & instantiate remaining routes on demand 
+### 4. LAZY-load & instantiate remaining routes on demand
 
 Lazy-loading and lazily instantiating remaining parts of the app is relatively challenging for SPA to achieve. It requires both code splitting and async importing. Fortunately, this is also a built-in feature of MPA model, in which routes are naturally separated.
 
-Noticed that the lazy-loading can be done instantly if the requested route is already pre-cached in Service Worker cache, no matter whether SPA or MPA is used. #ServiceWorkerAwesomeness 
+Noticed that the lazy-loading can be done instantly if the requested route is already pre-cached in Service Worker cache, no matter whether SPA or MPA is used. #ServiceWorkerAwesomeness
 
 
 ---
 
-Surprisingly, we found Multi-page PWA is kinda naturally "PRPL"! MPA has already provided built-in support for "PRL", and the second "P" involving Service Worker can be easily fulfilled in any PWA. 
+Surprisingly, we found Multi-page PWA is kinda naturally "PRPL"! MPA has already provided built-in support for "PRL", and the second "P" involving Service Worker can be easily fulfilled in any PWA.
 
 So what about the end result?
 
 
 ![](/img/in-post/post-eleme-pwa/Lighthouse-before.png)
 
-**In [Lighthouse](https://developers.google.com/web/tools/lighthouse/) simulation (3G & 5x Slower CPU), we made Time-To-Interactive around 2 seconds,** and this was benchmarked on our HTTP1 test server. 
+**In [Lighthouse](https://developers.google.com/web/tools/lighthouse/) simulation (3G & 5x Slower CPU), we made Time-To-Interactive around 2 seconds,** and this was benchmarked on our HTTP1 test server.
 
 The first visit is fast. The repeat visit with Service Worker is even faster. You can check out this video to see the huge difference between with or without Service Worker:
 
@@ -101,7 +101,7 @@ Unfortunately, Chrome has no this kind of in-memory bfcache currently concerning
 
 Although the reality is dark, we don't want to give up so easily. One optimization we try to do is to render DOM nodes/create Virtual DOM nodes as less as possible to improve the Time-To-Interactive. While another opportunity we see is to play tricks on perceived performance.
 
-@owencm have written a great post ["Reactive Web Design: The secret to building web apps that feel amazing"](https://medium.com/@owencm/reactive-web-design-the-secret-to-building-web-apps-that-feel-amazing-b5cbfe9b7c50) covering both "Instant loads with skeleton screens" and "Stable loads via predefined sizes on elements" to improve perceived performance and user experience. Yes, we actually used both. 
+@owencm have written a great post ["Reactive Web Design: The secret to building web apps that feel amazing"](https://medium.com/@owencm/reactive-web-design-the-secret-to-building-web-apps-that-feel-amazing-b5cbfe9b7c50) covering both "Instant loads with skeleton screens" and "Stable loads via predefined sizes on elements" to improve perceived performance and user experience. Yes, we actually used both.
 
 What about we showing the end result after these optimizations first before entering technical nitty gritty? There you go!
 
@@ -115,7 +115,7 @@ This is a much better UX, right? Even we have slow navigation in slow devices, a
 
 
 
-### Rendering Skeleton Screen with Vue at Build-Time 
+### Rendering Skeleton Screen with Vue at Build-Time
 
 As you might have guessed, the Skeleton Screen that consists of markups, styles, and images is inlined into `*.html` of each route. So they can be cached by Service Worker, be loaded instantly, and be rendered independently with any JavaScript.
 
@@ -152,7 +152,7 @@ I think you may curious about how this change performs in the wild, so I have re
 <iframe width="560" height="315" src="https://www.youtube.com/embed/3Ws7XBHrPD8" frameborder="0" allowfullscreen></iframe>
 
 
-This famous `setTimeout` hack (a.k.a. Zero Delays) looks quite magic,  but it is science™. If you are familiar with **event loop**, it just prevents these code from executing in the current loop by putting everything to the **task queues** with the Timer Callback, so the browser could breath (update the rendering) in the main thread. 
+This famous `setTimeout` hack (a.k.a. Zero Delays) looks quite magic,  but it is science™. If you are familiar with **event loop**, it just prevents these code from executing in the current loop by putting everything to the **task queues** with the Timer Callback, so the browser could breath (update the rendering) in the main thread.
 
 
 So we applied what we learned from MMPWA by putting `new Vue()` inside `setTimeout` and BOOM! We have Skeleton Screen painted consistently after every navigating! Here is the profile after all these optimizations.
@@ -195,7 +195,7 @@ This article is much longer than I could imagine. I am really appreciated if you
 
 [Jake Archibald](https://twitter.com/jaffathecake) ever said that "PWA !== SPA" at [Chrome Dev Summit 2016](https://youtu.be/J2dOTKBoTL4?list=PLNYkxOF6rcIBTs2KPy1E6tIYaWoFcG3uj). But the sad truth is that even we have taken advantages of bleeding edge technologies such as "PRPL" pattern, Service Worker, App-Shell, Skeleton Screen, there is still a distance between us and many Single Page PWA just because we are Multi-page structured.
 
-The web is extremely versatile. Static blogs, e-business sites, desktop-level software, all of them should be the first-class citizens of the web family. MPA might have things like "bfcache API", navigation transitions to catch up the SPA in the future, but it is not today certainly. 
+The web is extremely versatile. Static blogs, e-business sites, desktop-level software, all of them should be the first-class citizens of the web family. MPA might have things like "bfcache API", navigation transitions to catch up the SPA in the future, but it is not today certainly.
 
 
 ### PWA is Awesome No Matter What
