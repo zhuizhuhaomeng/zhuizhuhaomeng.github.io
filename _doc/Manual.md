@@ -1,4 +1,4 @@
-Hux Blog User Manual
+zhuizhuhaomeng Blog User Manual
 ====================
 
 * Basics
@@ -17,7 +17,7 @@ Hux Blog User Manual
 	* [Analytics](#analytics)
 	* [SEO Title](#seo-title)
 * [FAQ](#faq)
-* [Releases](#releases) 
+* [Releases](#releases)
 
 
 ### Getting Started
@@ -27,7 +27,7 @@ Hux Blog User Manual
 2. Installed dependencies in the `Gemfile`:
 
 ```sh
-$ bundle install 
+$ bundle install
 ```
 
 3. Serve the website (`localhost:4000` by default):
@@ -38,7 +38,7 @@ $ bundle exec jekyll serve  # alternatively, npm start
 
 ### Development
 
-To modify the theme, you will need [Grunt](https://gruntjs.com/). There are numbers of tasks you can find in the `Gruntfile.js`, includes minifing JavaScript, compiling `.less` to `.css`, adding banners to keep the Apache 2.0 license intact, watching for changes, etc. 
+To modify the theme, you will need [Grunt](https://gruntjs.com/). There are numbers of tasks you can find in the `Gruntfile.js`, includes minifing JavaScript, compiling `.less` to `.css`, adding banners to keep the Apache 2.0 license intact, watching for changes, etc.
 
 Yes, they were inherited and are extremely old-fashioned. There is no modularization and transpilation, etc.
 
@@ -53,11 +53,11 @@ You can easily customize the blog by modifying `_config.yml`:
 
 ```yml
 # Site settings
-title: Hux Blog             # title of your website
-SEOTitle: Hux Blog          # check out docs for more detail
+title: zhuizhuhaomeng Blog             # title of your website
+SEOTitle: zhuizhuhaomeng Blog          # check out docs for more detail
 description: "Cool Blog"    # ...
 
-# SNS settings      
+# SNS settings
 github_username: huxpro     # modify this account to yours
 weibo_username: huxpro      # the footer woule be auto-updated.
 
@@ -65,13 +65,13 @@ weibo_username: huxpro      # the footer woule be auto-updated.
 paginate: 10                # nums of posts in one page
 ```
 
-For more options, please check out [Jekyll - Official Site](http://jekyllrb.com/). 
-Most of them are very descriptive so feel brave to dive into code directly as well. 
+For more options, please check out [Jekyll - Official Site](http://jekyllrb.com/).
+Most of them are very descriptive so feel brave to dive into code directly as well.
 
 
 ### Posts
 
-Posts are simply just Markdown files in the `_posts/`. 
+Posts are simply just Markdown files in the `_posts/`.
 Metadata of posts are listed in a YAML style _front-matter_.
 
 For instance, [Hello 2015])(https://huangxuan.me/2015/01/29/hello-2015/) has the front-matter of this:
@@ -106,7 +106,7 @@ There are a bunch of _advanced_ configs:
 1. a _text style_ header like [this](https://huangxuan.me/2019/09/08/spacemacs-workflow/) with
 
 ```yml
-header-style: text 
+header-style: text
 ```
 
 2. Turning on Latex support:
@@ -137,23 +137,23 @@ sidebar-about-description: "your description here"
 sidebar-avatar: /img/avatar-hux.jpg     # use absolute URL.
 ```
 
-Modules *[Featured Tags](#featured-tags)*, *[Mini About Me](#mini-about-me)* and *[Friends](#friends)* are turned on by default and you can add your own. The sidebar is naturally responsive, i.e. be pushed to bottom in a smaller screen (`<= 992px`, according to [Bootstarp Grid System](http://getbootstrap.com/css/#grid))  
+Modules *[Featured Tags](#featured-tags)*, *[Mini About Me](#mini-about-me)* and *[Friends](#friends)* are turned on by default and you can add your own. The sidebar is naturally responsive, i.e. be pushed to bottom in a smaller screen (`<= 992px`, according to [Bootstarp Grid System](http://getbootstrap.com/css/#grid))
 
 
 ### Mini About Me
 
-**Mini-About-Me** displays your avatar, description and all SNS buttons if  `sidebar-avatar` and `sidebar-about-description` variables are set. 
+**Mini-About-Me** displays your avatar, description and all SNS buttons if  `sidebar-avatar` and `sidebar-about-description` variables are set.
 
 It would be hidden in a smaller screen when the entire sidebar are pushed to bottom. Since there is already SNS portion there in the footer.
 
 ### Featured Tags
 
 **Featured-Tags** is similar to any cool tag features in website like [Medium](http://medium.com).
-Started from V1.4, this module can be used even when sidebar is off and displayed always in the bottom. 
+Started from V1.4, this module can be used even when sidebar is off and displayed always in the bottom.
 
 ```yml
 # Featured Tags
-featured-tags: true  
+featured-tags: true
 featured-condition-size: 1     # A tag will be featured if the size of it is more than this condition value
 ```
 
@@ -196,7 +196,7 @@ iframe:     "http://huangxuan.me/js-module-7day/"
 ---
 ```
 
-The `iframe` element will be automatically resized to adapt different form factors and device orientation. 
+The `iframe` element will be automatically resized to adapt different form factors and device orientation.
 Because most of the keynote framework prevent the browser default scroll behavior. A bottom-padding is set to help user and imply user that more content could be presented below.
 
 
@@ -242,7 +242,7 @@ Just checkout the code offered by Google/Baidu, and copy paste here, all the res
 ### SEO Title
 
 Before V1.4, site setting `title` is not only used for displayed in Home Page and Navbar, but also used to generate the `<title>` in HTML.
-It's possible that you want the two things different. For me, my site-title is **“Hux Blog”** but I want the title shows in search engine is **“黄玄的博客 | Hux Blog”** which is multi-language.
+It's possible that you want the two things different. For me, my site-title is **“zhuizhuhaomeng Blog”** but I want the title shows in search engine is **“追逐好梦的博客 | zhuizhuhaomeng Blog”** which is multi-language.
 
 So, the SEO Title is introduced to solve this problem, you can set `SEOTitle` different from `title`, and it would be only used to generate HTML `<title>` and setting DuoShuo Sharing.
 
@@ -274,7 +274,7 @@ Releases
 #### V1.8
 
 - Brand new [Archive](https://huangxuan.me/archive/) page! It combines previous Archive and Tag page and it's backward-cmpatible.
-Shout out to [@kitian616/jekyll-TeXt-theme](https://github.com/kitian616/jekyll-TeXt-theme) of bringing this idea. 
+Shout out to [@kitian616/jekyll-TeXt-theme](https://github.com/kitian616/jekyll-TeXt-theme) of bringing this idea.
 - Improve engineering by extracting duplicated liquid templates into reuseable includes. This was proposed in #74 by @Kaijun but postponed for entirely 2.5 years! I wasn't able to merge his PR directly because of long-time divegence but the credit is belonging to @Kaijun.
 - Improved code block. Long-wanted line number are supported out of the box (thanks for @SmilingParadise's help from Sina Weibo), the default theme is updated to Atom One Dark as well (checkout FQA for how to change to your farovite theme)
 - MathJax support by @Voleking in #80. I choose to use the SVG renderer though. See [Mathjax, kramdown and Octopress](https://www.lucypark.kr/blog/2013/02/25/mathjax-kramdown-and-octopress/) for writing and escaping details.
