@@ -7,6 +7,10 @@ feature_image: img/luajit-ffi.png
 tags: [luajit, FFI]
 ---
 
+FFI 的方式调用 C 函数可以说是很简单，但是有时候缺个例子也是非常的难。
+本文通过几个例子来展示 FFI 调用 C 函数。相信对于需要用到可变参数函数
+以及需要传递数组参数的会有帮助。
+
 # 传递数值类型参数
 
 传递数值类型的参数可以说是最简单的了。FFI 会自动将数值转换为需要的类型。
@@ -21,7 +25,6 @@ local C = ffi.C
 local _M = {
     version = 1.0
 }
-
 
 ffi.cdef[[
 double lua_max_d(double a, double b);
