@@ -210,7 +210,7 @@ main(void)
 }
 ```
 
-编译 C 代码的命令为 `gcc -rdynamic -I/usr/include/luajit-2.1 -lluajit-5.1 b.c`
+编译 C 代码的命令为 `gcc -rdynamic -I/usr/include/luajit-2.1 -lluajit-5.1 main.c`
 如果不使用该命令，那么会出现类似这样的错误。
 
 ```
