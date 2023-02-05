@@ -4,7 +4,7 @@ title: "怎么选择内存分配器"
 description: "选择内存分配器时的要点"
 date: 2023-01-01
 feature_image: img/memory.jpg
-tags: [glibc, memory, ptmalloc, jemalloc, tcmalloc]
+tags: [glibc, memory ]
 ---
 
 很多软件，我们没有必要对其内存使用进行优化。这是因为有些软件的内存消耗非常的小，不值得再继续优化；

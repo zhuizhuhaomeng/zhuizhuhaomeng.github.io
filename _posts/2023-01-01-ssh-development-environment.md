@@ -4,7 +4,7 @@ title: "SSH 打造开发环境"
 description: "SSH 打造开发环境"
 date: 2023-01-01
 feature_image: img/ssh/GFW.jpg
-tags: [glibc, memory, ptmalloc, jemalloc, tcmalloc]
+tags: [ssh]
 ---
 
 # 使用 SSH 访问国际网络
@@ -25,7 +25,7 @@ ssh -qTfnN -D 0.0.0.0:8080 user@remote-host
   -N      Do not execute a remote command.
 ```
 
-为了防止 SSH 断开，应该配置一下 
+为了防止 SSH 断开，应该配置一下
 
 # 办公室访问家庭机器
 

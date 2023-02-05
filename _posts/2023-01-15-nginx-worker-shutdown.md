@@ -4,7 +4,7 @@ title: "nginx worker_shutdown_timeout 是怎么工作的"
 description: "SSH 打造开发环境"
 date: 2023-01-01
 feature_image: img/worker_shutdown_timeout/nginx-shutting-down.jpg
-tags: [glibc, memory, ptmalloc, jemalloc, tcmalloc]
+tags: [nginx, openresty]
 ---
 
 # 背景

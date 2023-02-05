@@ -4,7 +4,7 @@ title: "Glibc Memory Allocation Tune"
 description: "How to tune the Glibc Allocation parameters."
 date: 2022-01-05
 feature_image: img/road.jpg
-tags: [glibc, memory, malloc, free, performance]
+tags: [glibc, performance]
 ---
 
 <2.26

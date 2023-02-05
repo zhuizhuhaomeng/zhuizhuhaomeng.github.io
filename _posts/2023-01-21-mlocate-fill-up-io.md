@@ -4,7 +4,7 @@ title: "排查 PostgreSQL 慢查询发现 mlocate-updatedb 导致的 IO 瓶颈"
 description: "mlocate-updatedb 占用了大部分磁盘 IO"
 date: 2023-01-21
 feature_image: img/Hard-Disk.png
-tags: [locate, disk, mlocate, mlocate-updatedb.service, mlocate-updatedb.timer]
+tags: [disk, performance]
 ---
 
 # 背景

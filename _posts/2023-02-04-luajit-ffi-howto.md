@@ -4,7 +4,7 @@ title: "通过 LuaJIT FFI 接口集成原有的C模块"
 description: "将原有的C模块通过FFI集成到OpenResty"
 date: 2023-01-28
 feature_image: img/luajit-ffi.png
-tags: [epoll, events, debug]
+tags: [luajit, FFI]
 ---
 
 # LuaJIt FFI 接口和 Lua API 有什么差别

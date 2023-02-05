@@ -4,7 +4,7 @@ title: "查看添加到 epoll 的文件描述符对应的事件"
 description: "check the epoll fd events"
 date: 2023-01-28
 feature_image: img/epoll-event-loop.png
-tags: [epoll, events, debug]
+tags: [epoll, debug]
 ---
 
 # 找到要分析的进程

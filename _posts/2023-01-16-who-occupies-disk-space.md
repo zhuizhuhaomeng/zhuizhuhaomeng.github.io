@@ -4,7 +4,7 @@ title: "谁占用了我的磁盘空间"
 description: "告警系统报告磁盘空间不足，但是登陆机器找不到哪些文件占用的"
 date: 2023-01-16
 feature_image: img/Hard-Disk.png
-tags: [lsof, disk, find, df, mount]
+tags: [disk, debug]
 ---
 
 # 背景
