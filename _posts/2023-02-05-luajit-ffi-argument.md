@@ -188,3 +188,7 @@ C.printf("Pi %f %lf\n", ffi.new("float", math.pi), ffi.new("double", math.pi))
 # 后续
 
 后面我们进一步介绍 ffi.typeof 的使用以及 ffi.gc 的使用
+
+# 参考文档
+
+https://luajit.org/ext_ffi_semantics.html
