@@ -43,8 +43,27 @@ ssh -qfnNT -R  0.0.0.0:9022:127.0.0.1:22 user@remote-host
 ssh -qfnNT -L R 127.0.0.1:8080:127.0.0.1:80 user@remote-host
 ```
 
+
+## ssh 保活配置
+
+为了防止 ssh 连接远程机器的时候链接经常断开，我们需要给 ssh 的配置文件增加如下的报告配置。
+
+
+```shell
+mkdir ~/.ssh/
+touch ~/.ssh/
+
+cat >> ~/.ssh/config  << EOF
+Host *
+    ServerAliveInterval 60
+EOF
+chmod 600 ~/.ssh/config
+```
+
 # SSH 隧道图解
 
 这张图来自 https://iximiuz.com/en/posts/ssh-tunnels/
 
 ![](../img/ssh/ssh-tunnels.png)
+
+
