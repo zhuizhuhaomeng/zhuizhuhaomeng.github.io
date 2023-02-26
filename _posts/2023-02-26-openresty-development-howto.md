@@ -2,7 +2,7 @@
 layout: post
 title: "OpenResty 开发环境搭建"
 description: "OpenResty 开发环境搭建"
-date: 2023-02-23
+date: 2023-02-26
 tags: [OpenResty, 开发环境, How-To]
 ---
 
