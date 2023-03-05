@@ -3,7 +3,7 @@ layout: post
 title: "LuaJIT 的参数传递"
 description: "LuaJIT 参数传递的注意事项"
 date: 2023-02-16
-tags: [upstream, openresty]
+tags: [upstream, OpenResty]
 ---
 
 # 社区的问题
