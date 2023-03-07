@@ -55,3 +55,40 @@ make openresty-build
 
 如果是 deb 包，那么修改 deb 目录下相应的 文件即可。比如：
 openresty-packaging/deb/openresty/debian/rules 这个文件。
+
+## 如何给 spec 文件传递参数
+
+假设 spec 中使用 enable-valgrind 来控制是否启用valgrind，如下所示。
+
+```spec
+%if 0%{?enable-valgrind}
+ -I/usr/local/valgrind/include
+%endif
+```
+
+我们可以通过 --define 来传递变量 enable-valgrind 的值
+
+```shell
+rpmbuild -bb  --define 'enable-valgrind 1'  openresty-plus-core.spec
+```
+
+### 通过 with 传递变量
+
+```spec
+# bcond_with
+%bcond_with     feature_a
+%bcond_without  feature_b
+
+
+%if %{with feature_a}
+    --with-feature_a \
+%endif
+%if %{with feature_b}
+    --with-feature_b \
+%endif
+```
+
+bcond_with 定义的变量默认是关闭的，bcond_without 定义的变量默认是 打开的。
+
+1. 如果要开启某一个功能，应该是 `rpmbuild --with=feature_a`
+1. 如果要关闭一个功能，应该用 `rpmbuild --without=feature_b`
