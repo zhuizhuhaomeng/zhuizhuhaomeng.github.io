@@ -27,7 +27,66 @@ openssl s_client 可以将握手信息打印出来，因此可以得到不少的
 1.  Google 使用的是  ECDSA 256bit 签名 SHA256 摘要的证书，TLSv1.3 TLS_AES_256_GCM_SHA384。
 2. 百度使用的是 RSA 2048 bit 签名 SHA512 摘要的证书. TLSv1.2 ECDHE-RSA-AES128-GCM-SHA256
 
-那么 google baidu 那家强？我们通过实验来验证一下实际的效果。
+在这里，我想问问 google baidu 那家强？那么让我们先了解一下 TLS 的基本信息吧。
+
+一个 TLS 加密协议族一般包含 4 个部分：
+
+1. 密钥交换算法 - 规定了交换对称密钥的方式。
+1. 认证算法 - 规定如何进行服务器认证和客户端认证(可选)。
+1. 块加密算法 - 规定了将使用哪种对称密钥算法来加密实际数据。
+1. 消息摘要算法 - 决定了连接将使用何种方法来进行数据完整性检查。
+
+比如：
+
+1. 密钥交换算法: RSA, DH, ECDH, ECDHE;
+1. 认证算法: RSA, DSA, ECDSA;
+1. 对称加密算法: AES, 3DES, CAMELLIA;
+1. 消息摘要算法: SHA, MD5
+
+比如 TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384:
+
+TLS：传输层安全
+ECDHE：密钥交换算法是 ECDHE（Elliptic curve Diffie-Hellman，ephemeral）。
+ECDSA：认证算法是ECDSA（椭圆曲线数字签名算法）。证书颁发机构使用 ECDH 密钥来签署公共密钥。
+WITH_AES_256_CBC: 这是用来加密信息流的。(AES=高级加密标准，CBC=密码块链）。数字256表示块的大小。
+SHA_384: 这是所谓的消息验证码（MAC）算法。SHA=安全哈希算法。它用于创建一个消息摘要或消息流块的哈希值。这可以用来验证消息内容是否被改变。数字表示哈希值的大小。较大的是更安全的。
+
+google 使用的加密协议族为 TLS_AES_256_GCM_SHA384。 该协议族只包含 对称加密算法和消息摘要算法。
+因为 TLS1.3 中 RSA 被取消了，密钥交换是通过 Diffie-Hellman 算法进行。
+
+百度使用的协议族是 ECDHE-RSA-AES128-GCM-SHA256， 这个对应的名称是 TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256。
+该算法的密钥交换算法是 ECDHE, 认证算法是 RSA， 对称加密算法是 AES128-GCM, 消息摘要算法是 SHA256.
+
+查询标准名称可以使用这样的命令 `openssl ciphers -stdname | grep ECDHE-RSA-AES128-GCM-SHA256`
+
+关于如何选择加密协议族，Mozilla 的建议如下：[wiki.mozilla.org/Security/Server_Side_TLS](https://wiki.mozilla.org/Security/Server_Side_TLS)
+
+对于普通的服务器，为了更好的兼容性，其推荐如下的配置
+
+```text
+Cipher suites (TLS 1.3): TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
+Cipher suites (TLS 1.2): ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384
+Protocols: TLS 1.2, TLS 1.3
+TLS curves: X25519, prime256v1, secp384r1
+Certificate type: ECDSA (P-256) (recommended), or RSA (2048 bits)
+DH parameter size: 2048 (ffdhe2048, RFC 7919)
+HSTS: max-age=63072000 (two years)
+Certificate lifespan: 90 days (recommended) to 366 days
+Cipher preference: client chooses
+```
+
+如果要之间放在 Nginx / OpenResty 服务器上，那么可以参考这个连接：[ssl-config.mozilla.org](https://ssl-config.mozilla.org/)
+
+如果选择加密协议族其实是一件很有挑战的事情，如下是一些考虑的因素：
+
+1. 服务器、客户端和证书颁发机构的兼容性；
+    - 对外的网站需要与所有主要的客户端兼容
+    - 内部网站可以控制客户端的范围
+1. 加密/解密性能
+1. 加密强度；密钥和哈希值的类型和长度
+1. 所需的加密功能；如防止重放攻击、前向保密性
+
+**我们通过实验来比较一下 google 和 baidu 实际性能差异。**
 
 # 生成证书
 
