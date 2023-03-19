@@ -1,14 +1,22 @@
 ---
 layout: post
-title: "OpenResty 测试是怎么保证质量的"
-description: ""
+title: "OpenResty 是怎么保证软件质量的"
+description: "OpenResty 的软件是如何保障高质量的"
 date: 2023-03-05
 tags: [OpenResty, Nginx, Valgrind, Address Sanity, Mock, Test, Quality]
 ---
 
-OpenResty 的软件质量是非常有保障的，它使用了非常多的测试技术来保障软件质量。下面列一些其中使用到的一些测试方法和技术，大家也可以在自己的项目中使用。
+OpenResty 的软件质量是非常高的，这个得益于 OpenResty 创始人 章亦春 对代码要求非常高有直接关系。
+除了个人特质只要，OpenResty 使用了哪些技术来提高软件质量呢？
+
+首先，OpenResty 的每一个仓库都有非常详尽的用例覆盖，修改都会自动跑 CI 进行回归。
+
+其次，它使用了非常多的测试技术来保障软件质量。
+
+下面分享其中使用到的一些测试方法和技术，方便大家使用到自己的项目中，提升自己的软件质量。
 
 # 前提准备
+
 ## LuaJIT 编译
 
 LuaJIT 默认情况下使用的是自己的内存分配器，通过 mmap 接口向操作系统申请大块内存再分割成小块使用。
