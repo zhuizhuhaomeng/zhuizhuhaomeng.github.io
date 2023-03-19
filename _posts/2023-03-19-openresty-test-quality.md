@@ -105,6 +105,60 @@ prove -I./ -Itest-nginx/lib -Itest-nginx/inc -r t/
 
 **注意：一定要加上 export，否则测试框架 test-ngixn 看不到该环境变量**
 
+## 处理不完整的调用栈
+
+有时候发现 valgrind 给出的调用栈也是不完整的。比如下面这个例子：
+
+```shell
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:realloc
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   fun:lj_vm_ffi_call
+   fun:lj_ccall_func
+   fun:lj_cf_ffi_meta___call
+   fun:lj_BC_FUNCC
+   fun:ngx_http_lua_run_thread
+   fun:ngx_http_lua_content_by_chunk
+   fun:ngx_http_lua_content_handler
+   fun:ngx_http_core_content_phase
+   fun:ngx_http_core_run_phases
+   fun:ngx_http_process_request
+   fun:ngx_http_process_request_headers
+   fun:ngx_http_process_request_line
+   fun:ngx_epoll_process_events
+   fun:ngx_process_events_and_timers
+   fun:ngx_single_process_cycle
+   fun:main
+}
+```
+
+遇到这样的情况该如何是好呢？
+
+1. 首先检查是不是所有的调试符号的安装包都已经安装了。（rpm 对应 debuginfo， deb 对应 dbgsym）
+1. 这个也可能是 LuaJIT 通过动态加载 so 导致的问题，可以通过 LD_PRELAOD 将这个 so 预加载来解决该问题。
+
+比如：
+
+```shell
+export TEST_NGINX_USE_VALGRIND=1
+export TEST_NGINX_SLEEP=0.5
+export LD_PRELOAD=/usr/local/openresty/lib/cjson.so
+
+prove -I./ -Itest-nginx/lib -Itest-nginx/inc -r t/
+```
+
 ## Valgrind 的误报处理
 
 Valgrind 可能会有一些误报或者是没有必要处理的地方。
@@ -170,6 +224,7 @@ Lua调用钩子时只有一个参数，一个描述产生调用的事件的字�
 export MOCKEAGAIN=rw
 export LD_PRELOAD=/path/to/mockeagain.so
 export TEST_NGINX_EVENT_TYPE=poll
+export TEST_NGINX_POSTPONE_OUTPUT=1
 
 prove -I./ -Itest-nginx/lib -Itest-nginx/inc -r t/
 ```
