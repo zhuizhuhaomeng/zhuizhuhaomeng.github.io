@@ -2,7 +2,7 @@
 layout: post
 title: "OpenResty Lua GC 代码优化"
 description: "OpenResty Lua GC 代码优化"
-date: 2023-03-05
+date: 2023-03-25
 tags: [OpenResty, Nginx, Lua, LuaJIT, GC]
 ---
 
