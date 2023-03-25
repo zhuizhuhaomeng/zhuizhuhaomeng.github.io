@@ -1,0 +1,4314 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" width="1200" height="976" viewBox="0 0 1200 976" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<style type="text/css">
+svg {
+    font-family: "Verdana";
+    font-size: 12px;
+    background-image: linear-gradient(#eeeeee, #eeeeb0);
+    text-anchor: left;
+}
+
+.f_g:hover { stroke:black; stroke-width:0.5; cursor:pointer; }
+
+g.f_g {
+    fill: rgba(233,98,53,0.55);
+}
+
+g.o {
+    fill: rgba(238,134,99,0.35);
+}
+
+g.hi {
+    fill: red;
+}
+
+g.f_g > text {
+    fill: black;
+}
+</style>
+<script type="text/ecmascript">
+<![CDATA[
+var details,searchbtn,searching,matchedtxt,svg,nametype,config_fontsize,config_fontwidth,config_xpad,config_inverted,config_searchcolor;function find_child(t,e,a){for(var n=t.childNodes,i=0;i<n.length;i++)if(n[i].tagName==e)return null!=a?n[i].attributes[a].value:n[i]}function orig_style_save(t,e,a){null==t.attributes["_orig_"+e]&&null!=t.style[e]&&(null==a&&(a=t.style[e]),t.setAttribute("_orig_"+e,a))}function orig_save(t,e,a){null==t.attributes["_orig_"+e]&&null!=t.attributes[e]&&(null==a&&(a=t.attributes[e].value),t.setAttribute("_orig_"+e,a))}function orig_load(t,e){if("fill"==e)t.removeAttribute(e);else{if(null==t.attributes["_orig_"+e])return;t.setAttribute(e,t.attributes["_orig_"+e].value)}t.removeAttribute("_orig_"+e)}function g_to_text(t){return find_child(t,"title").firstChild.nodeValue}function g_to_func(t){return g_to_text(t)}function update_text(t){var e=find_child(t,"rect"),a=find_child(t,"text"),n=parseFloat(e.attributes.width.value)-3,i=find_child(t,"title").textContent.replace(/\([^(]*\)$/,"");if(a.attributes.x.value=parseFloat(e.attributes.x.value)+3,n<2*config_fontsize*config_fontwidth)a.textContent="";else if(a.textContent=i,!(/^ *$/.test(i)||a.getSubStringLength(0,i.length)<n)){for(var r=i.length-2;0<r;r--)if(a.getSubStringLength(0,r+2)<=n)return void(a.textContent=i.substring(0,r)+"..");a.textContent=""}}function selectText(t){var t=find_child(t,"text"),e=window.getSelection(),a=0<e.rangeCount?e.getRangeAt(0):new Range;a.selectNodeContents(t),e.removeAllRanges(),e.addRange(a)}function zoom_reset(t){if(null!=t.attributes&&(orig_load(t,"x"),orig_load(t,"width"),t.removeAttribute("click_unzoom")),null!=t.childNodes)for(var e=0,a=t.childNodes;e<a.length;e++)zoom_reset(a[e])}function zoom_child(t,e,a){if(null!=t.attributes&&(null!=t.attributes.x&&(orig_save(t,"x"),t.attributes.x.value=(parseFloat(t.attributes.x.value)-e-config_xpad)*a+config_xpad,"text"==t.tagName)&&(t.attributes.x.value=find_child(t.parentNode,"rect","x")+3),null!=t.attributes.width)&&(orig_save(t,"width"),t.attributes.width.value=parseFloat(t.attributes.width.value)*a),null!=t.childNodes)for(var n=0,i=t.childNodes;n<i.length;n++)zoom_child(i[n],e-config_xpad,a)}function zoom_parent(t){if(t.attributes&&(null!=t.attributes.x&&(orig_save(t,"x"),t.attributes.x.value=config_xpad),null!=t.attributes.width)&&(orig_save(t,"width"),t.attributes.width.value=parseInt(svg.width.baseVal.value)-2*config_xpad),null!=t.childNodes)for(var e=0,a=t.childNodes;e<a.length;e++)zoom_parent(a[e])}function on_g_click(t){for(var e=t.target||t.srcElement;"g"!=e.tagName;)e=e.parentElement;e.getAttribute("click_unzoom")&&unzoom(),zoom(t,e)}function zoom(t,e){if(!e)for(e=t.target||t.srcElement;"g"!=e.tagName;)e=e.parentElement;for(var t=find_child(e,"rect").attributes,a=parseFloat(t.width.value),n=parseFloat(t.x.value),i=parseFloat(n+a),r=parseFloat(t.y.value),o=(svg.width.baseVal.value-2*config_xpad)/a,l=(document.getElementById("unzoom").style.opacity="1.0",document.getElementsByTagName("g")),s=0;s<l.length;s++){var c,u,d,g=l[s];g.classList.contains("f_g")?(c=find_child(g,"rect").attributes,u=parseFloat(c.x.value),d=parseFloat(c.width.value),(0==config_inverted?parseFloat(c.y.value)>r:parseFloat(c.y.value)<r)?u<=n&&i<=u+d+1e-4?(g.style.opacity="0.5",zoom_parent(g),g.setAttribute("click_unzoom","1"),update_text(g)):g.style.display="none":u<n||i<=u+1e-4?g.style.display="none":(zoom_child(g,n,o),g.removeAttribute("click_unzoom"),update_text(g))):g.style.opacity="0"}}function unzoom(){document.getElementById("unzoom").style.opacity="0.0";var t=document.getElementsByTagName("g");for(i=0;i<t.length;i++)t[i].classList.contains("f_g")?(t[i].style.display="block",t[i].style.opacity="1",zoom_reset(t[i]),update_text(t[i])):t[i].style.opacity="1"}function reset_search(){for(var t=document.getElementsByTagName("rect"),e=0;e<t.length;e++)orig_load(t[e],"fill")}function search_prompt(){var t;searching?(reset_search(),searching=0,searchbtn.style.opacity="0.4",searchbtn.firstChild.nodeValue="Search",matchedtxt.style.opacity="0.0",matchedtxt.firstChild.nodeValue=""):null!=(t=prompt("Enter a search term (regexp allowed, eg: ^ext4_)",""))&&search(t)}function search(t){for(var e=new RegExp(t),a=document.getElementsByTagName("g"),n=new Object,i=0,o=0;o<a.length;o++){var l,s=a[o],c=s.classList;c&&c.contains("f_g")&&(c=g_to_func(s),null==(l=find_child(s,"rect"))&&(l=(l=find_child(s,"a"))&&find_child(r,"rect")),null!=c)&&null!=l&&(i<(m=parseFloat(l.attributes.width.value))&&(i=m),e.test(c))&&(_=parseFloat(l.attributes.x.value),l.setAttribute("fill",config_searchcolor),(null==n[_]||m>n[_])&&(n[_]=m),searching=1)}if(searching){searchbtn.style.opacity="1.0",searchbtn.firstChild.nodeValue="Reset Search";var u=0,d=-1,g=0,f=Array();for(var h in n)n.hasOwnProperty(h)&&f.push(h);f.sort(function(t,e){return t-e});for(h in f){var _=parseFloat(f[h]),m=n[f[h]];d+g-1e-4<=_&&(u+=m,d=_,g=m)}matchedtxt.style.opacity="1.0",pct=100==(pct=100*u/i)?"100":pct.toFixed(1),matchedtxt.firstChild.nodeValue="Matched: "+pct+""}}function searchover(t){searchbtn&&(searchbtn.style.opacity="1.0")}function searchout(t){searchbtn&&(searchbtn.style.opacity=searching?"1.0":"0.4")}function init(t){details=document.getElementById("details").firstChild,searchbtn=document.getElementById("search"),matchedtxt=document.getElementById("matched"),svg=document.getElementsByTagName("svg")[0],searching=0;for(var e=document.getElementsByClassName("f_g"),a=0;a<e.length;a++){var n,i,r,o=e[a],l=(o.addEventListener("mouseover",s),o.addEventListener("mouseout",c),o.addEventListener("click",on_g_click),find_child(o,"rect")),u=(l.setAttribute("rx",3),l.setAttribute("ry",3),find_child(o,"text"));u||(n=Number.parseFloat(l.getAttribute("x"))+3,i=3+((i=Number.parseFloat(l.getAttribute("y")))+(i+Number.parseFloat(l.getAttribute("height"))))/2,u?(l=Math.abs(Number.parseFloat(u.getAttribute("x"))-n),r=Math.abs(Number.parseFloat(u.getAttribute("y"))-i),.1<=l&&console.log("diff x too large: "+l),.1<=r&&console.log("diff y too large: "+r)):((u=document.createElementNS("http://www.w3.org/2000/svg","text")).setAttribute("x",n),u.setAttribute("y",i),o.appendChild(u)))}}function s(t){for(var e=t.target||t.srcElement;"g"!=e.tagName;)e=e.parentElement;info=g_to_text(e),details&&(details.nodeValue=nametype+" "+info)}function c(){details&&(details.nodeValue=" ")}window.addEventListener("contextmenu",function(t){t.preventDefault();var e=t.target.parentElement;return e&&e.classList.contains("f_g")&&(selectText(e),e=find_child(e,"title").firstChild.nodeValue,e=new CustomEvent("fg-contextmenu",{detail:{text:e,event:t}}),window.parent.dispatchEvent(e)),!1}),window.addEventListener("load",init),window.addEventListener("keydown",function(t){(114===t.keyCode||t.ctrlKey&&70===t.keyCode)&&(t.preventDefault(),search_prompt())});
+]]>
+</script>
+<script type="text/ecmascript">
+<![CDATA[
+nametype = "Function:";
+config_fontsize = 12;
+config_fontwidth = 0.59;
+config_xpad = 10;
+config_inverted = 1;
+config_searchcolor = "rgb(230,0,230)"
+]]>
+</script>
+<text x="600.00" y="24" font-size="17" text-anchor="middle">C-Land CPU Flame Graph for LuaJIT</text>
+<text x="600.00" y="48" text-anchor="middle">pid: 386271</text>
+<text x="10.00" y="72" id="details"> </text>
+<text x="10.00" y="24" id="unzoom" onclick="unzoom()" style="opacity:0.0;cursor:pointer">Reset Zoom</text>
+<text x="1090.00" y="24" id="search" onmouseover="searchover()" onmouseout="searchout()" onclick="search_prompt()" style="opacity:0.4;cursor:pointer">Search</text>
+<text x="1090.00" y="959" id="matched"> </text>
+<g class="f_g">
+<title>all (1,000 samples, 100.00%)</title>
+<rect x="10.0" y="78" width="1180.0" height="15.0"/>
+<text x="13.00" y="88.5">all</text>
+</g>
+<g class="f_g o">
+<title>_start [/usr/local/openresty-plus-dev/nginx/sbin/nginx] (1,000 samples, 100.00%)</title>
+<rect x="10.0" y="94" width="1180.0" height="15.0"/>
+<text x="13.00" y="104.5">_start [/usr/local/openresty-plus-dev/nginx/sbin/nginx]</text>
+</g>
+<g class="f_g">
+<title>@csu/libc-start.c:336 (1,000 samples, 100.00%)</title>
+<rect x="10.0" y="110" width="1180.0" height="15.0"/>
+<text x="13.00" y="120.5">@csu/libc-start.c:336</text>
+</g>
+<g class="f_g o">
+<title>__libc_start_main [/usr/lib64/libc-2.28.so] (1,000 samples, 100.00%)</title>
+<rect x="10.0" y="126" width="1180.0" height="15.0"/>
+<text x="13.00" y="136.5">__libc_start_main [/usr/lib64/libc-2.28.so]</text>
+</g>
+<g class="f_g">
+<title>@core/nginx.c:409 (1,000 samples, 100.00%)</title>
+<rect x="10.0" y="142" width="1180.0" height="15.0"/>
+<text x="13.00" y="152.5">@core/nginx.c:409</text>
+</g>
+<g class="f_g o">
+<title>main [/usr/local/openresty-plus-dev/nginx/sbin/nginx] (1,000 samples, 100.00%)</title>
+<rect x="10.0" y="158" width="1180.0" height="15.0"/>
+<text x="13.00" y="168.5">main [/usr/local/openresty-plus-dev/nginx/sbin/nginx]</text>
+</g>
+<g class="f_g">
+<title>@unix/ngx_process_cycle.c:340 (1,000 samples, 100.00%)</title>
+<rect x="10.0" y="174" width="1180.0" height="15.0"/>
+<text x="13.00" y="184.5">@unix/ngx_process_cycle.c:340</text>
+</g>
+<g class="f_g o">
+<title>ngx_single_process_cycle [/usr/local/openresty-plus-dev/nginx/sbin/nginx] (1,000 samples, 100.00%)</title>
+<rect x="10.0" y="190" width="1180.0" height="15.0"/>
+<text x="13.00" y="200.5">ngx_single_process_cycle [/usr/local/openresty-plus-dev/nginx/sbin/nginx]</text>
+</g>
+<g class="f_g">
+<title>@event/ngx_event.c:279 (1,000 samples, 100.00%)</title>
+<rect x="10.0" y="206" width="1180.0" height="15.0"/>
+<text x="13.00" y="216.5">@event/ngx_event.c:279</text>
+</g>
+<g class="f_g o">
+<title>ngx_process_events_and_timers [/usr/local/openresty-plus-dev/nginx/sbin/nginx] (1,000 samples, 100.00%)</title>
+<rect x="10.0" y="222" width="1180.0" height="15.0"/>
+<text x="13.00" y="232.5">ngx_process_events_and_timers [/usr/local/openresty-plus-dev/nginx/sbin/nginx]</text>
+</g>
+<g class="f_g">
+<title>@src/ngx_http_lua_timer.c:664 (1,000 samples, 100.00%)</title>
+<rect x="10.0" y="238" width="1180.0" height="15.0"/>
+<text x="13.00" y="248.5">@src/ngx_http_lua_timer.c:664</text>
+</g>
+<g class="f_g o">
+<title>ngx_http_lua_timer_handler [/usr/local/openresty-plus-dev/nginx/sbin/nginx] (1,000 samples, 100.00%)</title>
+<rect x="10.0" y="254" width="1180.0" height="15.0"/>
+<text x="13.00" y="264.5">ngx_http_lua_timer_handler [/usr/local/openresty-plus-dev/nginx/sbin/nginx]</text>
+</g>
+<g class="f_g">
+<title>@src/ngx_http_lua_util.c:1189 (1,000 samples, 100.00%)</title>
+<rect x="10.0" y="270" width="1180.0" height="15.0"/>
+<text x="13.00" y="280.5">@src/ngx_http_lua_util.c:1189</text>
+</g>
+<g class="f_g o">
+<title>ngx_http_lua_run_thread [/usr/local/openresty-plus-dev/nginx/sbin/nginx] (1,000 samples, 100.00%)</title>
+<rect x="10.0" y="286" width="1180.0" height="15.0"/>
+<text x="13.00" y="296.5">ngx_http_lua_run_thread [/usr/local/openresty-plus-dev/nginx/sbin/nginx]</text>
+</g>
+<g class="f_g">
+<title>@src/buildvm_x86.dasc:2633 (1 samples, 0.10%)</title>
+<rect x="10.0" y="302" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/buildvm_x86.dasc:906 (999 samples, 99.90%)</title>
+<rect x="11.2" y="302" width="1178.8" height="15.0"/>
+<text x="14.18" y="312.5">@src/buildvm_x86.dasc:906</text>
+</g>
+<g class="f_g o">
+<title>lj_cont_stitch [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="10.0" y="318" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_BC_FUNCC [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (999 samples, 99.90%)</title>
+<rect x="11.2" y="318" width="1178.8" height="15.0"/>
+<text x="14.18" y="328.5">lj_BC_FUNCC [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0]</text>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1432 (999 samples, 99.90%)</title>
+<rect x="11.2" y="334" width="1178.8" height="15.0"/>
+<text x="14.18" y="344.5">@lua-cjson/lua_cjson.c:1432</text>
+</g>
+<g class="f_g o">
+<title>json_decode [/usr/local/openresty-plus-dev/lualib/cjson.so] (999 samples, 99.90%)</title>
+<rect x="11.2" y="350" width="1178.8" height="15.0"/>
+<text x="14.18" y="360.5">json_decode [/usr/local/openresty-plus-dev/lualib/cjson.so]</text>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1390 (999 samples, 99.90%)</title>
+<rect x="11.2" y="366" width="1178.8" height="15.0"/>
+<text x="14.18" y="376.5">@lua-cjson/lua_cjson.c:1390</text>
+</g>
+<g class="f_g o">
+<title>json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (999 samples, 99.90%)</title>
+<rect x="11.2" y="382" width="1178.8" height="15.0"/>
+<text x="14.18" y="392.5">json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so]</text>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1355 (1 samples, 0.10%)</title>
+<rect x="11.2" y="398" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1356 (978 samples, 97.80%)</title>
+<rect x="12.4" y="398" width="1154.0" height="15.0"/>
+<text x="15.36" y="408.5">@lua-cjson/lua_cjson.c:1356</text>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1358 (18 samples, 1.80%)</title>
+<rect x="1166.4" y="398" width="21.2" height="15.0"/>
+<text x="1169.40" y="408.5">@..</text>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1360 (2 samples, 0.20%)</title>
+<rect x="1187.6" y="398" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_parse_array_context inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1390:9 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="11.2" y="414" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_parse_array_context inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1390:9 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (978 samples, 97.80%)</title>
+<rect x="12.4" y="414" width="1154.0" height="15.0"/>
+<text x="15.36" y="424.5">json_parse_array_context inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1390:9 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so]</text>
+</g>
+<g class="f_g o">
+<title>json_parse_array_context inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1390:9 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (18 samples, 1.80%)</title>
+<rect x="1166.4" y="414" width="21.2" height="15.0"/>
+<text x="1169.40" y="424.5">j..</text>
+</g>
+<g class="f_g o">
+<title>json_parse_array_context inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1390:9 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (2 samples, 0.20%)</title>
+<rect x="1187.6" y="414" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1233 (1 samples, 0.10%)</title>
+<rect x="11.2" y="430" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1375 (1 samples, 0.10%)</title>
+<rect x="12.4" y="430" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1387 (975 samples, 97.50%)</title>
+<rect x="13.5" y="430" width="1150.5" height="15.0"/>
+<text x="16.54" y="440.5">@lua-cjson/lua_cjson.c:1387</text>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1400 (1 samples, 0.10%)</title>
+<rect x="1164.0" y="430" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:1014 (2 samples, 0.20%)</title>
+<rect x="1166.4" y="430" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:1015 (2 samples, 0.20%)</title>
+<rect x="1168.8" y="430" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:1018 (10 samples, 1.00%)</title>
+<rect x="1171.1" y="430" width="11.8" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:1020 (3 samples, 0.30%)</title>
+<rect x="1182.9" y="430" width="3.6" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:1021 (1 samples, 0.10%)</title>
+<rect x="1186.5" y="430" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1164 (2 samples, 0.20%)</title>
+<rect x="1187.6" y="430" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="11.2" y="446" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="12.4" y="446" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (975 samples, 97.50%)</title>
+<rect x="13.5" y="446" width="1150.5" height="15.0"/>
+<text x="16.54" y="456.5">json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so]</text>
+</g>
+<g class="f_g o">
+<title>json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="1164.0" y="446" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lua_rawseti [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="1166.4" y="446" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lua_rawseti [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="1168.8" y="446" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lua_rawseti [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (10 samples, 1.00%)</title>
+<rect x="1171.1" y="446" width="11.8" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lua_rawseti [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (3 samples, 0.30%)</title>
+<rect x="1182.9" y="446" width="3.6" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lua_rawseti [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1186.5" y="446" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (2 samples, 0.20%)</title>
+<rect x="1187.6" y="446" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1287 (46 samples, 4.60%)</title>
+<rect x="13.5" y="462" width="54.3" height="15.0"/>
+<text x="16.54" y="472.5">@lua-..</text>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1290 (12 samples, 1.20%)</title>
+<rect x="67.8" y="462" width="14.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1295 (33 samples, 3.30%)</title>
+<rect x="82.0" y="462" width="38.9" height="15.0"/>
+<text x="84.98" y="472.5">@lu..</text>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1300 (1 samples, 0.10%)</title>
+<rect x="120.9" y="462" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1302 (31 samples, 3.10%)</title>
+<rect x="122.1" y="462" width="36.6" height="15.0"/>
+<text x="125.10" y="472.5">@lu..</text>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1303 (8 samples, 0.80%)</title>
+<rect x="158.7" y="462" width="9.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1307 (1 samples, 0.10%)</title>
+<rect x="168.1" y="462" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1308 (43 samples, 4.30%)</title>
+<rect x="169.3" y="462" width="50.7" height="15.0"/>
+<text x="172.30" y="472.5">@lua-..</text>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1311 (602 samples, 60.20%)</title>
+<rect x="220.0" y="462" width="710.4" height="15.0"/>
+<text x="223.04" y="472.5">@lua-cjson/lua_cjson.c:1311</text>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1313 (190 samples, 19.00%)</title>
+<rect x="930.4" y="462" width="224.2" height="15.0"/>
+<text x="933.40" y="472.5">@lua-cjson/lua_cjson.c:1313</text>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1315 (6 samples, 0.60%)</title>
+<rect x="1154.6" y="462" width="7.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1320 (1 samples, 0.10%)</title>
+<rect x="1161.7" y="462" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1323 (1 samples, 0.10%)</title>
+<rect x="1162.9" y="462" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:34 (1 samples, 0.10%)</title>
+<rect x="1168.8" y="462" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:35 (1 samples, 0.10%)</title>
+<rect x="1169.9" y="462" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:530 (9 samples, 0.90%)</title>
+<rect x="1171.1" y="462" width="10.6" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:981 (3 samples, 0.30%)</title>
+<rect x="1182.9" y="462" width="3.6" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_parse_object_context inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1387:9 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (46 samples, 4.60%)</title>
+<rect x="13.5" y="478" width="54.3" height="15.0"/>
+<text x="16.54" y="488.5">json_..</text>
+</g>
+<g class="f_g o">
+<title>json_parse_object_context inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1387:9 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (12 samples, 1.20%)</title>
+<rect x="67.8" y="478" width="14.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_parse_object_context inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1387:9 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (33 samples, 3.30%)</title>
+<rect x="82.0" y="478" width="38.9" height="15.0"/>
+<text x="84.98" y="488.5">jso..</text>
+</g>
+<g class="f_g o">
+<title>json_parse_object_context inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1387:9 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="120.9" y="478" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_parse_object_context inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1387:9 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (31 samples, 3.10%)</title>
+<rect x="122.1" y="478" width="36.6" height="15.0"/>
+<text x="125.10" y="488.5">jso..</text>
+</g>
+<g class="f_g o">
+<title>json_parse_object_context inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1387:9 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (8 samples, 0.80%)</title>
+<rect x="158.7" y="478" width="9.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_parse_object_context inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1387:9 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="168.1" y="478" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_parse_object_context inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1387:9 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (43 samples, 4.30%)</title>
+<rect x="169.3" y="478" width="50.7" height="15.0"/>
+<text x="172.30" y="488.5">json_..</text>
+</g>
+<g class="f_g o">
+<title>json_parse_object_context inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1387:9 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (602 samples, 60.20%)</title>
+<rect x="220.0" y="478" width="710.4" height="15.0"/>
+<text x="223.04" y="488.5">json_parse_object_context inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1387:9 in json_process..</text>
+</g>
+<g class="f_g o">
+<title>json_parse_object_context inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1387:9 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (190 samples, 19.00%)</title>
+<rect x="930.4" y="478" width="224.2" height="15.0"/>
+<text x="933.40" y="488.5">json_parse_object_context inl..</text>
+</g>
+<g class="f_g o">
+<title>json_parse_object_context inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1387:9 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (6 samples, 0.60%)</title>
+<rect x="1154.6" y="478" width="7.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_parse_object_context inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1387:9 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="1161.7" y="478" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_parse_object_context inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1387:9 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="1162.9" y="478" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>index2adr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1168.8" y="478" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>index2adr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1169.9" y="478" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_setinth [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (9 samples, 0.90%)</title>
+<rect x="1171.1" y="478" width="10.6" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>copyTV [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (3 samples, 0.30%)</title>
+<rect x="1182.9" y="478" width="3.6" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:721 (1 samples, 0.10%)</title>
+<rect x="13.5" y="494" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:722 (45 samples, 4.50%)</title>
+<rect x="14.7" y="494" width="53.1" height="15.0"/>
+<text x="17.72" y="504.5">@src/..</text>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1157 (1 samples, 0.10%)</title>
+<rect x="67.8" y="494" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1165 (1 samples, 0.10%)</title>
+<rect x="69.0" y="494" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1197 (10 samples, 1.00%)</title>
+<rect x="70.2" y="494" width="11.8" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1157 (1 samples, 0.10%)</title>
+<rect x="82.0" y="494" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1164 (5 samples, 0.50%)</title>
+<rect x="83.2" y="494" width="5.9" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1197 (27 samples, 2.70%)</title>
+<rect x="89.1" y="494" width="31.8" height="15.0"/>
+<text x="92.06" y="504.5">@l..</text>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:650 (1 samples, 0.10%)</title>
+<rect x="122.1" y="494" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:653 (1 samples, 0.10%)</title>
+<rect x="123.3" y="494" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:654 (27 samples, 2.70%)</title>
+<rect x="124.5" y="494" width="31.8" height="15.0"/>
+<text x="127.46" y="504.5">@s..</text>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:655 (1 samples, 0.10%)</title>
+<rect x="156.3" y="494" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:656 (1 samples, 0.10%)</title>
+<rect x="157.5" y="494" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1157 (5 samples, 0.50%)</title>
+<rect x="158.7" y="494" width="5.9" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1164 (1 samples, 0.10%)</title>
+<rect x="164.6" y="494" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1165 (1 samples, 0.10%)</title>
+<rect x="165.8" y="494" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1233 (1 samples, 0.10%)</title>
+<rect x="166.9" y="494" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1157 (2 samples, 0.20%)</title>
+<rect x="169.3" y="494" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1197 (27 samples, 2.70%)</title>
+<rect x="171.7" y="494" width="31.8" height="15.0"/>
+<text x="174.66" y="504.5">@l..</text>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1199 (2 samples, 0.20%)</title>
+<rect x="203.5" y="494" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1227 (9 samples, 0.90%)</title>
+<rect x="205.9" y="494" width="10.6" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1233 (2 samples, 0.20%)</title>
+<rect x="216.5" y="494" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1375 (2 samples, 0.20%)</title>
+<rect x="220.0" y="494" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1376 (3 samples, 0.30%)</title>
+<rect x="222.4" y="494" width="3.5" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1390 (535 samples, 53.50%)</title>
+<rect x="225.9" y="494" width="631.3" height="15.0"/>
+<text x="228.94" y="504.5">@lua-cjson/lua_cjson.c:1390</text>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1400 (61 samples, 6.10%)</title>
+<rect x="857.2" y="494" width="72.0" height="15.0"/>
+<text x="860.24" y="504.5">@lua-cjs..</text>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:1002 (4 samples, 0.40%)</title>
+<rect x="930.4" y="494" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:1003 (5 samples, 0.50%)</title>
+<rect x="935.1" y="494" width="5.9" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:1005 (4 samples, 0.40%)</title>
+<rect x="941.0" y="494" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:1007 (2 samples, 0.20%)</title>
+<rect x="945.7" y="494" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:1008 (173 samples, 17.30%)</title>
+<rect x="948.1" y="494" width="204.1" height="15.0"/>
+<text x="951.10" y="504.5">@src/lj_api.c:1008</text>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:1011 (2 samples, 0.20%)</title>
+<rect x="1152.2" y="494" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1157 (2 samples, 0.20%)</title>
+<rect x="1154.6" y="494" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1163 (1 samples, 0.10%)</title>
+<rect x="1157.0" y="494" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1164 (2 samples, 0.20%)</title>
+<rect x="1158.1" y="494" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1172 (1 samples, 0.10%)</title>
+<rect x="1160.5" y="494" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:39 (1 samples, 0.10%)</title>
+<rect x="1168.8" y="494" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:517 (9 samples, 0.90%)</title>
+<rect x="1171.1" y="494" width="10.6" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:911 (3 samples, 0.30%)</title>
+<rect x="1182.9" y="494" width="3.6" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lua_createtable [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="13.5" y="510" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lua_createtable [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (45 samples, 4.50%)</title>
+<rect x="14.7" y="510" width="53.1" height="15.0"/>
+<text x="17.72" y="520.5">lua_c..</text>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="67.8" y="510" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="69.0" y="510" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (10 samples, 1.00%)</title>
+<rect x="70.2" y="510" width="11.8" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="82.0" y="510" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (5 samples, 0.50%)</title>
+<rect x="83.2" y="510" width="5.9" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (27 samples, 2.70%)</title>
+<rect x="89.1" y="510" width="31.8" height="15.0"/>
+<text x="92.06" y="520.5">js..</text>
+</g>
+<g class="f_g o">
+<title>lua_pushlstring [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="122.1" y="510" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lua_pushlstring [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="123.3" y="510" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lua_pushlstring [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (27 samples, 2.70%)</title>
+<rect x="124.5" y="510" width="31.8" height="15.0"/>
+<text x="127.46" y="520.5">lu..</text>
+</g>
+<g class="f_g o">
+<title>lua_pushlstring [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="156.3" y="510" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lua_pushlstring [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="157.5" y="510" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (5 samples, 0.50%)</title>
+<rect x="158.7" y="510" width="5.9" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="164.6" y="510" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="165.8" y="510" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="166.9" y="510" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (2 samples, 0.20%)</title>
+<rect x="169.3" y="510" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (27 samples, 2.70%)</title>
+<rect x="171.7" y="510" width="31.8" height="15.0"/>
+<text x="174.66" y="520.5">js..</text>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (2 samples, 0.20%)</title>
+<rect x="203.5" y="510" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (9 samples, 0.90%)</title>
+<rect x="205.9" y="510" width="10.6" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (2 samples, 0.20%)</title>
+<rect x="216.5" y="510" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (2 samples, 0.20%)</title>
+<rect x="220.0" y="510" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (3 samples, 0.30%)</title>
+<rect x="222.4" y="510" width="3.5" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (535 samples, 53.50%)</title>
+<rect x="225.9" y="510" width="631.3" height="15.0"/>
+<text x="228.94" y="520.5">json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so]</text>
+</g>
+<g class="f_g o">
+<title>json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (61 samples, 6.10%)</title>
+<rect x="857.2" y="510" width="72.0" height="15.0"/>
+<text x="860.24" y="520.5">json_pro..</text>
+</g>
+<g class="f_g o">
+<title>lua_rawset [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (4 samples, 0.40%)</title>
+<rect x="930.4" y="510" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lua_rawset [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (5 samples, 0.50%)</title>
+<rect x="935.1" y="510" width="5.9" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lua_rawset [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (4 samples, 0.40%)</title>
+<rect x="941.0" y="510" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lua_rawset [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="945.7" y="510" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lua_rawset [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (173 samples, 17.30%)</title>
+<rect x="948.1" y="510" width="204.1" height="15.0"/>
+<text x="951.10" y="520.5">lua_rawset [/usr/local/ope..</text>
+</g>
+<g class="f_g o">
+<title>lua_rawset [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="1152.2" y="510" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (2 samples, 0.20%)</title>
+<rect x="1154.6" y="510" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="1157.0" y="510" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (2 samples, 0.20%)</title>
+<rect x="1158.1" y="510" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="1160.5" y="510" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>index2adr inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_api.c:34:16 in index2adr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1168.8" y="510" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_newkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (9 samples, 0.90%)</title>
+<rect x="1171.1" y="510" width="10.6" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>checklivetv inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_obj.h:981:3 in lua_rawseti [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (3 samples, 0.30%)</title>
+<rect x="1182.9" y="510" width="3.6" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:144 (42 samples, 4.20%)</title>
+<rect x="14.7" y="526" width="49.6" height="15.0"/>
+<text x="17.72" y="536.5">@src/..</text>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:145 (1 samples, 0.10%)</title>
+<rect x="64.3" y="526" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1044 (3 samples, 0.30%)</title>
+<rect x="70.2" y="526" width="3.5" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1076 (2 samples, 0.20%)</title>
+<rect x="73.7" y="526" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1077 (2 samples, 0.20%)</title>
+<rect x="76.1" y="526" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1084 (3 samples, 0.30%)</title>
+<rect x="78.4" y="526" width="3.6" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1036 (2 samples, 0.20%)</title>
+<rect x="89.1" y="526" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1042 (1 samples, 0.10%)</title>
+<rect x="91.4" y="526" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1044 (6 samples, 0.60%)</title>
+<rect x="92.6" y="526" width="7.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1076 (5 samples, 0.50%)</title>
+<rect x="99.7" y="526" width="5.9" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1077 (11 samples, 1.10%)</title>
+<rect x="105.6" y="526" width="13.0" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1081 (1 samples, 0.10%)</title>
+<rect x="118.6" y="526" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1084 (1 samples, 0.10%)</title>
+<rect x="119.7" y="526" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:941 (2 samples, 0.20%)</title>
+<rect x="124.5" y="526" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str.c:352 (1 samples, 0.10%)</title>
+<rect x="126.8" y="526" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str.c:355 (1 samples, 0.10%)</title>
+<rect x="128.0" y="526" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str.c:359 (7 samples, 0.70%)</title>
+<rect x="129.2" y="526" width="8.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str.c:367 (1 samples, 0.10%)</title>
+<rect x="137.4" y="526" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str.c:368 (7 samples, 0.70%)</title>
+<rect x="138.6" y="526" width="8.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str.c:370 (8 samples, 0.80%)</title>
+<rect x="146.9" y="526" width="9.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1044 (8 samples, 0.80%)</title>
+<rect x="171.7" y="526" width="9.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1045 (1 samples, 0.10%)</title>
+<rect x="181.1" y="526" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1052 (2 samples, 0.20%)</title>
+<rect x="182.3" y="526" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1076 (5 samples, 0.50%)</title>
+<rect x="184.6" y="526" width="5.9" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1077 (7 samples, 0.70%)</title>
+<rect x="190.5" y="526" width="8.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1079 (2 samples, 0.20%)</title>
+<rect x="198.8" y="526" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1081 (2 samples, 0.20%)</title>
+<rect x="201.2" y="526" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1142 (1 samples, 0.10%)</title>
+<rect x="205.9" y="526" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1143 (1 samples, 0.10%)</title>
+<rect x="207.1" y="526" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1144 (7 samples, 0.70%)</title>
+<rect x="208.2" y="526" width="8.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1335 (5 samples, 0.50%)</title>
+<rect x="225.9" y="526" width="5.9" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1340 (98 samples, 9.80%)</title>
+<rect x="231.8" y="526" width="115.7" height="15.0"/>
+<text x="234.84" y="536.5">@lua-cjson/lua..</text>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1349 (40 samples, 4.00%)</title>
+<rect x="347.5" y="526" width="47.2" height="15.0"/>
+<text x="350.48" y="536.5">@lua..</text>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1355 (42 samples, 4.20%)</title>
+<rect x="394.7" y="526" width="49.5" height="15.0"/>
+<text x="397.68" y="536.5">@lua..</text>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1356 (186 samples, 18.60%)</title>
+<rect x="444.2" y="526" width="219.5" height="15.0"/>
+<text x="447.24" y="536.5">@lua-cjson/lua_cjson.c:1356</text>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1358 (150 samples, 15.00%)</title>
+<rect x="663.7" y="526" width="177.0" height="15.0"/>
+<text x="666.72" y="536.5">@lua-cjson/lua_cjson.c:..</text>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1360 (12 samples, 1.20%)</title>
+<rect x="840.7" y="526" width="14.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1361 (1 samples, 0.10%)</title>
+<rect x="854.9" y="526" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1365 (1 samples, 0.10%)</title>
+<rect x="856.1" y="526" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:652 (1 samples, 0.10%)</title>
+<rect x="857.2" y="526" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:654 (58 samples, 5.80%)</title>
+<rect x="858.4" y="526" width="68.5" height="15.0"/>
+<text x="861.42" y="536.5">@src/lj..</text>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:34 (2 samples, 0.20%)</title>
+<rect x="935.1" y="526" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:35 (1 samples, 0.10%)</title>
+<rect x="937.5" y="526" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:34 (4 samples, 0.40%)</title>
+<rect x="941.0" y="526" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:980 (171 samples, 17.10%)</title>
+<rect x="948.1" y="526" width="201.8" height="15.0"/>
+<text x="951.10" y="536.5">@src/lj_obj.h:980</text>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:981 (2 samples, 0.20%)</title>
+<rect x="1149.9" y="526" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:370 (9 samples, 0.90%)</title>
+<rect x="1171.1" y="526" width="10.6" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (42 samples, 4.20%)</title>
+<rect x="14.7" y="542" width="49.6" height="15.0"/>
+<text x="17.72" y="552.5">lj_ta..</text>
+</g>
+<g class="f_g o">
+<title>lj_tab_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="64.3" y="542" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (3 samples, 0.30%)</title>
+<rect x="70.2" y="542" width="3.5" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (2 samples, 0.20%)</title>
+<rect x="73.7" y="542" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (2 samples, 0.20%)</title>
+<rect x="76.1" y="542" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (3 samples, 0.30%)</title>
+<rect x="78.4" y="542" width="3.6" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (2 samples, 0.20%)</title>
+<rect x="89.1" y="542" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="91.4" y="542" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (6 samples, 0.60%)</title>
+<rect x="92.6" y="542" width="7.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (5 samples, 0.50%)</title>
+<rect x="99.7" y="542" width="5.9" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (11 samples, 1.10%)</title>
+<rect x="105.6" y="542" width="13.0" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="118.6" y="542" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="119.7" y="542" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>setstrV [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="124.5" y="542" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_str_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="126.8" y="542" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_str_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="128.0" y="542" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_str_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (7 samples, 0.70%)</title>
+<rect x="129.2" y="542" width="8.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_str_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="137.4" y="542" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_str_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (7 samples, 0.70%)</title>
+<rect x="138.6" y="542" width="8.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_str_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (8 samples, 0.80%)</title>
+<rect x="146.9" y="542" width="9.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (8 samples, 0.80%)</title>
+<rect x="171.7" y="542" width="9.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="181.1" y="542" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (2 samples, 0.20%)</title>
+<rect x="182.3" y="542" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (3 samples, 0.30%)</title>
+<rect x="184.6" y="542" width="3.6" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (2 samples, 0.20%)</title>
+<rect x="188.2" y="542" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (7 samples, 0.70%)</title>
+<rect x="190.5" y="542" width="8.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (2 samples, 0.20%)</title>
+<rect x="198.8" y="542" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="201.2" y="542" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="202.3" y="542" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_number_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1227:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="205.9" y="542" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_number_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1227:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="207.1" y="542" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_number_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1227:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (7 samples, 0.70%)</title>
+<rect x="208.2" y="542" width="8.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_parse_array_context [/usr/local/openresty-plus-dev/lualib/cjson.so] (5 samples, 0.50%)</title>
+<rect x="225.9" y="542" width="5.9" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_parse_array_context inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1390:9 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (98 samples, 9.80%)</title>
+<rect x="231.8" y="542" width="115.7" height="15.0"/>
+<text x="234.84" y="552.5">json_parse_arr..</text>
+</g>
+<g class="f_g o">
+<title>json_parse_array_context inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1390:9 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (40 samples, 4.00%)</title>
+<rect x="347.5" y="542" width="47.2" height="15.0"/>
+<text x="350.48" y="552.5">json..</text>
+</g>
+<g class="f_g o">
+<title>json_parse_array_context inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1390:9 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (42 samples, 4.20%)</title>
+<rect x="394.7" y="542" width="49.5" height="15.0"/>
+<text x="397.68" y="552.5">json..</text>
+</g>
+<g class="f_g o">
+<title>json_parse_array_context inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1390:9 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (186 samples, 18.60%)</title>
+<rect x="444.2" y="542" width="219.5" height="15.0"/>
+<text x="447.24" y="552.5">json_parse_array_context inl..</text>
+</g>
+<g class="f_g o">
+<title>json_parse_array_context inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1390:9 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (150 samples, 15.00%)</title>
+<rect x="663.7" y="542" width="177.0" height="15.0"/>
+<text x="666.72" y="552.5">json_parse_array_contex..</text>
+</g>
+<g class="f_g o">
+<title>json_parse_array_context inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1390:9 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (12 samples, 1.20%)</title>
+<rect x="840.7" y="542" width="14.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_parse_array_context [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="854.9" y="542" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_parse_array_context inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1390:9 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="856.1" y="542" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lua_pushlstring [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="857.2" y="542" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lua_pushlstring [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (58 samples, 5.80%)</title>
+<rect x="858.4" y="542" width="68.5" height="15.0"/>
+<text x="861.42" y="552.5">lua_pus..</text>
+</g>
+<g class="f_g o">
+<title>index2adr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="935.1" y="542" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>index2adr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="937.5" y="542" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>index2adr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (4 samples, 0.40%)</title>
+<rect x="941.0" y="542" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>copyTV inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_api.c:1008:3 in lua_rawset [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (171 samples, 17.10%)</title>
+<rect x="948.1" y="542" width="201.8" height="15.0"/>
+<text x="951.10" y="552.5">copyTV inlined at /home/co..</text>
+</g>
+<g class="f_g o">
+<title>copyTV [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="1149.9" y="542" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (9 samples, 0.90%)</title>
+<rect x="1171.1" y="542" width="10.6" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:76 (42 samples, 4.20%)</title>
+<rect x="14.7" y="558" width="49.6" height="15.0"/>
+<text x="17.72" y="568.5">@src/..</text>
+</g>
+<g class="f_g">
+<title>@lua-cjson/strbuf.h:135 (2 samples, 0.20%)</title>
+<rect x="73.7" y="558" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/strbuf.h:86 (1 samples, 0.10%)</title>
+<rect x="91.4" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/strbuf.h:135 (5 samples, 0.50%)</title>
+<rect x="99.7" y="558" width="5.9" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/strbuf.h:153 (1 samples, 0.10%)</title>
+<rect x="118.6" y="558" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:932 (1 samples, 0.10%)</title>
+<rect x="124.5" y="558" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:933 (1 samples, 0.10%)</title>
+<rect x="125.6" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str_hash.c:272 (2 samples, 0.20%)</title>
+<rect x="129.2" y="558" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str_hash.c:274 (2 samples, 0.20%)</title>
+<rect x="131.5" y="558" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str_hash.c:277 (1 samples, 0.10%)</title>
+<rect x="133.9" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@multiarch/memcmp-avx2-movbe.S:179 (1 samples, 0.10%)</title>
+<rect x="146.9" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@multiarch/memcmp-avx2-movbe.S:181 (1 samples, 0.10%)</title>
+<rect x="148.1" y="558" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@multiarch/memcmp-avx2-movbe.S:184 (1 samples, 0.10%)</title>
+<rect x="149.2" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@multiarch/memcmp-avx2-movbe.S:187 (1 samples, 0.10%)</title>
+<rect x="150.4" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@multiarch/memcmp-avx2-movbe.S:59 (2 samples, 0.20%)</title>
+<rect x="151.6" y="558" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/strbuf.h:135 (3 samples, 0.30%)</title>
+<rect x="184.6" y="558" width="3.6" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/strbuf.h:153 (1 samples, 0.10%)</title>
+<rect x="201.2" y="558" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/dtoa.c:3435 (1 samples, 0.10%)</title>
+<rect x="208.2" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/dtoa.c:3480 (1 samples, 0.10%)</title>
+<rect x="209.4" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/dtoa.c:3523 (2 samples, 0.20%)</title>
+<rect x="210.6" y="558" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/dtoa.c:3525 (1 samples, 0.10%)</title>
+<rect x="213.0" y="558" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/dtoa.c:3557 (1 samples, 0.10%)</title>
+<rect x="214.1" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1265 (2 samples, 0.20%)</title>
+<rect x="225.9" y="558" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1267 (3 samples, 0.30%)</title>
+<rect x="228.3" y="558" width="3.5" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:722 (95 samples, 9.50%)</title>
+<rect x="231.8" y="558" width="112.1" height="15.0"/>
+<text x="234.84" y="568.5">@src/lj_api.c..</text>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:723 (1 samples, 0.10%)</title>
+<rect x="343.9" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1157 (1 samples, 0.10%)</title>
+<rect x="347.5" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1163 (1 samples, 0.10%)</title>
+<rect x="348.7" y="558" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1164 (1 samples, 0.10%)</title>
+<rect x="349.8" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1165 (2 samples, 0.20%)</title>
+<rect x="351.0" y="558" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1197 (33 samples, 3.30%)</title>
+<rect x="353.4" y="558" width="38.9" height="15.0"/>
+<text x="356.38" y="568.5">@lu..</text>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1233 (2 samples, 0.20%)</title>
+<rect x="392.3" y="558" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1164 (4 samples, 0.40%)</title>
+<rect x="394.7" y="558" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1175 (1 samples, 0.10%)</title>
+<rect x="399.4" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1196 (1 samples, 0.10%)</title>
+<rect x="400.6" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1197 (36 samples, 3.60%)</title>
+<rect x="401.8" y="558" width="42.4" height="15.0"/>
+<text x="404.76" y="568.5">@lu..</text>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1375 (1 samples, 0.10%)</title>
+<rect x="444.2" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1376 (4 samples, 0.40%)</title>
+<rect x="445.4" y="558" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1378 (1 samples, 0.10%)</title>
+<rect x="450.1" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1400 (180 samples, 18.00%)</title>
+<rect x="451.3" y="558" width="212.4" height="15.0"/>
+<text x="454.32" y="568.5">@lua-cjson/lua_cjson.c:1400</text>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:1015 (7 samples, 0.70%)</title>
+<rect x="663.7" y="558" width="8.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:1017 (5 samples, 0.50%)</title>
+<rect x="672.0" y="558" width="5.9" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:1018 (130 samples, 13.00%)</title>
+<rect x="677.9" y="558" width="153.4" height="15.0"/>
+<text x="680.88" y="568.5">@src/lj_api.c:1018</text>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:1020 (5 samples, 0.50%)</title>
+<rect x="831.3" y="558" width="5.9" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:1023 (2 samples, 0.20%)</title>
+<rect x="837.2" y="558" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1157 (2 samples, 0.20%)</title>
+<rect x="840.7" y="558" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1164 (3 samples, 0.30%)</title>
+<rect x="843.1" y="558" width="3.5" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1165 (1 samples, 0.10%)</title>
+<rect x="846.6" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1172 (1 samples, 0.10%)</title>
+<rect x="847.8" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1186 (1 samples, 0.10%)</title>
+<rect x="849.0" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1233 (3 samples, 0.30%)</title>
+<rect x="850.2" y="558" width="3.5" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1260 (1 samples, 0.10%)</title>
+<rect x="854.9" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:941 (1 samples, 0.10%)</title>
+<rect x="858.4" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str.c:351 (2 samples, 0.20%)</title>
+<rect x="859.6" y="558" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str.c:352 (1 samples, 0.10%)</title>
+<rect x="862.0" y="558" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str.c:355 (1 samples, 0.10%)</title>
+<rect x="863.1" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str.c:359 (3 samples, 0.30%)</title>
+<rect x="864.3" y="558" width="3.6" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str.c:367 (9 samples, 0.90%)</title>
+<rect x="867.9" y="558" width="10.6" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str.c:368 (33 samples, 3.30%)</title>
+<rect x="878.5" y="558" width="38.9" height="15.0"/>
+<text x="881.48" y="568.5">@sr..</text>
+</g>
+<g class="f_g">
+<title>@src/lj_str.c:369 (1 samples, 0.10%)</title>
+<rect x="917.4" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str.c:370 (5 samples, 0.50%)</title>
+<rect x="918.6" y="558" width="5.9" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str.c:377 (1 samples, 0.10%)</title>
+<rect x="924.5" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str.c:392 (1 samples, 0.10%)</title>
+<rect x="925.7" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:40 (1 samples, 0.10%)</title>
+<rect x="935.1" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:42 (1 samples, 0.10%)</title>
+<rect x="936.3" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:40 (2 samples, 0.20%)</title>
+<rect x="941.0" y="558" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:42 (2 samples, 0.20%)</title>
+<rect x="943.4" y="558" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:535 (4 samples, 0.40%)</title>
+<rect x="948.1" y="558" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:537 (4 samples, 0.40%)</title>
+<rect x="952.8" y="558" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:540 (1 samples, 0.10%)</title>
+<rect x="957.5" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:542 (157 samples, 15.70%)</title>
+<rect x="958.7" y="558" width="185.3" height="15.0"/>
+<text x="961.72" y="568.5">@src/lj_tab.c:542</text>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:548 (1 samples, 0.10%)</title>
+<rect x="1144.0" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:549 (2 samples, 0.20%)</title>
+<rect x="1145.2" y="558" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:911 (1 samples, 0.10%)</title>
+<rect x="1149.9" y="558" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:916 (1 samples, 0.10%)</title>
+<rect x="1151.1" y="558" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:250 (4 samples, 0.40%)</title>
+<rect x="1171.1" y="558" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:256 (5 samples, 0.50%)</title>
+<rect x="1175.8" y="558" width="5.9" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>clearapart inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:144:3 in lj_tab_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (42 samples, 4.20%)</title>
+<rect x="14.7" y="574" width="49.6" height="15.0"/>
+<text x="17.72" y="584.5">clear..</text>
+</g>
+<g class="f_g o">
+<title>strbuf_append_char_unsafe inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1076:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (2 samples, 0.20%)</title>
+<rect x="73.7" y="574" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>strbuf_reset inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1042:5 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="91.4" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>strbuf_append_char_unsafe inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1076:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (5 samples, 0.50%)</title>
+<rect x="99.7" y="574" width="5.9" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>strbuf_ensure_null inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1081:5 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="118.6" y="574" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>setgcV [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="124.5" y="574" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>setgcV [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="125.6" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>hash_sparse_sse42 [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="129.2" y="574" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>hash_sparse_sse42 [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="131.5" y="574" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>hash_sparse_sse42 [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="133.9" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>__memcmp_avx2_movbe [/usr/lib64/libc-2.28.so] (1 samples, 0.10%)</title>
+<rect x="146.9" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>__memcmp_avx2_movbe [/usr/lib64/libc-2.28.so] (1 samples, 0.10%)</title>
+<rect x="148.1" y="574" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>__memcmp_avx2_movbe [/usr/lib64/libc-2.28.so] (1 samples, 0.10%)</title>
+<rect x="149.2" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>__memcmp_avx2_movbe [/usr/lib64/libc-2.28.so] (1 samples, 0.10%)</title>
+<rect x="150.4" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>__memcmp_avx2_movbe [/usr/lib64/libc-2.28.so] (2 samples, 0.20%)</title>
+<rect x="151.6" y="574" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>strbuf_append_char_unsafe inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1076:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (3 samples, 0.30%)</title>
+<rect x="184.6" y="574" width="3.6" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>strbuf_ensure_null inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1081:5 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="201.2" y="574" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>fpconv_strtod [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="208.2" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>fpconv_strtod [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="209.4" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>fpconv_strtod [/usr/local/openresty-plus-dev/lualib/cjson.so] (2 samples, 0.20%)</title>
+<rect x="210.6" y="574" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>fpconv_strtod [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="213.0" y="574" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>fpconv_strtod [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="214.1" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_decode_descend inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1335:5 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (2 samples, 0.20%)</title>
+<rect x="225.9" y="574" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_decode_descend inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1335:5 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (3 samples, 0.30%)</title>
+<rect x="228.3" y="574" width="3.5" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lua_createtable [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (95 samples, 9.50%)</title>
+<rect x="231.8" y="574" width="112.1" height="15.0"/>
+<text x="234.84" y="584.5">lua_createtab..</text>
+</g>
+<g class="f_g o">
+<title>lua_createtable [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="343.9" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="347.5" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="348.7" y="574" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="349.8" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (2 samples, 0.20%)</title>
+<rect x="351.0" y="574" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (33 samples, 3.30%)</title>
+<rect x="353.4" y="574" width="38.9" height="15.0"/>
+<text x="356.38" y="584.5">jso..</text>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (2 samples, 0.20%)</title>
+<rect x="392.3" y="574" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (4 samples, 0.40%)</title>
+<rect x="394.7" y="574" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="399.4" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="400.6" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (36 samples, 3.60%)</title>
+<rect x="401.8" y="574" width="42.4" height="15.0"/>
+<text x="404.76" y="584.5">jso..</text>
+</g>
+<g class="f_g o">
+<title>json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="444.2" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (4 samples, 0.40%)</title>
+<rect x="445.4" y="574" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="450.1" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (180 samples, 18.00%)</title>
+<rect x="451.3" y="574" width="212.4" height="15.0"/>
+<text x="454.32" y="584.5">json_process_value [/usr/lo..</text>
+</g>
+<g class="f_g o">
+<title>lua_rawseti [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (7 samples, 0.70%)</title>
+<rect x="663.7" y="574" width="8.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lua_rawseti [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (5 samples, 0.50%)</title>
+<rect x="672.0" y="574" width="5.9" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lua_rawseti [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (130 samples, 13.00%)</title>
+<rect x="677.9" y="574" width="153.4" height="15.0"/>
+<text x="680.88" y="584.5">lua_rawseti [/usr/l..</text>
+</g>
+<g class="f_g o">
+<title>lua_rawseti [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (5 samples, 0.50%)</title>
+<rect x="831.3" y="574" width="5.9" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lua_rawseti [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="837.2" y="574" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (2 samples, 0.20%)</title>
+<rect x="840.7" y="574" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (3 samples, 0.30%)</title>
+<rect x="843.1" y="574" width="3.5" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="846.6" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="847.8" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="849.0" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (3 samples, 0.30%)</title>
+<rect x="850.2" y="574" width="3.5" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_decode_ascend inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1361:13 in json_process_value [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="854.9" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>setstrV [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="858.4" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_str_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="859.6" y="574" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_str_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="862.0" y="574" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_str_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="863.1" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_str_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (3 samples, 0.30%)</title>
+<rect x="864.3" y="574" width="3.6" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_str_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (9 samples, 0.90%)</title>
+<rect x="867.9" y="574" width="10.6" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_str_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (33 samples, 3.30%)</title>
+<rect x="878.5" y="574" width="38.9" height="15.0"/>
+<text x="881.48" y="584.5">lj_..</text>
+</g>
+<g class="f_g o">
+<title>lj_str_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="917.4" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_str_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (5 samples, 0.50%)</title>
+<rect x="918.6" y="574" width="5.9" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_str_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="924.5" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_str_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="925.7" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>index2adr inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_api.c:34:16 in index2adr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="935.1" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>index2adr inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_api.c:34:16 in index2adr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="936.3" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>index2adr inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_api.c:34:16 in index2adr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="941.0" y="574" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>index2adr inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_api.c:34:16 in index2adr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="943.4" y="574" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_setstr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (4 samples, 0.40%)</title>
+<rect x="948.1" y="574" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_setstr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (4 samples, 0.40%)</title>
+<rect x="952.8" y="574" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_setstr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="957.5" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_setstr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (157 samples, 15.70%)</title>
+<rect x="958.7" y="574" width="185.3" height="15.0"/>
+<text x="961.72" y="584.5">lj_tab_setstr [/usr/loca..</text>
+</g>
+<g class="f_g o">
+<title>lj_tab_set [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1144.0" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_set [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="1145.2" y="574" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>checklivetv inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_obj.h:981:3 in lua_rawset [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1149.9" y="574" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>checklivetv inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_obj.h:981:3 in lua_rawset [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1151.1" y="574" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_resize [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (4 samples, 0.40%)</title>
+<rect x="1171.1" y="574" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_resize [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (5 samples, 0.50%)</title>
+<rect x="1175.8" y="574" width="5.9" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:106 (39 samples, 3.90%)</title>
+<rect x="14.7" y="590" width="46.0" height="15.0"/>
+<text x="17.72" y="600.5">@src..</text>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:110 (1 samples, 0.10%)</title>
+<rect x="60.7" y="590" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:128 (1 samples, 0.10%)</title>
+<rect x="61.9" y="590" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:87 (1 samples, 0.10%)</title>
+<rect x="63.1" y="590" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:924 (1 samples, 0.10%)</title>
+<rect x="124.5" y="590" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:916 (1 samples, 0.10%)</title>
+<rect x="125.6" y="590" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str_hash.c:281 (2 samples, 0.20%)</title>
+<rect x="129.2" y="590" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:105 (2 samples, 0.20%)</title>
+<rect x="228.3" y="590" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>_init [/usr/local/openresty-plus-dev/lualib/cjson.so] [2030] (1 samples, 0.10%)</title>
+<rect x="230.7" y="590" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:946 (3 samples, 0.30%)</title>
+<rect x="231.8" y="590" width="3.6" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:144 (88 samples, 8.80%)</title>
+<rect x="235.4" y="590" width="103.8" height="15.0"/>
+<text x="238.38" y="600.5">@src/lj_tab...</text>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:145 (1 samples, 0.10%)</title>
+<rect x="339.2" y="590" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:147 (1 samples, 0.10%)</title>
+<rect x="340.4" y="590" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:152 (2 samples, 0.20%)</title>
+<rect x="341.6" y="590" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1044 (4 samples, 0.40%)</title>
+<rect x="353.4" y="590" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1045 (2 samples, 0.20%)</title>
+<rect x="358.1" y="590" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1052 (1 samples, 0.10%)</title>
+<rect x="360.5" y="590" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1076 (5 samples, 0.50%)</title>
+<rect x="361.6" y="590" width="5.9" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1077 (7 samples, 0.70%)</title>
+<rect x="367.5" y="590" width="8.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1079 (1 samples, 0.10%)</title>
+<rect x="375.8" y="590" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1081 (7 samples, 0.70%)</title>
+<rect x="377.0" y="590" width="8.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1084 (6 samples, 0.60%)</title>
+<rect x="385.2" y="590" width="7.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1044 (8 samples, 0.80%)</title>
+<rect x="401.8" y="590" width="9.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1052 (1 samples, 0.10%)</title>
+<rect x="411.2" y="590" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1076 (5 samples, 0.50%)</title>
+<rect x="412.4" y="590" width="5.9" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1077 (11 samples, 1.10%)</title>
+<rect x="418.3" y="590" width="13.0" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1079 (3 samples, 0.30%)</title>
+<rect x="431.3" y="590" width="3.5" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1081 (6 samples, 0.60%)</title>
+<rect x="434.8" y="590" width="7.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/lua_cjson.c:1084 (2 samples, 0.20%)</title>
+<rect x="441.9" y="590" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:650 (4 samples, 0.40%)</title>
+<rect x="451.3" y="590" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:652 (2 samples, 0.20%)</title>
+<rect x="456.0" y="590" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:653 (2 samples, 0.20%)</title>
+<rect x="458.4" y="590" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:654 (168 samples, 16.80%)</title>
+<rect x="460.8" y="590" width="198.2" height="15.0"/>
+<text x="463.76" y="600.5">@src/lj_api.c:654</text>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:655 (1 samples, 0.10%)</title>
+<rect x="659.0" y="590" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:34 (3 samples, 0.30%)</title>
+<rect x="663.7" y="590" width="3.6" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:34 (3 samples, 0.30%)</title>
+<rect x="672.0" y="590" width="3.5" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:35 (1 samples, 0.10%)</title>
+<rect x="675.5" y="590" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:62 (1 samples, 0.10%)</title>
+<rect x="676.7" y="590" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:523 (1 samples, 0.10%)</title>
+<rect x="677.9" y="590" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:524 (3 samples, 0.30%)</title>
+<rect x="679.1" y="590" width="3.5" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:526 (2 samples, 0.20%)</title>
+<rect x="682.6" y="590" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:530 (121 samples, 12.10%)</title>
+<rect x="685.0" y="590" width="142.7" height="15.0"/>
+<text x="687.96" y="600.5">@src/lj_tab.c:530</text>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:980 (1 samples, 0.10%)</title>
+<rect x="831.3" y="590" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:981 (4 samples, 0.40%)</title>
+<rect x="832.5" y="590" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:933 (1 samples, 0.10%)</title>
+<rect x="858.4" y="590" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str_hash.c:277 (1 samples, 0.10%)</title>
+<rect x="864.3" y="590" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str_hash.c:282 (2 samples, 0.20%)</title>
+<rect x="865.5" y="590" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@multiarch/memcmp-avx2-movbe.S:246 (1 samples, 0.10%)</title>
+<rect x="918.6" y="590" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@multiarch/memcmp-avx2-movbe.S:265 (1 samples, 0.10%)</title>
+<rect x="919.8" y="590" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@multiarch/memcmp-avx2-movbe.S:267 (1 samples, 0.10%)</title>
+<rect x="921.0" y="590" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.h:38 (4 samples, 0.40%)</title>
+<rect x="948.1" y="590" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:941 (1 samples, 0.10%)</title>
+<rect x="957.5" y="590" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:445 (2 samples, 0.20%)</title>
+<rect x="958.7" y="590" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:446 (2 samples, 0.20%)</title>
+<rect x="961.1" y="590" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:447 (2 samples, 0.20%)</title>
+<rect x="963.4" y="590" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:455 (1 samples, 0.10%)</title>
+<rect x="965.8" y="590" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:459 (1 samples, 0.10%)</title>
+<rect x="967.0" y="590" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:461 (2 samples, 0.20%)</title>
+<rect x="968.2" y="590" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:462 (2 samples, 0.20%)</title>
+<rect x="970.5" y="590" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:468 (1 samples, 0.10%)</title>
+<rect x="972.9" y="590" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:470 (2 samples, 0.20%)</title>
+<rect x="974.1" y="590" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:517 (125 samples, 12.50%)</title>
+<rect x="976.4" y="590" width="147.5" height="15.0"/>
+<text x="979.42" y="600.5">@src/lj_tab.c:517</text>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:535 (1 samples, 0.10%)</title>
+<rect x="1123.9" y="590" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:537 (4 samples, 0.40%)</title>
+<rect x="1125.1" y="590" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:540 (1 samples, 0.10%)</title>
+<rect x="1129.8" y="590" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:542 (10 samples, 1.00%)</title>
+<rect x="1131.0" y="590" width="11.8" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_gc.c:879 (4 samples, 0.40%)</title>
+<rect x="1171.1" y="590" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>newtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (39 samples, 3.90%)</title>
+<rect x="14.7" y="606" width="46.0" height="15.0"/>
+<text x="17.72" y="616.5">newt..</text>
+</g>
+<g class="f_g o">
+<title>newtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="60.7" y="606" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>newtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="61.9" y="606" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>newtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="63.1" y="606" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>setgcVraw inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_obj.h:932:3 in lua_pushlstring [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="124.5" y="606" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>checklivetv inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_obj.h:933:3 in lua_pushlstring [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="125.6" y="606" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>hash_sparse_sse42 [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="129.2" y="606" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lua_checkstack [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="228.3" y="606" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>settabV [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (3 samples, 0.30%)</title>
+<rect x="231.8" y="606" width="3.6" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (88 samples, 8.80%)</title>
+<rect x="235.4" y="606" width="103.8" height="15.0"/>
+<text x="238.38" y="616.5">lj_tab_new [..</text>
+</g>
+<g class="f_g o">
+<title>lj_tab_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="339.2" y="606" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="340.4" y="606" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_new_ah [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="341.6" y="606" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (4 samples, 0.40%)</title>
+<rect x="353.4" y="606" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (2 samples, 0.20%)</title>
+<rect x="358.1" y="606" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="360.5" y="606" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (3 samples, 0.30%)</title>
+<rect x="361.6" y="606" width="3.6" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (2 samples, 0.20%)</title>
+<rect x="365.2" y="606" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (7 samples, 0.70%)</title>
+<rect x="367.5" y="606" width="8.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="375.8" y="606" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (4 samples, 0.40%)</title>
+<rect x="377.0" y="606" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (3 samples, 0.30%)</title>
+<rect x="381.7" y="606" width="3.5" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (6 samples, 0.60%)</title>
+<rect x="385.2" y="606" width="7.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (8 samples, 0.80%)</title>
+<rect x="401.8" y="606" width="9.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="411.2" y="606" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (4 samples, 0.40%)</title>
+<rect x="412.4" y="606" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (1 samples, 0.10%)</title>
+<rect x="417.1" y="606" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (11 samples, 1.10%)</title>
+<rect x="418.3" y="606" width="13.0" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (3 samples, 0.30%)</title>
+<rect x="431.3" y="606" width="3.5" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (6 samples, 0.60%)</title>
+<rect x="434.8" y="606" width="7.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>json_next_string_token inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1197:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (2 samples, 0.20%)</title>
+<rect x="441.9" y="606" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lua_pushlstring [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (4 samples, 0.40%)</title>
+<rect x="451.3" y="606" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lua_pushlstring [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="456.0" y="606" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lua_pushlstring [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="458.4" y="606" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lua_pushlstring [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (168 samples, 16.80%)</title>
+<rect x="460.8" y="606" width="198.2" height="15.0"/>
+<text x="463.76" y="616.5">lua_pushlstring [/usr/loca..</text>
+</g>
+<g class="f_g o">
+<title>lua_pushlstring [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="659.0" y="606" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>index2adr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (3 samples, 0.30%)</title>
+<rect x="663.7" y="606" width="3.6" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>index2adr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (3 samples, 0.30%)</title>
+<rect x="672.0" y="606" width="3.5" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>index2adr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="675.5" y="606" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>index2adr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="676.7" y="606" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_setinth [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="677.9" y="606" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_setinth [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (3 samples, 0.30%)</title>
+<rect x="679.1" y="606" width="3.5" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_setinth [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="682.6" y="606" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_setinth [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (121 samples, 12.10%)</title>
+<rect x="685.0" y="606" width="142.7" height="15.0"/>
+<text x="687.96" y="616.5">lj_tab_setinth [/u..</text>
+</g>
+<g class="f_g o">
+<title>copyTV inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_api.c:1020:3 in lua_rawseti [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="831.3" y="606" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>copyTV [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (4 samples, 0.40%)</title>
+<rect x="832.5" y="606" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>setgcV [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="858.4" y="606" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>hash_sparse_sse42 [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="864.3" y="606" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>hash_sparse_sse42 [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="865.5" y="606" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>__memcmp_avx2_movbe [/usr/lib64/libc-2.28.so] (1 samples, 0.10%)</title>
+<rect x="918.6" y="606" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>__memcmp_avx2_movbe [/usr/lib64/libc-2.28.so] (1 samples, 0.10%)</title>
+<rect x="919.8" y="606" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>__memcmp_avx2_movbe [/usr/lib64/libc-2.28.so] (1 samples, 0.10%)</title>
+<rect x="921.0" y="606" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>hashmask inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:535:13 in lj_tab_setstr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (4 samples, 0.40%)</title>
+<rect x="948.1" y="606" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>setstrV [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="957.5" y="606" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_newkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="958.7" y="606" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_newkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="961.1" y="606" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_newkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="963.4" y="606" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_newkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="965.8" y="606" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_newkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="967.0" y="606" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_newkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="968.2" y="606" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_newkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="970.5" y="606" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_newkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="972.9" y="606" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_newkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="974.1" y="606" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_newkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (125 samples, 12.50%)</title>
+<rect x="976.4" y="606" width="147.5" height="15.0"/>
+<text x="979.42" y="616.5">lj_tab_newkey [/us..</text>
+</g>
+<g class="f_g o">
+<title>lj_tab_setstr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1123.9" y="606" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_setstr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (4 samples, 0.40%)</title>
+<rect x="1125.1" y="606" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_setstr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1129.8" y="606" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_setstr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (10 samples, 1.00%)</title>
+<rect x="1131.0" y="606" width="11.8" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_mem_realloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (4 samples, 0.40%)</title>
+<rect x="1171.1" y="606" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_gc.c:893 (38 samples, 3.80%)</title>
+<rect x="14.7" y="622" width="44.9" height="15.0"/>
+<text x="17.72" y="632.5">@src..</text>
+</g>
+<g class="f_g">
+<title>@src/lj_gc.c:902 (1 samples, 0.10%)</title>
+<rect x="59.6" y="622" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str_hash.c:105 (2 samples, 0.20%)</title>
+<rect x="129.2" y="622" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:933 (3 samples, 0.30%)</title>
+<rect x="231.8" y="622" width="3.6" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:76 (88 samples, 8.80%)</title>
+<rect x="235.4" y="622" width="103.8" height="15.0"/>
+<text x="238.38" y="632.5">@src/lj_tab...</text>
+</g>
+<g class="f_g">
+<title>@lua-cjson/strbuf.h:135 (3 samples, 0.30%)</title>
+<rect x="361.6" y="622" width="3.6" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/strbuf.h:153 (4 samples, 0.40%)</title>
+<rect x="377.0" y="622" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@lua-cjson/strbuf.h:135 (4 samples, 0.40%)</title>
+<rect x="412.4" y="622" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:941 (4 samples, 0.40%)</title>
+<rect x="460.8" y="622" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str.c:351 (3 samples, 0.30%)</title>
+<rect x="465.5" y="622" width="3.5" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str.c:352 (1 samples, 0.10%)</title>
+<rect x="469.0" y="622" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str.c:353 (2 samples, 0.20%)</title>
+<rect x="470.2" y="622" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str.c:359 (4 samples, 0.40%)</title>
+<rect x="472.6" y="622" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str.c:367 (32 samples, 3.20%)</title>
+<rect x="477.3" y="622" width="37.7" height="15.0"/>
+<text x="480.28" y="632.5">@sr..</text>
+</g>
+<g class="f_g">
+<title>@src/lj_str.c:368 (94 samples, 9.40%)</title>
+<rect x="515.0" y="622" width="111.0" height="15.0"/>
+<text x="518.04" y="632.5">@src/lj_str.c..</text>
+</g>
+<g class="f_g">
+<title>@src/lj_str.c:369 (4 samples, 0.40%)</title>
+<rect x="626.0" y="622" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str.c:370 (12 samples, 1.20%)</title>
+<rect x="630.7" y="622" width="14.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str.c:371 (2 samples, 0.20%)</title>
+<rect x="644.8" y="622" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str.c:377 (9 samples, 0.90%)</title>
+<rect x="647.2" y="622" width="10.6" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str.c:392 (1 samples, 0.10%)</title>
+<rect x="657.8" y="622" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:39 (2 samples, 0.20%)</title>
+<rect x="663.7" y="622" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:40 (1 samples, 0.10%)</title>
+<rect x="666.1" y="622" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_api.c:40 (3 samples, 0.30%)</title>
+<rect x="672.0" y="622" width="3.5" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.h:38 (2 samples, 0.20%)</title>
+<rect x="679.1" y="622" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:445 (3 samples, 0.30%)</title>
+<rect x="685.0" y="622" width="3.5" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:447 (1 samples, 0.10%)</title>
+<rect x="688.5" y="622" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:453 (1 samples, 0.10%)</title>
+<rect x="689.7" y="622" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:454 (2 samples, 0.20%)</title>
+<rect x="690.9" y="622" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:455 (1 samples, 0.10%)</title>
+<rect x="693.2" y="622" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:517 (108 samples, 10.80%)</title>
+<rect x="694.4" y="622" width="127.4" height="15.0"/>
+<text x="697.40" y="632.5">@src/lj_tab.c:517</text>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:548 (1 samples, 0.10%)</title>
+<rect x="821.8" y="622" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:555 (2 samples, 0.20%)</title>
+<rect x="823.0" y="622" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:556 (1 samples, 0.10%)</title>
+<rect x="825.4" y="622" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:912 (3 samples, 0.30%)</title>
+<rect x="832.5" y="622" width="3.5" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:916 (1 samples, 0.10%)</title>
+<rect x="836.0" y="622" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:911 (1 samples, 0.10%)</title>
+<rect x="858.4" y="622" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:933 (1 samples, 0.10%)</title>
+<rect x="957.5" y="622" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:24 (1 samples, 0.10%)</title>
+<rect x="963.4" y="622" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:25 (1 samples, 0.10%)</title>
+<rect x="964.6" y="622" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:24 (1 samples, 0.10%)</title>
+<rect x="968.2" y="622" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:26 (1 samples, 0.10%)</title>
+<rect x="969.3" y="622" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:359 (2 samples, 0.20%)</title>
+<rect x="976.4" y="622" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:362 (9 samples, 0.90%)</title>
+<rect x="978.8" y="622" width="10.6" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:363 (1 samples, 0.10%)</title>
+<rect x="989.4" y="622" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:365 (6 samples, 0.60%)</title>
+<rect x="990.6" y="622" width="7.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:366 (1 samples, 0.10%)</title>
+<rect x="997.7" y="622" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:367 (1 samples, 0.10%)</title>
+<rect x="998.8" y="622" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:369 (1 samples, 0.10%)</title>
+<rect x="1000.0" y="622" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:370 (102 samples, 10.20%)</title>
+<rect x="1001.2" y="622" width="120.4" height="15.0"/>
+<text x="1004.20" y="632.5">@src/lj_tab.c:370</text>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.h:38 (1 samples, 0.10%)</title>
+<rect x="1123.9" y="622" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:941 (1 samples, 0.10%)</title>
+<rect x="1129.8" y="622" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:445 (1 samples, 0.10%)</title>
+<rect x="1131.0" y="622" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:447 (2 samples, 0.20%)</title>
+<rect x="1132.2" y="622" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:457 (2 samples, 0.20%)</title>
+<rect x="1134.5" y="622" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:461 (1 samples, 0.10%)</title>
+<rect x="1136.9" y="622" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:507 (1 samples, 0.10%)</title>
+<rect x="1138.1" y="622" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:517 (3 samples, 0.30%)</title>
+<rect x="1139.3" y="622" width="3.5" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1437 (1 samples, 0.10%)</title>
+<rect x="1171.1" y="622" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1462 (2 samples, 0.20%)</title>
+<rect x="1172.3" y="622" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1466 (1 samples, 0.10%)</title>
+<rect x="1174.7" y="622" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_mem_newgco [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (38 samples, 3.80%)</title>
+<rect x="14.7" y="638" width="44.9" height="15.0"/>
+<text x="17.72" y="648.5">lj_m..</text>
+</g>
+<g class="f_g o">
+<title>lj_mem_newgco [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="59.6" y="638" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>hash_sparse_4_16 inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_str_hash.c:281:10 in hash_sparse_sse42 [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="129.2" y="638" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>setgcV [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (3 samples, 0.30%)</title>
+<rect x="231.8" y="638" width="3.6" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>clearapart inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:144:3 in lj_tab_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (88 samples, 8.80%)</title>
+<rect x="235.4" y="638" width="103.8" height="15.0"/>
+<text x="238.38" y="648.5">clearapart i..</text>
+</g>
+<g class="f_g o">
+<title>strbuf_append_char_unsafe inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1076:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (3 samples, 0.30%)</title>
+<rect x="361.6" y="638" width="3.6" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>strbuf_ensure_null inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1081:5 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (4 samples, 0.40%)</title>
+<rect x="377.0" y="638" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>strbuf_append_char_unsafe inlined at /home/code/orinc/lua-cjson/lua_cjson.c:1076:9 in json_next_token [/usr/local/openresty-plus-dev/lualib/cjson.so] (4 samples, 0.40%)</title>
+<rect x="412.4" y="638" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>setstrV [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (4 samples, 0.40%)</title>
+<rect x="460.8" y="638" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_str_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (3 samples, 0.30%)</title>
+<rect x="465.5" y="638" width="3.5" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_str_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="469.0" y="638" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_str_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="470.2" y="638" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_str_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (4 samples, 0.40%)</title>
+<rect x="472.6" y="638" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_str_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (32 samples, 3.20%)</title>
+<rect x="477.3" y="638" width="37.7" height="15.0"/>
+<text x="480.28" y="648.5">lj_..</text>
+</g>
+<g class="f_g o">
+<title>lj_str_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (94 samples, 9.40%)</title>
+<rect x="515.0" y="638" width="111.0" height="15.0"/>
+<text x="518.04" y="648.5">lj_str_new [/..</text>
+</g>
+<g class="f_g o">
+<title>lj_str_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (4 samples, 0.40%)</title>
+<rect x="626.0" y="638" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_str_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (12 samples, 1.20%)</title>
+<rect x="630.7" y="638" width="14.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_str_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="644.8" y="638" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_str_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (9 samples, 0.90%)</title>
+<rect x="647.2" y="638" width="10.6" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_str_new [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="657.8" y="638" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>index2adr inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_api.c:34:16 in index2adr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="663.7" y="638" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>index2adr inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_api.c:34:16 in index2adr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="666.1" y="638" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>index2adr inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_api.c:34:16 in index2adr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (3 samples, 0.30%)</title>
+<rect x="672.0" y="638" width="3.5" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>hashmask inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:524:7 in lj_tab_setinth [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="679.1" y="638" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_newkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (3 samples, 0.30%)</title>
+<rect x="685.0" y="638" width="3.5" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_newkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="688.5" y="638" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_newkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="689.7" y="638" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_newkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="690.9" y="638" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_newkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="693.2" y="638" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_newkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (108 samples, 10.80%)</title>
+<rect x="694.4" y="638" width="127.4" height="15.0"/>
+<text x="697.40" y="648.5">lj_tab_newkey [..</text>
+</g>
+<g class="f_g o">
+<title>lj_tab_set [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="821.8" y="638" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_set [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="823.0" y="638" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_set [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="825.4" y="638" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>checklivetv inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_obj.h:981:3 in lua_rawseti [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (3 samples, 0.30%)</title>
+<rect x="832.5" y="638" width="3.5" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>checklivetv inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_obj.h:981:3 in lua_rawseti [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="836.0" y="638" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>checklivetv inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_obj.h:933:3 in lua_pushlstring [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="858.4" y="638" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>setgcV [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="957.5" y="638" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>hashkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="963.4" y="638" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>hashkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="964.6" y="638" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>hashkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="968.2" y="638" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>hashkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="969.3" y="638" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="976.4" y="638" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (9 samples, 0.90%)</title>
+<rect x="978.8" y="638" width="10.6" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="989.4" y="638" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (6 samples, 0.60%)</title>
+<rect x="990.6" y="638" width="7.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="997.7" y="638" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="998.8" y="638" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1000.0" y="638" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (102 samples, 10.20%)</title>
+<rect x="1001.2" y="638" width="120.4" height="15.0"/>
+<text x="1004.20" y="648.5">rehashtab [/usr..</text>
+</g>
+<g class="f_g o">
+<title>hashmask inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:535:13 in lj_tab_setstr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1123.9" y="638" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>setstrV [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1129.8" y="638" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_newkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1131.0" y="638" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_newkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="1132.2" y="638" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_newkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="1134.5" y="638" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_newkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1136.9" y="638" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_newkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1138.1" y="638" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_newkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (3 samples, 0.30%)</title>
+<rect x="1139.3" y="638" width="3.5" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_realloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1171.1" y="638" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_realloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="1172.3" y="638" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_realloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1174.7" y="638" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1290 (1 samples, 0.10%)</title>
+<rect x="14.7" y="654" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1330 (22 samples, 2.20%)</title>
+<rect x="15.9" y="654" width="26.0" height="15.0"/>
+<text x="18.90" y="664.5">@..</text>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1349 (15 samples, 1.50%)</title>
+<rect x="41.9" y="654" width="17.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:911 (1 samples, 0.10%)</title>
+<rect x="231.8" y="654" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:912 (1 samples, 0.10%)</title>
+<rect x="233.0" y="654" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:916 (1 samples, 0.10%)</title>
+<rect x="234.2" y="654" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:106 (85 samples, 8.50%)</title>
+<rect x="235.4" y="654" width="100.3" height="15.0"/>
+<text x="238.38" y="664.5">@src/lj_tab...</text>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:110 (1 samples, 0.10%)</title>
+<rect x="335.7" y="654" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:113 (1 samples, 0.10%)</title>
+<rect x="336.9" y="654" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:125 (1 samples, 0.10%)</title>
+<rect x="338.0" y="654" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:932 (2 samples, 0.20%)</title>
+<rect x="460.8" y="654" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:933 (2 samples, 0.20%)</title>
+<rect x="463.1" y="654" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str_hash.c:272 (1 samples, 0.10%)</title>
+<rect x="472.6" y="654" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str_hash.c:277 (1 samples, 0.10%)</title>
+<rect x="473.7" y="654" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str_hash.c:278 (2 samples, 0.20%)</title>
+<rect x="474.9" y="654" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@multiarch/memcmp-avx2-movbe.S:233 (2 samples, 0.20%)</title>
+<rect x="630.7" y="654" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@multiarch/memcmp-avx2-movbe.S:241 (1 samples, 0.10%)</title>
+<rect x="633.0" y="654" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@multiarch/memcmp-avx2-movbe.S:246 (1 samples, 0.10%)</title>
+<rect x="634.2" y="654" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@multiarch/memcmp-avx2-movbe.S:247 (1 samples, 0.10%)</title>
+<rect x="635.4" y="654" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@multiarch/memcmp-avx2-movbe.S:257 (1 samples, 0.10%)</title>
+<rect x="636.6" y="654" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@multiarch/memcmp-avx2-movbe.S:59 (1 samples, 0.10%)</title>
+<rect x="637.8" y="654" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>_init [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] [95b0] (2 samples, 0.20%)</title>
+<rect x="638.9" y="654" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:28 (1 samples, 0.10%)</title>
+<rect x="688.5" y="654" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:359 (4 samples, 0.40%)</title>
+<rect x="694.4" y="654" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:362 (12 samples, 1.20%)</title>
+<rect x="699.1" y="654" width="14.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:363 (5 samples, 0.50%)</title>
+<rect x="713.3" y="654" width="5.9" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:365 (3 samples, 0.30%)</title>
+<rect x="719.2" y="654" width="3.5" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:367 (14 samples, 1.40%)</title>
+<rect x="722.7" y="654" width="16.5" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:370 (70 samples, 7.00%)</title>
+<rect x="739.2" y="654" width="82.6" height="15.0"/>
+<text x="742.24" y="664.5">@src/lj_t..</text>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:911 (1 samples, 0.10%)</title>
+<rect x="957.5" y="654" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.h:38 (1 samples, 0.10%)</title>
+<rect x="969.3" y="654" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:312 (1 samples, 0.10%)</title>
+<rect x="989.4" y="654" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:335 (1 samples, 0.10%)</title>
+<rect x="990.6" y="654" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:337 (3 samples, 0.30%)</title>
+<rect x="991.8" y="654" width="3.5" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:338 (2 samples, 0.20%)</title>
+<rect x="995.3" y="654" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:348 (1 samples, 0.10%)</title>
+<rect x="998.8" y="654" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1353 (1 samples, 0.10%)</title>
+<rect x="1001.2" y="654" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1380 (1 samples, 0.10%)</title>
+<rect x="1002.4" y="654" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1412 (1 samples, 0.10%)</title>
+<rect x="1003.6" y="654" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1476 (1 samples, 0.10%)</title>
+<rect x="1004.7" y="654" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:233 (1 samples, 0.10%)</title>
+<rect x="1005.9" y="654" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:260 (79 samples, 7.90%)</title>
+<rect x="1007.1" y="654" width="93.2" height="15.0"/>
+<text x="1010.10" y="664.5">@src/lj_tab..</text>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:261 (3 samples, 0.30%)</title>
+<rect x="1100.3" y="654" width="3.6" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:288 (13 samples, 1.30%)</title>
+<rect x="1103.9" y="654" width="15.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:293 (1 samples, 0.10%)</title>
+<rect x="1119.2" y="654" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:933 (1 samples, 0.10%)</title>
+<rect x="1129.8" y="654" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:24 (1 samples, 0.10%)</title>
+<rect x="1132.2" y="654" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:26 (1 samples, 0.10%)</title>
+<rect x="1133.4" y="654" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:25 (1 samples, 0.10%)</title>
+<rect x="1136.9" y="654" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:858 (1 samples, 0.10%)</title>
+<rect x="1171.1" y="654" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1349 (2 samples, 0.20%)</title>
+<rect x="1172.3" y="654" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@multiarch/memmove-vec-unaligned-erms.S:240 (1 samples, 0.10%)</title>
+<rect x="1174.7" y="654" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="14.7" y="670" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (22 samples, 2.20%)</title>
+<rect x="15.9" y="670" width="26.0" height="15.0"/>
+<text x="18.90" y="680.5">l..</text>
+</g>
+<g class="f_g o">
+<title>lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (15 samples, 1.50%)</title>
+<rect x="41.9" y="670" width="17.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>checklivetv inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_obj.h:933:3 in lua_createtable [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="231.8" y="670" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>checklivetv inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_obj.h:933:3 in lua_createtable [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="233.0" y="670" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>checklivetv inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_obj.h:933:3 in lua_createtable [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="234.2" y="670" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>newtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (85 samples, 8.50%)</title>
+<rect x="235.4" y="670" width="100.3" height="15.0"/>
+<text x="238.38" y="680.5">newtab [/usr..</text>
+</g>
+<g class="f_g o">
+<title>newtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="335.7" y="670" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>newtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="336.9" y="670" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>newtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="338.0" y="670" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>setgcV [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="460.8" y="670" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>setgcV [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="463.1" y="670" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>hash_sparse_sse42 [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="472.6" y="670" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>hash_sparse_sse42 [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="473.7" y="670" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>hash_sparse_sse42 [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="474.9" y="670" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>__memcmp_avx2_movbe [/usr/lib64/libc-2.28.so] (2 samples, 0.20%)</title>
+<rect x="630.7" y="670" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>__memcmp_avx2_movbe [/usr/lib64/libc-2.28.so] (1 samples, 0.10%)</title>
+<rect x="633.0" y="670" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>__memcmp_avx2_movbe [/usr/lib64/libc-2.28.so] (1 samples, 0.10%)</title>
+<rect x="634.2" y="670" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>__memcmp_avx2_movbe [/usr/lib64/libc-2.28.so] (1 samples, 0.10%)</title>
+<rect x="635.4" y="670" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>__memcmp_avx2_movbe [/usr/lib64/libc-2.28.so] (1 samples, 0.10%)</title>
+<rect x="636.6" y="670" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>__memcmp_avx2_movbe [/usr/lib64/libc-2.28.so] (1 samples, 0.10%)</title>
+<rect x="637.8" y="670" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>hashkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="688.5" y="670" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (4 samples, 0.40%)</title>
+<rect x="694.4" y="670" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (12 samples, 1.20%)</title>
+<rect x="699.1" y="670" width="14.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (5 samples, 0.50%)</title>
+<rect x="713.3" y="670" width="5.9" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (3 samples, 0.30%)</title>
+<rect x="719.2" y="670" width="3.5" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (14 samples, 1.40%)</title>
+<rect x="722.7" y="670" width="16.5" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (70 samples, 7.00%)</title>
+<rect x="739.2" y="670" width="82.6" height="15.0"/>
+<text x="742.24" y="680.5">rehashtab..</text>
+</g>
+<g class="f_g o">
+<title>checklivetv inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_obj.h:933:3 in lj_tab_setstr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="957.5" y="670" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>hashmask inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:26:12 in hashkey.isra.1 [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="969.3" y="670" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>countarray inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:363:11 in rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="989.4" y="670" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>counthash inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:365:12 in rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="990.6" y="670" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>counthash inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:365:12 in rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (3 samples, 0.30%)</title>
+<rect x="991.8" y="670" width="3.5" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>counthash inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:365:12 in rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="995.3" y="670" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>bestasize inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:367:8 in rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="998.8" y="670" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_free [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1001.2" y="670" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_free [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1002.4" y="670" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_free [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1003.6" y="670" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_f [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1004.7" y="670" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_resize [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1005.9" y="670" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_resize [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (79 samples, 7.90%)</title>
+<rect x="1007.1" y="670" width="93.2" height="15.0"/>
+<text x="1010.10" y="680.5">lj_tab_resi..</text>
+</g>
+<g class="f_g o">
+<title>lj_tab_resize [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (3 samples, 0.30%)</title>
+<rect x="1100.3" y="670" width="3.6" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_resize [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (13 samples, 1.30%)</title>
+<rect x="1103.9" y="670" width="15.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_resize [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1119.2" y="670" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>setgcV [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1129.8" y="670" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>hashkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1132.2" y="670" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>hashkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1133.4" y="670" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>hashkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1136.9" y="670" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>direct_resize [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1171.1" y="670" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="1172.3" y="670" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>__memmove_avx_unaligned_erms [/usr/lib64/libc-2.28.so] (1 samples, 0.10%)</title>
+<rect x="1174.7" y="670" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1010 (14 samples, 1.40%)</title>
+<rect x="41.9" y="686" width="16.5" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:999 (1 samples, 0.10%)</title>
+<rect x="58.4" y="686" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_gc.c:892 (1 samples, 0.10%)</title>
+<rect x="235.4" y="686" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_gc.c:893 (79 samples, 7.90%)</title>
+<rect x="236.6" y="686" width="93.2" height="15.0"/>
+<text x="239.56" y="696.5">@src/lj_gc...</text>
+</g>
+<g class="f_g">
+<title>@src/lj_gc.c:895 (1 samples, 0.10%)</title>
+<rect x="329.8" y="686" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_gc.c:897 (1 samples, 0.10%)</title>
+<rect x="331.0" y="686" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_gc.c:898 (1 samples, 0.10%)</title>
+<rect x="332.1" y="686" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_gc.c:902 (2 samples, 0.20%)</title>
+<rect x="333.3" y="686" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:924 (2 samples, 0.20%)</title>
+<rect x="460.8" y="686" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:911 (1 samples, 0.10%)</title>
+<rect x="463.1" y="686" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:916 (1 samples, 0.10%)</title>
+<rect x="464.3" y="686" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str_hash.c:281 (1 samples, 0.10%)</title>
+<rect x="472.6" y="686" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str_hash.c:124 (1 samples, 0.10%)</title>
+<rect x="474.9" y="686" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_str_hash.c:125 (1 samples, 0.10%)</title>
+<rect x="476.1" y="686" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.h:24 (1 samples, 0.10%)</title>
+<rect x="688.5" y="686" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:312 (1 samples, 0.10%)</title>
+<rect x="713.3" y="686" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:313 (1 samples, 0.10%)</title>
+<rect x="714.5" y="686" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:317 (1 samples, 0.10%)</title>
+<rect x="715.6" y="686" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:322 (1 samples, 0.10%)</title>
+<rect x="716.8" y="686" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:323 (1 samples, 0.10%)</title>
+<rect x="718.0" y="686" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:335 (2 samples, 0.20%)</title>
+<rect x="719.2" y="686" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:337 (1 samples, 0.10%)</title>
+<rect x="721.5" y="686" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:348 (9 samples, 0.90%)</title>
+<rect x="722.7" y="686" width="10.6" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:349 (2 samples, 0.20%)</title>
+<rect x="733.3" y="686" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:350 (3 samples, 0.30%)</title>
+<rect x="735.7" y="686" width="3.5" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:233 (1 samples, 0.10%)</title>
+<rect x="739.2" y="686" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:236 (1 samples, 0.10%)</title>
+<rect x="740.4" y="686" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:240 (2 samples, 0.20%)</title>
+<rect x="741.6" y="686" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:242 (1 samples, 0.10%)</title>
+<rect x="744.0" y="686" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:250 (58 samples, 5.80%)</title>
+<rect x="745.1" y="686" width="68.5" height="15.0"/>
+<text x="748.14" y="696.5">@src/lj..</text>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:254 (1 samples, 0.10%)</title>
+<rect x="813.6" y="686" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:255 (1 samples, 0.10%)</title>
+<rect x="814.8" y="686" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:264 (2 samples, 0.20%)</title>
+<rect x="815.9" y="686" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:266 (1 samples, 0.10%)</title>
+<rect x="818.3" y="686" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:295 (1 samples, 0.10%)</title>
+<rect x="998.8" y="686" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:50 (79 samples, 7.90%)</title>
+<rect x="1007.1" y="686" width="93.2" height="15.0"/>
+<text x="1010.10" y="696.5">@src/lj_tab..</text>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:65 (1 samples, 0.10%)</title>
+<rect x="1100.3" y="686" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:68 (1 samples, 0.10%)</title>
+<rect x="1101.5" y="686" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:69 (1 samples, 0.10%)</title>
+<rect x="1102.7" y="686" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:980 (11 samples, 1.10%)</title>
+<rect x="1103.9" y="686" width="12.9" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:981 (2 samples, 0.20%)</title>
+<rect x="1116.8" y="686" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:916 (1 samples, 0.10%)</title>
+<rect x="1129.8" y="686" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:361 (1 samples, 0.10%)</title>
+<rect x="1171.1" y="686" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1010 (1 samples, 0.10%)</title>
+<rect x="1172.3" y="686" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1023 (1 samples, 0.10%)</title>
+<rect x="1173.5" y="686" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>alloc_sys inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_alloc.c:1349:10 in lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (14 samples, 1.40%)</title>
+<rect x="41.9" y="702" width="16.5" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>alloc_sys inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_alloc.c:1349:10 in lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="58.4" y="702" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_mem_newgco [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="235.4" y="702" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_mem_newgco [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (79 samples, 7.90%)</title>
+<rect x="236.6" y="702" width="93.2" height="15.0"/>
+<text x="239.56" y="712.5">lj_mem_newg..</text>
+</g>
+<g class="f_g o">
+<title>lj_mem_newgco [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="329.8" y="702" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_mem_newgco [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="331.0" y="702" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_mem_newgco [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="332.1" y="702" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_mem_newgco [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="333.3" y="702" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>setgcVraw inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_obj.h:932:3 in lua_pushlstring [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="460.8" y="702" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>checklivetv inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_obj.h:933:3 in lua_pushlstring [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="463.1" y="702" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>checklivetv inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_obj.h:933:3 in lua_pushlstring [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="464.3" y="702" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>hash_sparse_sse42 [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="472.6" y="702" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>hash_16_128 inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_str_hash.c:278:12 in hash_sparse_sse42 [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="474.9" y="702" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>hash_16_128 inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_str_hash.c:278:12 in hash_sparse_sse42 [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="476.1" y="702" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>hashrot inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:28:12 in hashkey.isra.1 [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="688.5" y="702" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>countarray inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:363:11 in rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="713.3" y="702" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>countarray inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:363:11 in rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="714.5" y="702" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>countarray inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:363:11 in rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="715.6" y="702" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>countarray inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:363:11 in rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="716.8" y="702" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>countarray inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:363:11 in rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="718.0" y="702" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>counthash inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:365:12 in rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="719.2" y="702" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>counthash inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:365:12 in rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="721.5" y="702" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>bestasize inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:367:8 in rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (9 samples, 0.90%)</title>
+<rect x="722.7" y="702" width="10.6" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>bestasize inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:367:8 in rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="733.3" y="702" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>bestasize inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:367:8 in rehashtab [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (3 samples, 0.30%)</title>
+<rect x="735.7" y="702" width="3.5" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_resize [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="739.2" y="702" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_resize [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="740.4" y="702" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_resize [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="741.6" y="702" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_resize [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="744.0" y="702" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_resize [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (58 samples, 5.80%)</title>
+<rect x="745.1" y="702" width="68.5" height="15.0"/>
+<text x="748.14" y="712.5">lj_tab_..</text>
+</g>
+<g class="f_g o">
+<title>lj_tab_resize [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="813.6" y="702" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_resize [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="814.8" y="702" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_resize [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="815.9" y="702" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_resize [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="818.3" y="702" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>countint [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="998.8" y="702" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>newhpart inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:260:5 in lj_tab_resize [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (79 samples, 7.90%)</title>
+<rect x="1007.1" y="702" width="93.2" height="15.0"/>
+<text x="1010.10" y="712.5">newhpart in..</text>
+</g>
+<g class="f_g o">
+<title>clearhpart inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:261:5 in lj_tab_resize [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1100.3" y="702" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>clearhpart inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:261:5 in lj_tab_resize [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1101.5" y="702" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>clearhpart inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:261:5 in lj_tab_resize [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1102.7" y="702" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>copyTV inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:288:2 in lj_tab_resize [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (11 samples, 1.10%)</title>
+<rect x="1103.9" y="702" width="12.9" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>copyTV [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="1116.8" y="702" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>checklivetv inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_obj.h:933:3 in lj_tab_setstr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1129.8" y="702" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>CALL_MREMAP_ inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_alloc.c:858:24 in lj_alloc_realloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1171.1" y="702" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>alloc_sys inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_alloc.c:1349:10 in lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1172.3" y="702" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>alloc_sys [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1173.5" y="702" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:242 (1 samples, 0.10%)</title>
+<rect x="58.4" y="718" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1279 (1 samples, 0.10%)</title>
+<rect x="236.6" y="718" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1291 (1 samples, 0.10%)</title>
+<rect x="237.7" y="718" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1330 (49 samples, 4.90%)</title>
+<rect x="238.9" y="718" width="57.8" height="15.0"/>
+<text x="241.92" y="728.5">@src/l..</text>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1349 (28 samples, 2.80%)</title>
+<rect x="296.7" y="718" width="33.1" height="15.0"/>
+<text x="299.74" y="728.5">@s..</text>
+</g>
+<g class="f_g">
+<title>@src/lj_str_hash.c:101 (1 samples, 0.10%)</title>
+<rect x="472.6" y="718" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:295 (1 samples, 0.10%)</title>
+<rect x="722.7" y="718" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:297 (1 samples, 0.10%)</title>
+<rect x="723.9" y="718" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:299 (2 samples, 0.20%)</title>
+<rect x="725.1" y="718" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:301 (4 samples, 0.40%)</title>
+<rect x="727.4" y="718" width="4.8" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:307 (1 samples, 0.10%)</title>
+<rect x="732.2" y="718" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_gc.c:877 (2 samples, 0.20%)</title>
+<rect x="745.1" y="718" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_gc.c:879 (51 samples, 5.10%)</title>
+<rect x="747.5" y="718" width="60.2" height="15.0"/>
+<text x="750.50" y="728.5">@src/l..</text>
+</g>
+<g class="f_g">
+<title>@src/lj_gc.c:886 (3 samples, 0.30%)</title>
+<rect x="807.7" y="718" width="3.5" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_gc.c:875 (2 samples, 0.20%)</title>
+<rect x="1007.1" y="718" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_gc.c:879 (76 samples, 7.60%)</title>
+<rect x="1009.5" y="718" width="89.6" height="15.0"/>
+<text x="1012.46" y="728.5">@src/lj_gc..</text>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:540 (3 samples, 0.30%)</title>
+<rect x="1103.9" y="718" width="3.5" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:542 (7 samples, 0.70%)</title>
+<rect x="1107.4" y="718" width="8.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:548 (1 samples, 0.10%)</title>
+<rect x="1115.7" y="718" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:911 (1 samples, 0.10%)</title>
+<rect x="1116.8" y="718" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:912 (1 samples, 0.10%)</title>
+<rect x="1118.0" y="718" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@unix/syscall-template.S:78 (1 samples, 0.10%)</title>
+<rect x="1171.1" y="718" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:927 (1 samples, 0.10%)</title>
+<rect x="1173.5" y="718" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>mmap_probe [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="58.4" y="734" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="236.6" y="734" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="237.7" y="734" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (49 samples, 4.90%)</title>
+<rect x="238.9" y="734" width="57.8" height="15.0"/>
+<text x="241.92" y="744.5">lj_all..</text>
+</g>
+<g class="f_g o">
+<title>lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (28 samples, 2.80%)</title>
+<rect x="296.7" y="734" width="33.1" height="15.0"/>
+<text x="299.74" y="744.5">lj..</text>
+</g>
+<g class="f_g o">
+<title>hash_sparse_4_16 inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_str_hash.c:281:10 in hash_sparse_sse42 [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="472.6" y="734" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>countint [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="722.7" y="734" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>countint [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="723.9" y="734" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>countint [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="725.1" y="734" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>countint [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (4 samples, 0.40%)</title>
+<rect x="727.4" y="734" width="4.8" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>countint [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="732.2" y="734" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_mem_realloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="745.1" y="734" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_mem_realloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (51 samples, 5.10%)</title>
+<rect x="747.5" y="734" width="60.2" height="15.0"/>
+<text x="750.50" y="744.5">lj_mem..</text>
+</g>
+<g class="f_g o">
+<title>lj_mem_realloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (3 samples, 0.30%)</title>
+<rect x="807.7" y="734" width="3.5" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_mem_realloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="1007.1" y="734" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_mem_realloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (76 samples, 7.60%)</title>
+<rect x="1009.5" y="734" width="89.6" height="15.0"/>
+<text x="1012.46" y="744.5">lj_mem_rea..</text>
+</g>
+<g class="f_g o">
+<title>lj_tab_setstr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (3 samples, 0.30%)</title>
+<rect x="1103.9" y="734" width="3.5" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_setstr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (7 samples, 0.70%)</title>
+<rect x="1107.4" y="734" width="8.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_set [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1115.7" y="734" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>checklivetv inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_obj.h:981:3 in lj_tab_resize [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1116.8" y="734" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>checklivetv inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_obj.h:981:3 in lj_tab_resize [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1118.0" y="734" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>mremap [/usr/lib64/libc-2.28.so] (1 samples, 0.10%)</title>
+<rect x="1171.1" y="734" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>prepend_alloc inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_alloc.c:1023:9 in lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1173.5" y="734" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@linux/mmap64.c:40 (1 samples, 0.10%)</title>
+<rect x="58.4" y="750" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1010 (21 samples, 2.10%)</title>
+<rect x="296.7" y="750" width="24.8" height="15.0"/>
+<text x="299.74" y="760.5">@..</text>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1023 (2 samples, 0.20%)</title>
+<rect x="321.5" y="750" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1033 (1 samples, 0.10%)</title>
+<rect x="323.9" y="750" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:999 (4 samples, 0.40%)</title>
+<rect x="325.1" y="750" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1283 (4 samples, 0.40%)</title>
+<rect x="747.5" y="750" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1286 (1 samples, 0.10%)</title>
+<rect x="752.2" y="750" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1325 (1 samples, 0.10%)</title>
+<rect x="753.4" y="750" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1330 (21 samples, 2.10%)</title>
+<rect x="754.6" y="750" width="24.8" height="15.0"/>
+<text x="757.58" y="760.5">@..</text>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1349 (3 samples, 0.30%)</title>
+<rect x="779.4" y="750" width="3.5" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1350 (1 samples, 0.10%)</title>
+<rect x="782.9" y="750" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1424 (1 samples, 0.10%)</title>
+<rect x="784.1" y="750" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1462 (11 samples, 1.10%)</title>
+<rect x="785.3" y="750" width="12.9" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1464 (1 samples, 0.10%)</title>
+<rect x="798.2" y="750" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1466 (6 samples, 0.60%)</title>
+<rect x="799.4" y="750" width="7.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1471 (1 samples, 0.10%)</title>
+<rect x="806.5" y="750" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1270 (2 samples, 0.20%)</title>
+<rect x="1009.5" y="750" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1277 (1 samples, 0.10%)</title>
+<rect x="1011.8" y="750" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1279 (1 samples, 0.10%)</title>
+<rect x="1013.0" y="750" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1281 (1 samples, 0.10%)</title>
+<rect x="1014.2" y="750" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1286 (1 samples, 0.10%)</title>
+<rect x="1015.4" y="750" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1287 (1 samples, 0.10%)</title>
+<rect x="1016.5" y="750" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1327 (1 samples, 0.10%)</title>
+<rect x="1017.7" y="750" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1328 (1 samples, 0.10%)</title>
+<rect x="1018.9" y="750" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1330 (38 samples, 3.80%)</title>
+<rect x="1020.1" y="750" width="44.8" height="15.0"/>
+<text x="1023.08" y="760.5">@src..</text>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1349 (27 samples, 2.70%)</title>
+<rect x="1064.9" y="750" width="31.9" height="15.0"/>
+<text x="1067.92" y="760.5">@s..</text>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1350 (1 samples, 0.10%)</title>
+<rect x="1096.8" y="750" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:941 (3 samples, 0.30%)</title>
+<rect x="1103.9" y="750" width="3.5" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:445 (2 samples, 0.20%)</title>
+<rect x="1107.4" y="750" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:446 (2 samples, 0.20%)</title>
+<rect x="1109.8" y="750" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:447 (1 samples, 0.10%)</title>
+<rect x="1112.1" y="750" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:513 (2 samples, 0.20%)</title>
+<rect x="1113.3" y="750" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>__GI___mmap64 [/usr/lib64/libc-2.28.so] (1 samples, 0.10%)</title>
+<rect x="58.4" y="766" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>alloc_sys inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_alloc.c:1349:10 in lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (21 samples, 2.10%)</title>
+<rect x="296.7" y="766" width="24.8" height="15.0"/>
+<text x="299.74" y="776.5">a..</text>
+</g>
+<g class="f_g o">
+<title>alloc_sys [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="321.5" y="766" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>alloc_sys inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_alloc.c:1349:10 in lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="323.9" y="766" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>alloc_sys inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_alloc.c:1349:10 in lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (4 samples, 0.40%)</title>
+<rect x="325.1" y="766" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (4 samples, 0.40%)</title>
+<rect x="747.5" y="766" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="752.2" y="766" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="753.4" y="766" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (21 samples, 2.10%)</title>
+<rect x="754.6" y="766" width="24.8" height="15.0"/>
+<text x="757.58" y="776.5">l..</text>
+</g>
+<g class="f_g o">
+<title>lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (3 samples, 0.30%)</title>
+<rect x="779.4" y="766" width="3.5" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="782.9" y="766" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_realloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="784.1" y="766" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_realloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (11 samples, 1.10%)</title>
+<rect x="785.3" y="766" width="12.9" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_realloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="798.2" y="766" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_realloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (6 samples, 0.60%)</title>
+<rect x="799.4" y="766" width="7.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_realloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="806.5" y="766" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="1009.5" y="766" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1011.8" y="766" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1013.0" y="766" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1014.2" y="766" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1015.4" y="766" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1016.5" y="766" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1017.7" y="766" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1018.9" y="766" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (38 samples, 3.80%)</title>
+<rect x="1020.1" y="766" width="44.8" height="15.0"/>
+<text x="1023.08" y="776.5">lj_a..</text>
+</g>
+<g class="f_g o">
+<title>lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (27 samples, 2.70%)</title>
+<rect x="1064.9" y="766" width="31.9" height="15.0"/>
+<text x="1067.92" y="776.5">lj..</text>
+</g>
+<g class="f_g o">
+<title>lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1096.8" y="766" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>setstrV [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (3 samples, 0.30%)</title>
+<rect x="1103.9" y="766" width="3.5" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_newkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="1107.4" y="766" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_newkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="1109.8" y="766" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_newkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1112.1" y="766" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_tab_newkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="1113.3" y="766" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@linux/mmap64.c:52 (1 samples, 0.10%)</title>
+<rect x="58.4" y="782" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:909 (2 samples, 0.20%)</title>
+<rect x="321.5" y="782" width="2.4" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:242 (4 samples, 0.40%)</title>
+<rect x="325.1" y="782" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1010 (3 samples, 0.30%)</title>
+<rect x="779.4" y="782" width="3.5" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1330 (9 samples, 0.90%)</title>
+<rect x="785.3" y="782" width="10.6" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1349 (2 samples, 0.20%)</title>
+<rect x="795.9" y="782" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@multiarch/memmove-vec-unaligned-erms.S:221 (1 samples, 0.10%)</title>
+<rect x="799.4" y="782" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@multiarch/memmove-vec-unaligned-erms.S:224 (1 samples, 0.10%)</title>
+<rect x="800.6" y="782" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1353 (1 samples, 0.10%)</title>
+<rect x="801.8" y="782" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1412 (1 samples, 0.10%)</title>
+<rect x="803.0" y="782" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1421 (1 samples, 0.10%)</title>
+<rect x="804.1" y="782" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1010 (20 samples, 2.00%)</title>
+<rect x="1064.9" y="782" width="23.6" height="15.0"/>
+<text x="1067.92" y="792.5">@..</text>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1023 (3 samples, 0.30%)</title>
+<rect x="1088.5" y="782" width="3.6" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:999 (4 samples, 0.40%)</title>
+<rect x="1092.1" y="782" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:933 (3 samples, 0.30%)</title>
+<rect x="1103.9" y="782" width="3.5" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.c:26 (1 samples, 0.10%)</title>
+<rect x="1112.1" y="782" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>__GI___mmap64 inlined at ../sysdeps/unix/sysv/linux/mmap64.c:40:1 in __mmap [/usr/lib64/libc-2.28.so] (1 samples, 0.10%)</title>
+<rect x="58.4" y="798" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>prepend_alloc inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_alloc.c:1023:9 in lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="321.5" y="798" width="2.4" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>mmap_probe [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (4 samples, 0.40%)</title>
+<rect x="325.1" y="798" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>alloc_sys inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_alloc.c:1349:10 in lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (3 samples, 0.30%)</title>
+<rect x="779.4" y="798" width="3.5" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (9 samples, 0.90%)</title>
+<rect x="785.3" y="798" width="10.6" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="795.9" y="798" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>__memmove_avx_unaligned_erms [/usr/lib64/libc-2.28.so] (1 samples, 0.10%)</title>
+<rect x="799.4" y="798" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>__memmove_avx_unaligned_erms [/usr/lib64/libc-2.28.so] (1 samples, 0.10%)</title>
+<rect x="800.6" y="798" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_free [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="801.8" y="798" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_free [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="803.0" y="798" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>lj_alloc_free [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="804.1" y="798" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>alloc_sys inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_alloc.c:1349:10 in lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (20 samples, 2.00%)</title>
+<rect x="1064.9" y="798" width="23.6" height="15.0"/>
+<text x="1067.92" y="808.5">a..</text>
+</g>
+<g class="f_g o">
+<title>alloc_sys [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (3 samples, 0.30%)</title>
+<rect x="1088.5" y="798" width="3.6" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>alloc_sys inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_alloc.c:1349:10 in lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (4 samples, 0.40%)</title>
+<rect x="1092.1" y="798" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>setgcV [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (3 samples, 0.30%)</title>
+<rect x="1103.9" y="798" width="3.5" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>hashkey [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1112.1" y="798" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@linux/mmap64.c:40 (4 samples, 0.40%)</title>
+<rect x="325.1" y="814" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:1010 (1 samples, 0.10%)</title>
+<rect x="795.9" y="814" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:999 (1 samples, 0.10%)</title>
+<rect x="797.1" y="814" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:909 (3 samples, 0.30%)</title>
+<rect x="1088.5" y="814" width="3.6" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:242 (4 samples, 0.40%)</title>
+<rect x="1092.1" y="814" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:912 (2 samples, 0.20%)</title>
+<rect x="1103.9" y="814" width="2.3" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_obj.h:916 (1 samples, 0.10%)</title>
+<rect x="1106.2" y="814" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_tab.h:38 (1 samples, 0.10%)</title>
+<rect x="1112.1" y="814" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>__GI___mmap64 [/usr/lib64/libc-2.28.so] (4 samples, 0.40%)</title>
+<rect x="325.1" y="830" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>alloc_sys inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_alloc.c:1349:10 in lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="795.9" y="830" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>alloc_sys inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_alloc.c:1349:10 in lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="797.1" y="830" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>prepend_alloc inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_alloc.c:1023:9 in lj_alloc_malloc [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (3 samples, 0.30%)</title>
+<rect x="1088.5" y="830" width="3.6" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>mmap_probe [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (4 samples, 0.40%)</title>
+<rect x="1092.1" y="830" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>checklivetv inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_obj.h:933:3 in lj_tab_setstr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (2 samples, 0.20%)</title>
+<rect x="1103.9" y="830" width="2.3" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>checklivetv inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_obj.h:933:3 in lj_tab_setstr [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1106.2" y="830" width="1.2" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>hashmask inlined at /home/code/orinc/openresty-plus/openresty-plus-1.19.9.1.33/build/LuaJIT-plus-2.1-20230112/src/lj_tab.c:26:12 in hashkey.isra.1 [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="1112.1" y="830" width="1.2" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@linux/mmap64.c:52 (4 samples, 0.40%)</title>
+<rect x="325.1" y="846" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@src/lj_alloc.c:242 (1 samples, 0.10%)</title>
+<rect x="797.1" y="846" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@linux/mmap64.c:40 (4 samples, 0.40%)</title>
+<rect x="1092.1" y="846" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>__GI___mmap64 inlined at ../sysdeps/unix/sysv/linux/mmap64.c:40:1 in __mmap [/usr/lib64/libc-2.28.so] (4 samples, 0.40%)</title>
+<rect x="325.1" y="862" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>mmap_probe [/usr/local/openresty-plus-dev/luajit/lib/libluajit-5.1.so.2.1.0] (1 samples, 0.10%)</title>
+<rect x="797.1" y="862" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>__GI___mmap64 [/usr/lib64/libc-2.28.so] (4 samples, 0.40%)</title>
+<rect x="1092.1" y="862" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@linux/mmap64.c:40 (1 samples, 0.10%)</title>
+<rect x="797.1" y="878" width="1.1" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@linux/mmap64.c:52 (4 samples, 0.40%)</title>
+<rect x="1092.1" y="878" width="4.7" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>__GI___mmap64 [/usr/lib64/libc-2.28.so] (1 samples, 0.10%)</title>
+<rect x="797.1" y="894" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>__GI___mmap64 inlined at ../sysdeps/unix/sysv/linux/mmap64.c:40:1 in __mmap [/usr/lib64/libc-2.28.so] (4 samples, 0.40%)</title>
+<rect x="1092.1" y="894" width="4.7" height="15.0"/>
+</g>
+<g class="f_g">
+<title>@linux/mmap64.c:52 (1 samples, 0.10%)</title>
+<rect x="797.1" y="910" width="1.1" height="15.0"/>
+</g>
+<g class="f_g o">
+<title>__GI___mmap64 inlined at ../sysdeps/unix/sysv/linux/mmap64.c:40:1 in __mmap [/usr/lib64/libc-2.28.so] (1 samples, 0.10%)</title>
+<rect x="797.1" y="926" width="1.1" height="15.0"/>
+</g>
+</svg>
+
