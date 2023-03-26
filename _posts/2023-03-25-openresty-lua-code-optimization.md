@@ -1,12 +1,15 @@
 ---
 layout: post
-title: "OpenResty Lua GC 代码优化"
-description: "OpenResty Lua GC 代码优化"
+title: "OpenResty Lua GC 优化"
+description: "OpenResty Lua GC 优化"
 date: 2023-03-25
 tags: [OpenResty, Nginx, Lua, LuaJIT, GC]
 ---
 
-OpenResty 是一个市场占有率非常高的网关，对 OpenResty 的性能优化也就尤其重要。
+OpenResty 是一个非常优秀的网关，很多企业采用 OpenResty 网关作来管理所有的入口流量。
+在不优化的情况下，OpenResty 性能也十分优异，但是每一个企业都有自己特定的定制，难免
+在一些地方引入性能瓶颈。因此需要对网关进行优化，避免在一些情况下网关出现性能故障。
+比如各种活动引起的大流量问题，被攻击情况下异常流量引发的问题等等。
 
 这里从 GC 的角度探讨一下 Lua 的代码的性能优化。
 
@@ -26,7 +29,7 @@ OpenResty 是一个市场占有率非常高的网关，对 OpenResty 的性能�
 Lua GC 回收使用的是扫描的方式，从根出发进行深度遍历，扫描不到的对象都是死对象。
 这些死的对象的内存都是会被 Lua GC 回收再利用的。
 
-哪些对象是根对象呢？ 根据 [Lua 官方的这个分享文章](https://www.lua.org/wshop18/Ierusalimschy.pdf) 我们知道只有注册表和共享元表才是根。而寄存器里面又
+哪些对象是根对象呢？ 根据 [Lua 官方的这个分享文章](https://www.lua.org/wshop18/Ierusalimschy.pdf) 我们知道只有注册表和共享元表才是根。而注册表里面又
 包含了全局表 _G, 主线程 和 package.loaded.
 
 - root set: the registry and shared metatables.
@@ -71,7 +74,7 @@ ngx.say(a .. b .. c .. d)
 # 减少创建新的表
 
 对于 Lua table，我们也应该尽可能的复用，而不要创建。
-比如下面的这个代码片段示例通过 `table.clear` 这个扩展原语将 tbale 的成员清空来实现复用。
+比如下面的这个代码片段示例通过 `table.clear` 这个扩展原语将 table 的成员清空来实现复用。
 
 Lua table 的复用效果是非常的好，因此 OpenResty 官方有一个专门的仓库 [table-pool](https://github.com/openresty/lua-tablepool) 就是为了解决 table 复用的问题。
 
@@ -92,10 +95,10 @@ end
 
 对于 Cdata，我们经常会忽略 GC 开销这个问题。想想通过 ffi.new 申请的对象不需要主动释放，
 那谁来释放呢？ 是 GC 来帮你保证资源不会泄漏的，因此 Cdata 就是一个 GC 对象了。
-因此如果我们通过 ffi.new 申请的内存能够复用，那么就可以减少 GC 对象了。
+因此如果我们通过 `ffi.new` 申请的内存能够复用，那么就可以减少 GC 对象了。
 
 下面这个操作就存在每次调用 get_msg() 都会分配一次内存，这样也就会产生大量的 GC 对象了。
-我们应该把这个内存分配的操作放在函数的外部，作为函数的upvalue，这样就不需要每次都分配一次内存。
+我们应该把这个内存分配的操作放在函数的外部，作为函数的 upvalue，这样就不需要每次都分配一次内存。
 
 ```lua
 local ffi = require "ffi"
