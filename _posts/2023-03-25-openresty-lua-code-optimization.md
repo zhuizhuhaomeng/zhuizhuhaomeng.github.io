@@ -16,6 +16,9 @@ OpenResty 是一个市场占有率非常高的网关，对 OpenResty 的性能�
 
 从这个火焰图可以看到，GC 相关的开销高达 `22.3%`。这个数值我们可以通过在右上角的 search 搜索框中输入 `lj_gc_step ` 即可得到高亮的结果。
 
+
+![lj-gc](https://raw.githubusercontent.com/zhuizhuhaomeng/zhuizhuhaomeng.github.io/main/img/openersty-lua-code-optimization/lua-gc.svg)
+
 ![lj-gc](../img/openersty-lua-code-optimization/lua-gc.svg)
 
 # Lua 的 GC 回收是怎么回事
@@ -146,6 +149,8 @@ collectgarbage("restart")
 
 所以：火焰图诚不欺我也！
 
+
+![lj-no-gc](https://raw.githubusercontent.com/zhuizhuhaomeng/zhuizhuhaomeng.github.io/main/img/openersty-lua-code-optimization/lua-no-gc.svg)
 
 ![lua-no-gc](../img/openersty-lua-code-optimization/lua-no-gc.svg)
 
