@@ -3,7 +3,7 @@ layout: post
 title: "如何阅读代码 -- 巧借 GCC 选项分析真正使用的宏"
 description: "如何阅读代码序列"
 date: 2023-03-26
-tags: [OpenResty, Nginx, Lua, LuaJIT, GC]
+tags: [GCC, objdump]
 ---
 
 # 阅读代码的难题

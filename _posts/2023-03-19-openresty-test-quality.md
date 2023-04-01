@@ -38,7 +38,7 @@ make -j"$JOBS" CCDEBUG=-g Q= PREFIX=$LUAJIT_PREFIX CC=$CC XCFLAGS="-DLUAJIT_NUMM
 
 ## Nginx 的编译
 
-Nginx 的一个特色就是内存泄漏不少那么的容易，它是如何做到的呢？
+Nginx 的一个特色就是内存泄漏不是那么的容易，它是如何做到的呢？
 
 这个得归功于 Nginx 的 内存池接口，通过将内存申请释放都统一到内存池，减少了内存释放得位置。
 在一些情况下，新增的模块设置完全没有内存释放是操作。
