@@ -2,7 +2,7 @@
 layout: post
 title: "从一个小例子学习 Lua GC 回收是怎么回事"
 description: "由于 Lua 对象被 GC 回收导致进程崩溃的问题"
-date: 2023-03-26
+date: 2023-04-01
 tags: [LuaJIT, crash, valgrind]
 ---
 
