@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "使用 jemalloc 的 prof.dump 功能分析内存泄漏"
-description: "该哦工具可以分析不断内存增长的原因"
+description: "该工具可以分析不断内存增长的原因"
 date: 2023-04-04
 tags: [Jemalloc, Memleak]
 ---
@@ -116,6 +116,14 @@ export LD_PRELOAD=/usr/local/lib/libjemalloc.so
 ./a.out
 ```
 
+如果想让程序在退出之前也打印一下内存分配的情况，可以增加 `opt.prof_final` 选项。比如：
+
+```shell
+export MALLOC_CONF="prof:true,prof_prefix:jeprof.out,lg_prof_interval:20,lg_prof_sample:5,prof_final:true"
+export LD_PRELOAD=/usr/local/lib/libjemalloc.so
+./a.out
+```
+
 ## 每次新高就执行的方式
 
 ```shell
@@ -173,3 +181,7 @@ export MALLOC_CONF=prof:true
 export LD_PRELOAD=/usr/local/lib/libjemalloc.so
 ./sbin/nginx -s reload
 ```
+
+# 参考文档
+
+https://github.com/jemalloc/jemalloc/wiki/Use-Case%3A-Heap-Profiling
