@@ -3,7 +3,7 @@ layout: post
 title: "给 TLS 添加扩展头部"
 description: "给 TLS 添加扩展头部"
 date: 2023-04-05
-tags: [Jemalloc, Memleak]
+tags: [SSL, TLS, extension, client hello]
 ---
 
 TLS 协议本身已经定义了很多标准的扩展头字段，同事它允许用户添加自定义的扩展头字段，
@@ -208,6 +208,8 @@ main(int count, char *strings[])
 
 在服务端的代码中，我们一样通过 SSL_CTX_add_custom_ext 这个函数来添加扩展头的回调函数。与客户端不同的是，这里我们需要的是解析扩展头。
 
+同时我们展示了另一种获取 client 扩展头的技术： 通过设置 SSL_CTX_set_client_hello_cb 来解析 client Hello 中的扩展头。
+
 ```C
 #include "openssl/err.h"
 #include "openssl/ssl.h"
@@ -283,6 +285,22 @@ InitServerCTX(void)
     return ctx;
 }
 
+int client_hello_cb(SSL *ssl, int *al, void *arg)
+{
+    const unsigned char *ext;
+    size_t ext_len;
+
+    if (SSL_client_hello_get0_ext(ssl, TEST_EXT_TYPE1, &ext, &ext_len) == 1) {
+        printf("extension: %.*s\n", (int) ext_len, ext);
+        return 1;
+
+    } else {
+        printf("extension no found\n");
+        *al = 1;
+        return 0;
+    }
+}
+
 void
 LoadCertificates(SSL_CTX *ctx, char *CertFile, char *KeyFile)
 {
@@ -303,6 +321,8 @@ LoadCertificates(SSL_CTX *ctx, char *CertFile, char *KeyFile)
         fprintf(stderr, "Private key does not match the public certificate\n");
         abort();
     }
+
+    SSL_CTX_set_client_hello_cb(ctx, client_hello_cb, NULL);
 }
 
 void
@@ -333,14 +353,15 @@ Servlet(SSL *ssl) /* Serve the connection -- threadable */
     char buf[1024] = {0};
     int sd, bytes;
     const char *ServerResponse = "<Body>\
-        <Name>zhuizhuhaomeng.com</Name>\
-        <BlogType>Performace Optimization</BlogType>\
-        <Author>lijunlong<Author>\
-        </Body>";
+                               <Name>aticleworld.com</Name>\
+                 <year>1.5</year>\
+                 <BlogType>Embedede and c/c++</BlogType>\
+                 <Author>amlendra<Author>\
+                 </Body>";
     const char *cpValidMessage = "<Body>\
-        <UserName>zhuizhuhaomeng<UserName>\
-        <Password>123456<Password>\
-        </Body>";
+                               <UserName>aticle<UserName>\
+                 <Password>123<Password>\
+                 </Body>";
 
     if (SSL_accept(ssl) == FAIL) { /* do SSL-protocol accept */
         ERR_print_errors_fp(stderr);
@@ -353,7 +374,8 @@ Servlet(SSL *ssl) /* Serve the connection -- threadable */
 
         if (bytes > 0) {
             if (strcmp(cpValidMessage, buf) == 0) {
-                SSL_write(ssl, ServerResponse, strlen(ServerResponse)); /* send reply */
+                /* send reply */
+                SSL_write(ssl, ServerResponse, strlen(ServerResponse));
 
             } else {
                 SSL_write(ssl, "Invalid Message",
@@ -385,15 +407,16 @@ main(int argv, char *argc[])
     // Initialize the SSL library
     SSL_library_init();
     portnum = argc[1];
-    ctx = InitServerCTX();
+    ctx = InitServerCTX();                             /* initialize SSL */
     LoadCertificates(ctx, "mycert.pem", "mycert.key"); /* load certs */
-    server = OpenListener(atoi(portnum));
+    server = OpenListener(atoi(portnum));              /* create server socket */
 
     while (1) {
         struct sockaddr_in addr;
         socklen_t len = sizeof(addr);
         SSL *ssl;
-        int client = accept(server, (struct sockaddr *)&addr, &len);
+        int client = accept(server, (struct sockaddr *)&addr,
+                            &len); /* accept connection as usual */
         printf("Connection: %s:%d\n", inet_ntoa(addr.sin_addr),
                ntohs(addr.sin_port));
         ssl = SSL_new(ctx);      /* get new SSL state with context */
@@ -436,9 +459,14 @@ openssl x509 -req -days 365 -in mycert.csr -CA ca.crt -CAkey ca.key -set_serial 
 
 ```shell
 $ ./server 1988
-Connection: 127.0.0.1:46026
+Connection: 127.0.0.1:52924
+extension: Hello world!
 receive: Hello world!
 No certificates.
 ```
 
 可以看到，我们成功的解析了扩展头，得到 "Hello world 这个消息"。
+
+# 参考链接
+
+https://github.com/openssl/openssl/blob/master/test/sslapitest.c
