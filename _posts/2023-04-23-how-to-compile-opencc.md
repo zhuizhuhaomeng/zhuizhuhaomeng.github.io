@@ -6,6 +6,15 @@ date: 2023-04-23
 tags: [opencc, rpm, deb, spec]
 ---
 
+# 更新 cmake
+
+如果机器上的cmake比较老，需要更新cmake，那么最快的方式就是使用已经编译好的包。
+
+```shell
+wget https://github.com/Kitware/CMake/releases/download/v3.26.3/cmake-3.26.3-linux-x86_64.sh
+bash cmake-3.26.3-linux-x86_64.sh --prefix=/usr --skip-license
+```
+
 # opencc 找不到 libopencc 库
 
 使用下面的命令编译 opencc，安装后 opencc 无法正常使用，报错 libopencc.so 找不到。
