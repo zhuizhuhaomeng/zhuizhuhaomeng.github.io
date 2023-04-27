@@ -174,3 +174,36 @@ apt-get download python3.9-minimal
 ```
 
 更多信息查看官方文档 [调试信息包](https://wiki.ubuntu.com/Debug%20Symbol%20Packages)
+
+# 使用 debuginfod 自动下载调试信息
+
+因为下载 debuginfo 包是很麻烦，而且不熟悉的人还经常下载错了版本，因此衍生了 debuginfod 的服务。
+特别是如果你想在宿主机上调试 docker 容器进程的时候，那么更应该使用 debuginfod 的服务。不过有个缺点是不是所有的发行版本都支持 debuginfod，有些发现版本虽然支持了，但是老版本的系统是不支持的。比如 CentOS 7 的 GDB 默认就不支持。
+
+我们只要先设置环境变量 `export DEBUGINFOD_URLS="xxx"`， 然后执行 gdb，readelf等命令的时候就会自动下载相关的调试信息了。
+
+1. debian 的链接为： https://debuginfod.debian.net/
+1. Ubuntu 的链接为： https://debuginfod.ubuntu.com/
+1. CentOS 的链接为： https://debuginfod.centos.org/
+1. Fedora 的链接为： https://debuginfod.fedoraproject.org/
+1. Arch Linux的链接为： https://debuginfod.archlinux.org/
+
+举例如下:
+
+```shell
+$ export DEBUGINFOD_URLS="https://debuginfod.debian.net"
+$ gdb -q /usr/bin/cat
+Reading symbols from /usr/bin/cat...
+Downloading separate debug info for /usr/bin/cat...
+Reading symbols from /home/ljl/.cache/debuginfod_client/e6afa43e1e280bd06c018f541c7ae46a2ebda83c/debuginfo...
+Downloading separate debug info for /home/ljl/.cache/debuginfod_client/e6afa43e1e280bd06c018f541c7ae46a2ebda83c/debuginfo...
+(gdb)
+```
+
+## 参考连接
+
+1. https://wiki.debian.org/Debuginfod
+1. https://ubuntu.com/server/docs/service-debuginfod
+1. https://fedoraproject.org/wiki/Debuginfod
+1. https://wiki.archlinux.org/title/Debuginfod
+1. https://debuginfod.centos.org/
