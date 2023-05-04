@@ -53,3 +53,6 @@ def calculate_md5_for_dir(dir_path):
 for dir in sys.argv[1:]:
     calculate_md5_for_dir(dir)
 ```
+
+把上面的代码保存到文件 remove_duplicate.py 中。
+然后通过执行 `python path_to/remove_duplicate.py  dir1 dir2 ...` 这样可以删除多个目录下的重复文件。

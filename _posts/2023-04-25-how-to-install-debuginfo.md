@@ -3,7 +3,7 @@ layout: post
 title: "How to install debuginfo"
 description: "How to install debuginfo"
 date: 2023-04-23
-tags: [debuginfo, debuginfo-install, rpm, deb, debuginfod]
+tags: [debuginfo, debuginfo-install, rpm, deb, debuginfod, gdb]
 ---
 
 # 为什么需要调试信息
