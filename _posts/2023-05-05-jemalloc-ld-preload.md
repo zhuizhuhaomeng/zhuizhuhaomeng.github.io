@@ -6,6 +6,9 @@ date: 2023-05-05
 tags: [Jemalloc, systemd, LD_PRELOAD]
 ---
 
+我们希望能够使用 Jemalloc 作为 nginx 默认的内存分配器，
+但是我我们不想要重新编译 Nginx。这个时候可以在启动 Nginx 的时候加上 LD_PRELOAD 来实现目标。
+
 1. 我们先通过如下命令查找开启启动的配置文件。
 
     ```shell
