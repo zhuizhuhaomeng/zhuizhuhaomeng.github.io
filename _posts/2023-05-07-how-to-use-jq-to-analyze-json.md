@@ -88,6 +88,13 @@ jq 的语法是清晰的:
 
 # 通过一份文件学习 jq 的操作
 
+## 测试数据
+
+https://github.com/joseluisq/json-datasets/blob/master/json/programming-languages/programming_languages_keywords.json
+
+
+## 操作实践
+
 我们先要了解一个 json 对象的整体结构，那么就需要获取这个对象有哪些键值。
 
 ```shell
@@ -273,11 +280,11 @@ jq '.data[] | select(.keywords[] == "go") | .name' programming_languag_languages
 jq '.data | sort_by(.version)' programming_languages_keywords.json
 ```
 
-# 测试数据
-
-https://github.com/joseluisq/json-datasets/blob/master/json/programming-languages/programming_languages_keywords.json
-
 # 参考文档
+
+执行 `man jq` 查询帮助是最快捷的方式
+
+此外还有如下文档
 
 https://stackoverflow.com/questions/tagged/jq
 https://github.com/stedolan/jq/wiki/Cookbook#filter-objects-based-on-the-contents-of-a-key
