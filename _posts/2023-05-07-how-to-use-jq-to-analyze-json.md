@@ -287,4 +287,4 @@ jq '.data | sort_by(.version)' programming_languages_keywords.json
 此外还有如下文档
 
 https://stackoverflow.com/questions/tagged/jq
-https://github.com/stedolan/jq/wiki/Cookbook#filter-objects-based-on-the-contents-of-a-key
+https://stedolan.github.io/jq/manual/

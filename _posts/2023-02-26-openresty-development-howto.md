@@ -453,3 +453,9 @@ src/ngx_http_lua_balancer.c:370:    lua_pushcfunction(L, ngx_http_lua_traceback)
 src/ngx_http_lua_bodyfilterby.c:100:    lua_pushcfunction(L, ngx_http_lua_traceback);
 ....
 ```
+
+# 其它学习笔记推荐
+
+这个学习笔记是我的一个同事做的，里面记录了很多大家都会遇到的疑难问题。
+
+https://github.com/isshe/coding-life/tree/master/K.%E5%B7%A5%E5%85%B7/OpenResty
