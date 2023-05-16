@@ -6,9 +6,9 @@ date: 2023-05-07
 tags: [curl, timing, client hello]
 ---
 
+# 反馈问题
 
-发现业务的请求有点慢，使用 curl 测试一下指定的网站看看响应时间。结果发现需要 229 ms 才响应。
-
+同事发现业务的请求有点慢，使用 curl 测试一下指定的网站看看响应时间。结果发现需要 229 ms 才响应。
 
 ```shell
 time curl -k https://a.b.c.d:443
@@ -32,6 +32,8 @@ PING a.b.c.d (a.b.c.d a.b.c.d) 56(84) bytes of data.
 64 bytes from a.b.c.d: icmp_seq=2 ttl=41 time=15.3 ms
 ```
 
+# 使用 curl 自带的时间测量变量
+
 ping 的延时很短，但是 curl 的响应时间很长，应该是服务端的问题。
 我们使用 curl 自带的测量时间的工具进行测试
 
@@ -44,6 +46,8 @@ $ curl -s -o /dev/null -w "%{time_connect} %{time_appconnect} %{time_total}" -k 
 实际的响应时间是 15 ms，差不多就说链路延时。
 
 因此，我们可以判断，问题就是在建连上。
+
+# tcpdump 抓包分析
 
 建连为什么这么长呢？ 是 SSL/TLS 握手很慢导致的码？假设是 SSL/TLS 握手造成的问题，
 我们计算一下的话会发现 1 秒只能进行 5次握手，这显然不合常理。所以不会是 SSL/TLS 的握手性能导致的问题。
@@ -65,11 +69,15 @@ $ sudo tcpdump -nnn -ttt  -i eth0 host a.b.c.d and tcp port 443
 通过以上抓包，我们可以看到，客户端在三次握手成功之后的 159 ms 之后才发送了 client hello 报文出去。
 因此，我们确认是客户端问题导致的整个 HTTPS 请求耗时很长。
 
+# strace 分析系统调用
+
 那么客户端在做什么事情，为什么会这么慢呢？
 我们在其它机器上测试并不会这么慢，因此我们怀疑是跟系统有关系。我们这个机器是 `CentOS Linux 7 (Core)` 的系统。
 
 想要了解 curl 到底在干啥，可以使用 strace 命令进行跟踪分析。
 我们使用了下面的命令进行分析，发现 curl 打开了很多不相关的文件。或许就是这些不相关功能导致的，没有再进一步的深入分析了。
+
+**这里应该加上 `-r` 的命令行选项，这样就有两个系统调用之间的时间差了。**
 
 ```shell
 $ strace -tt curl -s -o /dev/null -w "%{time_connect} %{time_appconnect} %{time_total}" -k https://a.b.c.d > c.log 2>&1
@@ -106,9 +114,9 @@ $ grep -w sleep c.log
 16:10:56.242199 open("/lib64/libcrypt.so.1", O_RDONLY|O_CLOEXEC) = 3
 16:10:56.243129 open("/lib64/libpcre.so.1", O_RDONLY|O_CLOEXEC) = 3
 16:10:56.244002 open("/lib64/libfreebl3.so", O_RDONLY|O_CLOEXEC) = 3
-16:10:56.254924 open("/etc/pki/tls/legacy-settings", O_RDONLY) = -1 ENOENT (没有那个文件或目录)
+16:10:56.254924 open("/etc/pki/tls/legacy-settings", O_RDONLY) = -1 ENOENT (No such file or directory)
 16:10:56.256168 open("/usr/lib/locale/locale-archive", O_RDONLY|O_CLOEXEC) = 3
-16:10:56.256694 open("/home/lijunlong/.curlrc", O_RDONLY) = -1 ENOENT (没有那个文件或目录)
+16:10:56.256694 open("/home/lijunlong/.curlrc", O_RDONLY) = -1 ENOENT (No such file or directory)
 16:10:56.269587 open("/proc/sys/crypto/fips_enabled", O_RDONLY) = 4
 16:10:56.270662 open("/lib64/libsoftokn3.so", O_RDONLY|O_CLOEXEC) = 4
 16:10:56.271482 open("/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 4
@@ -132,7 +140,7 @@ $ grep -w sleep c.log
 16:10:56.333191 open("/proc/sys/crypto/fips_enabled", O_RDONLY) = 4
 16:10:56.334547 open("/proc/sys/crypto/fips_enabled", O_RDONLY) = 4
 16:10:56.371159 open("/proc/sys/crypto/fips_enabled", O_RDONLY) = 4
-16:10:56.372245 open("/home/lijunlong/.pki/nssdb/pkcs11.txt", O_RDONLY) = -1 ENOENT (没有那个文件或目录)
+16:10:56.372245 open("/home/lijunlong/.pki/nssdb/pkcs11.txt", O_RDONLY) = -1 ENOENT (No such file or directory)
 16:10:56.372482 open("/proc/sys/crypto/fips_enabled", O_RDONLY) = 4
 16:10:56.407273 open("/etc/pki/nssdb/cert9.db", O_RDONLY|O_CLOEXEC) = 4
 16:10:56.410721 open("/dev/urandom", O_RDONLY|O_CLOEXEC) = 5
