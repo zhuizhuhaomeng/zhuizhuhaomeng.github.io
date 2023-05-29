@@ -40,7 +40,7 @@ be used to find the current location of the program break.
 
 也就是说 brk()和sbrk() 通过改变程序中断(program break)的位置来实现内存的分配和释放。这里所谓的程序中断是指进程的数据段的截止地址。(即，程序中断是未初始化数据段结束后的第一个位置）。增加程序中断的效果是为进程分配内存；减少中断的效果是释放进程分配内存。
 
-brk() 将数据段的末端设置为addr所指定的值， sbrk()将程序的数据空间以增量字节的方式增加。 
+brk() 将数据段的末端设置为addr所指定的值， sbrk()将程序的数据空间以增量字节的方式增加。
 在增量为 0 的情况下调用 sbrk() 可以 可以用来查找程序中断的当前位置。
 
 我们通过下面这个 C 程序来模拟向操作系统申请内存。
@@ -68,7 +68,7 @@ main(int argc, char *argv[])
 
 ```shell
 $ gcc -Wall brk.c
-$ ./a.out                               
+$ ./a.out
 program break address: 0x54f000
 c1: 0x54f080
 program break address: 0x54f080
@@ -110,7 +110,7 @@ print_file_map(void)
     char    *line;
     int      len;
     char     line_buf[512];
-     
+
     fp = fopen("/proc/self/maps", "r");
     if(fp == NULL) {
         fprintf(stderr, "failed to open /proc/self/maps\n");
@@ -144,7 +144,7 @@ main(int argc, char *argv[])
     fprintf(stderr, "c1: %p\n", c1);
     brk(c1);
     void* c2 = sbrk(0);
-    fprintf(stderr, "program break address: %p\n", c2); 
+    fprintf(stderr, "program break address: %p\n", c2);
     print_file_map();
 
     return 0;
@@ -155,7 +155,7 @@ main(int argc, char *argv[])
 
 ```shell
 $ gcc -Wall a.c
-$ ./a.out                               
+$ ./a.out
 program break address: 0x1254000
 00400000-00401000 r--p 00000000 fd:02 6598                               /home/ljl/a.out
 00401000-00402000 r-xp 00001000 fd:02 6598                               /home/ljl/a.out
@@ -167,9 +167,9 @@ program break address: 0x1254000
 7f94e0e16000-7f94e1016000 ---p 001bc000 fd:00 67815250                   /usr/lib64/libc-2.28.so
 7f94e1016000-7f94e101a000 r--p 001bc000 fd:00 67815250                   /usr/lib64/libc-2.28.so
 7f94e101a000-7f94e101c000 rw-p 001c0000 fd:00 67815250                   /usr/lib64/libc-2.28.so
-7f94e101c000-7f94e1020000 rw-p 00000000 00:00 0 
+7f94e101c000-7f94e1020000 rw-p 00000000 00:00 0
 7f94e1020000-7f94e104d000 r-xp 00000000 fd:00 67789606                   /usr/lib64/ld-2.28.so
-7f94e123b000-7f94e123d000 rw-p 00000000 00:00 0 
+7f94e123b000-7f94e123d000 rw-p 00000000 00:00 0
 7f94e124d000-7f94e124e000 r--p 0002d000 fd:00 67789606                   /usr/lib64/ld-2.28.so
 7f94e124e000-7f94e1250000 rw-p 0002e000 fd:00 67789606                   /usr/lib64/ld-2.28.so
 7ffd55e7d000-7ffd55e9e000 rw-p 00000000 00:00 0                          [stack]
@@ -189,9 +189,9 @@ program break address: 0x1254080
 7f94e0e16000-7f94e1016000 ---p 001bc000 fd:00 67815250                   /usr/lib64/libc-2.28.so
 7f94e1016000-7f94e101a000 r--p 001bc000 fd:00 67815250                   /usr/lib64/libc-2.28.so
 7f94e101a000-7f94e101c000 rw-p 001c0000 fd:00 67815250                   /usr/lib64/libc-2.28.so
-7f94e101c000-7f94e1020000 rw-p 00000000 00:00 0 
+7f94e101c000-7f94e1020000 rw-p 00000000 00:00 0
 7f94e1020000-7f94e104d000 r-xp 00000000 fd:00 67789606                   /usr/lib64/ld-2.28.so
-7f94e123b000-7f94e123d000 rw-p 00000000 00:00 0 
+7f94e123b000-7f94e123d000 rw-p 00000000 00:00 0
 7f94e124d000-7f94e124e000 r--p 0002d000 fd:00 67789606                   /usr/lib64/ld-2.28.so
 7f94e124e000-7f94e1250000 rw-p 0002e000 fd:00 67789606                   /usr/lib64/ld-2.28.so
 7ffd55e7d000-7ffd55e9e000 rw-p 00000000 00:00 0                          [stack]
@@ -240,7 +240,7 @@ print_file_map(void)
     char    *line;
     int      len;
     char     line_buf[512];
-     
+
     fp = fopen("/proc/self/maps", "r");
     if(fp == NULL) {
         fprintf(stderr, "failed to open /proc/self/maps\n");
@@ -256,7 +256,7 @@ print_file_map(void)
 
         fprintf(stderr, "%s", line);
     }
-     
+
     fprintf(stderr, "\n");
     fclose(fp);
 }
@@ -307,9 +307,9 @@ main(int argc, char **argv)
 7f46dc848000-7f46dca48000 ---p 001bc000 fd:00 67815250                   /usr/lib64/libc-2.28.so
 7f46dca48000-7f46dca4c000 r--p 001bc000 fd:00 67815250                   /usr/lib64/libc-2.28.so
 7f46dca4c000-7f46dca4e000 rw-p 001c0000 fd:00 67815250                   /usr/lib64/libc-2.28.so
-7f46dca4e000-7f46dca52000 rw-p 00000000 00:00 0 
+7f46dca4e000-7f46dca52000 rw-p 00000000 00:00 0
 7f46dca52000-7f46dca7f000 r-xp 00000000 fd:00 67789606                   /usr/lib64/ld-2.28.so
-7f46dcc6d000-7f46dcc6f000 rw-p 00000000 00:00 0 
+7f46dcc6d000-7f46dcc6f000 rw-p 00000000 00:00 0
 7f46dcc7f000-7f46dcc80000 r--p 0002d000 fd:00 67789606                   /usr/lib64/ld-2.28.so
 7f46dcc80000-7f46dcc82000 rw-p 0002e000 fd:00 67789606                   /usr/lib64/ld-2.28.so
 7ffeb1755000-7ffeb1776000 rw-p 00000000 00:00 0                          [stack]
@@ -328,10 +328,10 @@ Mapping address: 0x7f46dcc7e000
 7f46dc848000-7f46dca48000 ---p 001bc000 fd:00 67815250                   /usr/lib64/libc-2.28.so
 7f46dca48000-7f46dca4c000 r--p 001bc000 fd:00 67815250                   /usr/lib64/libc-2.28.so
 7f46dca4c000-7f46dca4e000 rw-p 001c0000 fd:00 67815250                   /usr/lib64/libc-2.28.so
-7f46dca4e000-7f46dca52000 rw-p 00000000 00:00 0 
+7f46dca4e000-7f46dca52000 rw-p 00000000 00:00 0
 7f46dca52000-7f46dca7f000 r-xp 00000000 fd:00 67789606                   /usr/lib64/ld-2.28.so
-7f46dcc6d000-7f46dcc6f000 rw-p 00000000 00:00 0 
-7f46dcc7e000-7f46dcc7f000 rw-p 00000000 00:00 0 
+7f46dcc6d000-7f46dcc6f000 rw-p 00000000 00:00 0
+7f46dcc7e000-7f46dcc7f000 rw-p 00000000 00:00 0
 7f46dcc7f000-7f46dcc80000 r--p 0002d000 fd:00 67789606                   /usr/lib64/ld-2.28.so
 7f46dcc80000-7f46dcc82000 rw-p 0002e000 fd:00 67789606                   /usr/lib64/ld-2.28.so
 7ffeb1755000-7ffeb1776000 rw-p 00000000 00:00 0                          [stack]
@@ -349,9 +349,9 @@ ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsysca
 7f46dc848000-7f46dca48000 ---p 001bc000 fd:00 67815250                   /usr/lib64/libc-2.28.so
 7f46dca48000-7f46dca4c000 r--p 001bc000 fd:00 67815250                   /usr/lib64/libc-2.28.so
 7f46dca4c000-7f46dca4e000 rw-p 001c0000 fd:00 67815250                   /usr/lib64/libc-2.28.so
-7f46dca4e000-7f46dca52000 rw-p 00000000 00:00 0 
+7f46dca4e000-7f46dca52000 rw-p 00000000 00:00 0
 7f46dca52000-7f46dca7f000 r-xp 00000000 fd:00 67789606                   /usr/lib64/ld-2.28.so
-7f46dcc6d000-7f46dcc6f000 rw-p 00000000 00:00 0 
+7f46dcc6d000-7f46dcc6f000 rw-p 00000000 00:00 0
 7f46dcc7f000-7f46dcc80000 r--p 0002d000 fd:00 67789606                   /usr/lib64/ld-2.28.so
 7f46dcc80000-7f46dcc82000 rw-p 0002e000 fd:00 67789606                   /usr/lib64/ld-2.28.so
 7ffeb1755000-7ffeb1776000 rw-p 00000000 00:00 0                          [stack]
@@ -381,7 +381,156 @@ int madvise(void *addr, size_t length, int advice);
 
 如果我们要释放内存，那么应该告诉操作系统指定的内存不需要了，advice 参数的值为 MADV_DONTNEED。
 
-摘录一个来自 man7 的例子 https://man7.org/tlpi/code/online/dist/vmem/madvise_dontneed.c
+因为 madvise 只是告诉操作系统怎么处理物理内存，而虚拟内存其实还是保留的。因此我们这次要观察物理内存的变化。
+可以通过 /proc/[pid]/statm 接口来观察物理内存。其中第二个字段 resident 就是进程的物理内存的大小。
+这个接口给出的统计单位是页面，而不是字节或者KB。
+
+```
+/proc/[pid]/statm
+              Provides information about memory usage, measured in pages.  The columns are:
+
+                  size       (1) total program size
+                             (same as VmSize in /proc/[pid]/status)
+                  resident   (2) resident set size
+                             (same as VmRSS in /proc/[pid]/status)
+                  shared     (3) number of resident shared pages (i.e., backed by a file)
+                             (same as RssFile+RssShmem in /proc/[pid]/status)
+                  text       (4) text (code)
+                  lib        (5) library (unused since Linux 2.6; always 0)
+                  data       (6) data + stack
+                  dt         (7) dirty pages (unused since Linux 2.6; always 0)
+```
+
+我们用下面的 C 代码来演示 madvise 的使用
+
+```C
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <errno.h>
+#include <unistd.h>
+
+
+void
+print_file_map(const char *file)
+{
+    FILE    *fp;
+    char    *line;
+    int      len;
+    char     line_buf[512];
+
+    fp = fopen(file, "r");
+    if(fp == NULL) {
+        fprintf(stderr, "failed to open /proc/self/maps\n");
+        return;
+    }
+
+    while (1) {
+        len = sizeof(line_buf);
+        line = fgets(line_buf, len, fp);
+        if (line == NULL) {
+            break;
+        }
+
+        fprintf(stderr, "%s", line);
+    }
+
+    fclose(fp);
+    fprintf(stderr, "\n");
+}
+
+
+int
+main(int argc, char *argv[])
+{
+    int page_sz = getpagesize();
+    if (page_sz == -1) {
+        fprintf(stderr, "Failed to get page size: %s\n", strerror(errno));
+        return 1;
+    }
+
+    fprintf(stderr, "page size: %ld\n", page_sz);
+    print_file_map("/proc/self/maps");
+    print_file_map("/proc/self/statm");
+
+    char *buf = malloc(4096 * 1024);
+    memset(buf, 0, 4096 * 1024);
+
+    print_file_map("/proc/self/maps");
+    print_file_map("/proc/self/statm");
+
+#define PAGE_MASK  (~(uintptr_t)(page_sz - 1))
+#define SZ_1M   (1024 * 1024)
+
+    uintptr_t start_addr = ((uintptr_t) buf + page_sz -1) & PAGE_MASK;
+    if (madvise((void *)start_addr, SZ_1M, MADV_DONTNEED) == -1) {
+        fprintf(stderr, "madvise failed: %s\n", strerror(errno));
+    }
+
+    print_file_map("/proc/self/maps");
+    print_file_map("/proc/self/statm");
+
+    return 0;
+}
+```
+
+编译并执行上述代码，我们得到的结果如下, 删除了部分不相关的输出：
+
+```shell
+$ ./a.out
+page size: 4096
+
+00400000-00401000 r--p 00000000 fd:02 6598                               /home/ljl/a.out
+...
+00aaa000-00acb000 rw-p 00000000 00:00 0                                  [heap]
+7fcba3287000-7fcba328b000 rw-p 00000000 00:00 0
+7fcba34a6000-7fcba34a8000 rw-p 00000000 00:00 0
+7fffb560d000-7fffb562e000 rw-p 00000000 00:00 0                          [stack]
+
+1093 201 183 2 0 77 0
+
+00400000-00401000 r--p 00000000 fd:02 6598                               /home/ljl/a.out
+00aaa000-00acb000 rw-p 00000000 00:00 0                                  [heap]
+7fcba2ac4000-7fcba2ec5000 rw-p 00000000 00:00 0
+7fcba3287000-7fcba328b000 rw-p 00000000 00:00 0
+7fcba34a6000-7fcba34a8000 rw-p 00000000 00:00 0
+7fffb560d000-7fffb562e000 rw-p 00000000 00:00 0                          [stack]
+
+2118 1277 297 2 0 1102 0
+
+00400000-00401000 r--p 00000000 fd:02 6598                               /home/ljl/a.out
+...
+00aaa000-00acb000 rw-p 00000000 00:00 0                                  [heap]
+7fcba2ac4000-7fcba2ec5000 rw-p 00000000 00:00 0
+7fcba3287000-7fcba328b000 rw-p 00000000 00:00 0
+7fcba34a6000-7fcba34a8000 rw-p 00000000 00:00 0
+7fffb560d000-7fffb562e000 rw-p 00000000 00:00 0                          [stack]
+
+2118 1087 297 2 0 1102 0
+```
+
+通过观察上面的输出，我们可以看到多出了一个匿名映射的内存段，同时物理内存的大小也变化了。
+新映射的段大小为 (0x7fcba2ec5000 - 0x7fcba2ac4000) / 1024 = 4100KB。这个大小比我们申请
+的 4096KB 的大小大了一个内存页。我们观察物理内存的变化，从 201 pages -> 1277 pages -> 1087 pages。
+也就是第一次 malloc 并写入数据之后，物理内存增长了（1277 - 201）pages = 4304KB。调用 madvise
+释放 1M 的物理内存后，内存减少了 (1277 - 1087)pages = 760KB.
+
+```text
+7fcba2ac4000-7fcba2ec5000 rw-p 00000000 00:00 0
+
+1093 201 183 2 0 77 0
+2118 1277 297 2 0 1102 0
+2118 1087 297 2 0 1102 0
+```
+
+## madvise 的其它用法示例
+
+上面只是使用 madvise 的一个简单示例。下面是 [man7 手册](https://man7.org/tlpi/code/online/dist/vmem/madvise_dontneed.c) 中的另一个例子。
+更多的 madvise 的使用方法可以查看 man madvise 的接口说明。
+
 
 ```C
 #ifdef __linux__
