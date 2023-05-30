@@ -452,7 +452,7 @@ main(int argc, char *argv[])
         return 1;
     }
 
-    fprintf(stderr, "page size: %ld\n", page_sz);
+    fprintf(stderr, "page size: %d\n", page_sz);
     print_file_map("/proc/self/maps");
     print_file_map("/proc/self/statm");
 
