@@ -86,6 +86,9 @@ systemctl start mysqld
 
 # travis上的创建命令失败，替换如下
 mysql -uroot -e "drop database if exists ngx_test;use mysql;delete from user where User='ngx_test';flush privileges;"
+# 发现删除用户用 delete 还不生效，需要使用drop。遇到如下错误的时候大家试试看
+# MariaDB [mysql]> ERROR 1396 (HY000): Operation CREATE USER failed for 'ngx_test'@'%'
+mysql -uroot -e "use mysql; drop user ngx_test;flush privileges;"
 mysql -uroot -e "create database ngx_test; CREATE USER 'ngx_test'@'%' IDENTIFIED BY 'ngx_test'; grant all on ngx_test.* to 'ngx_test'@'%'; flush privileges;"
 
 iptables -I OUTPUT 1 -p udp --dport 10086 -j REJECT
@@ -317,6 +320,25 @@ client_body_temp  conf  fastcgi_temp  html  logs  proxy_temp  scgi_temp  uwsgi_t
 ```
 
 想要查看生成的配置文件，错误日志等可以在这里查看。
+
+有时候开发过程并不想跑完整的用例集合。但是需要注意，这种情况下要初始化好环境。包括(不限于)如下部分：
+
+1. iptables 相关规则的添加
+1. 启动 util/nc_server.py
+1. 启动 mysql-server, 并创建名称 ngx_test 的数据库和用户名称和密码都为 ngx_test 的用户
+1. 启动 redis-server
+1. 启动 memcached，注意要支持 udp 协议
+1. 执行 t/000--int.t 初始化
+
+比如 Rocky-8 上的 /etc/sysconfig/memcached 这个配置文件的 OPTIONS 增加了-U 来指定 UDP 端口。
+
+```text
+PORT="11211"
+USER="memcached"
+MAXCONN="1024"
+CACHESIZE="64"
+OPTIONS="-U 11211 -l 127.0.0.1,::1"
+```
 
 ### 用例测试个数调整
 

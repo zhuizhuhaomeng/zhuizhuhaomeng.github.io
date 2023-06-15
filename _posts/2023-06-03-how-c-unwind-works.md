@@ -32,15 +32,70 @@ gcc -g -O2 test.c
 # or
 gcc -g test.c
 ```
+## 查看 elf 文件中的 dwarf 的信息
+
+可以使用命令 llvm-dwarfdump --eh-frame 或者 readelf -wf 查看相关的信息
+
+```shell
+$ readelf -wf a.out
+readelf -wf a.out
+Contents of the .eh_frame section:
+
+
+00000000 0000000000000014 00000000 CIE
+  Version:               1
+  Augmentation:          "zR"
+  Code alignment factor: 1
+  Data alignment factor: -8
+  Return address column: 16
+  Augmentation data:     1b
+  DW_CFA_def_cfa: r7 (rsp) ofs 8
+  DW_CFA_offset: r16 (rip) at cfa-8
+  DW_CFA_nop
+  DW_CFA_nop
+
+00000018 0000000000000010 0000001c FDE cie=00000000 pc=0000000000401040..0000000000401066
+  DW_CFA_advance_loc: 4 to 0000000000401044
+  DW_CFA_undefined: r16 (rip)
+
+0000002c 0000000000000010 00000030 FDE cie=00000000 pc=0000000000401070..0000000000401075
+  DW_CFA_nop
+  DW_CFA_nop
+  DW_CFA_nop
+
+00000040 0000000000000024 00000044 FDE cie=00000000 pc=0000000000401020..0000000000401040
+  DW_CFA_def_cfa_offset: 16
+  DW_CFA_advance_loc: 6 to 0000000000401026
+  DW_CFA_def_cfa_offset: 24
+  DW_CFA_advance_loc: 10 to 0000000000401030
+  DW_CFA_def_cfa_expression (DW_OP_breg7 (rsp): 8; DW_OP_breg16 (rip): 0; DW_OP_lit15; DW_OP_and; DW_OP_lit11; DW_OP_ge; DW_OP_lit3; DW_OP_shl; DW_OP_plus)
+  DW_CFA_nop
+  DW_CFA_nop
+  DW_CFA_nop
+  DW_CFA_nop
+
+00000068 000000000000001c 0000006c FDE cie=00000000 pc=0000000000401126..000000000040113b
+  DW_CFA_advance_loc: 1 to 0000000000401127
+  DW_CFA_def_cfa_offset: 16
+  DW_CFA_offset: r6 (rbp) at cfa-16
+  DW_CFA_advance_loc: 3 to 000000000040112a
+  DW_CFA_def_cfa_register: r6 (rbp)
+  DW_CFA_advance_loc: 16 to 000000000040113a
+  DW_CFA_def_cfa: r7 (rsp) ofs 8
+  DW_CFA_nop
+  DW_CFA_nop
+  DW_CFA_nop
+
+00000088 ZERO terminator
+```
 
 ## 将测试程序编译成汇编代码
-
 
 ```shell
 gcc -S test.c
 ```
 
-编译得到的汇编代码在 a.s中, 摘录部分结果如下:
+编译得到的汇编代码在 a.s 中, 摘录部分结果如下:
 
 下面的汇编代码中有各种 .cfi_ 开头的指令，想要了解这些指令的意义可以查阅 https://sourceware.org/binutils/docs/as/CFI-directives.html。
 
@@ -97,16 +152,6 @@ main:
 	.section	.note.GNU-stack,"",@progbits
 ```
 
-# 查看 dwarf 的信息
-
-## 需要的工具
-
-llvm-dwarfdump --eh-frame and readelf -wf can dump the section.
-
-```shell
-readelf -wf a.out
-```
-
 # 术语
 
 DIE: Debugging Information Entry
@@ -149,6 +194,8 @@ Each FDE has an associated CIE. FDE has these fields:
 
 A CIE may optionally refer to a personality routine in the text section (.cfi_personality directive). A FDE may optionally refer to its associated LSDA in .gcc_except_table (.cfi_lsda directive). The personality routine and LSDA are used in Level 2: C++ ABI of Itanium C++ ABI.
 
+# 调用接口执行调用栈回溯
+
 ```C
 #include <libunwind.h>
 #include <stdio.h>
@@ -177,26 +224,6 @@ int main() {foo();}
 $CC a.c -Ipath/to/include -Lpath/to/lib -lunwind
 ```
 
-如果使用nongnu.org/libunwind，两种选择：(a) #include <libunwind.h>前添加#define UNW_LOCAL_ONLY (b) 多链接一个库，x86-64上是-l:libunwind-x86_64.so。 使用Clang的话也可用clang --rtlib=compiler-rt --unwindlib=libunwind -I path/to/include a.c，除了提供unw_*外，能确保不链接libgcc_s.so
-
-unw_getcontext: 获取寄存器值(包含PC)
-unw_init_local
-使用dl_iterate_phdr遍历可执行文件和shared objects，找到包含PC的PT_LOAD program header
-找到所在module的PT_GNU_EH_FRAME(.eh_frame_hdr)，存入cursor
-unw_step
-二分搜索PC对应的.eh_frame_hdr项，记录找到的FDE和其指向的CIE
-执行CIE中的initial_instructions
-执行FDE中的instructions。维护一个location、CFA，初始指向FDE的initial_location，指令中DW_CFA_advance_loc增加location；DW_CFA_def_cfa_*更新CFA；DW_CFA_offset表示一个寄存器的值保存在CFA+offset处
-location大于等于PC时停止。也就是说，执行的指令是FDE instructions的一个前缀
-Unwinder根据program counter找到适用的FDE，执行所有在program counter之前的CFI instructions。
-
-有几种重要的
-
-DW_CFA_def_cfa_*
-DW_CFA_offset
-DW_CFA_advance_loc
-一个-DCMAKE_BUILD_TYPE=Release -DLLVM_TARGETS_TO_BUILD=X86的clang，.text 51.7MiB、.eh_frame 4.2MiB、.eh_frame_hdr 646、2个CIE、82745个FDE
-
 # 参考文章
 
 ## unwind 的参考源码
@@ -205,13 +232,3 @@ https://gcc.gnu.org/git/gitweb.cgi?p=gcc.git;a=blob;f=libgcc/unwind.inc;h=12f62b
 https://gcc.gnu.org/git/gitweb.cgi?p=gcc.git;a=blob;f=libgcc/unwind-dw2.c;h=b262fd9f5b92e2d0ea4f0e65152927de0290fcbd;hb=HEAD#l1222
 https://gcc.gnu.org/git/gitweb.cgi?p=gcc.git;a=blob;f=libgcc/unwind-dw2.c;h=b262fd9f5b92e2d0ea4f0e65152927de0290fcbd;hb=HEAD#l1494
 https://gcc.gnu.org/git/gitweb.cgi?p=gcc.git;a=blob;f=libgcc/unwind-dw2.c;h=b262fd9f5b92e2d0ea4f0e65152927de0290fcbd;hb=HEAD#l1376
-
-## 介绍 unwind 的文章
-
-https://eli.thegreenplace.net/2015/programmatic-access-to-the-call-stack-in-c/
-https://github.com/simpleton/stack-unwind-samples
-https://maskray.me/blog/2020-11-08-stack-unwinding
-https://refspecs.linuxfoundation.org/LSB_3.0.0/LSB-Core-generic/LSB-Core-generic/ehframechpt.html
-
-https://blogs.oracle.com/linux/post/unwinding-stack-frame-pointers-and-orc
-
