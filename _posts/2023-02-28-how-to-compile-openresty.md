@@ -5,6 +5,10 @@ description: "OpenResty 打包过程"
 date: 2023-02-28
 tags: [OpenResty, packaging, How-To]
 ---
+# 序列文章
+
+[怎么编译 OpenResty](./2023-02-28-how-to-compile-openresty.md)
+[怎么编译 OpenCC](./2023-04-23-how-to-compile-opencc.md)
 
 很多公司因为各种原因不能直接试用 OpenResty 官方提供的预编译的包。
 但是由于对打包过程并不熟悉，因此他们可能不打包，也可能打包不规范。
@@ -92,3 +96,52 @@ bcond_with 定义的变量默认是关闭的，bcond_without 定义的变量默�
 
 1. 如果要开启某一个功能，应该是 `rpmbuild --with=feature_a`
 1. 如果要关闭一个功能，应该用 `rpmbuild --without=feature_b`
+
+
+# 打包问题如果解决
+
+很多软件可以配置的参数很多，而有些软件的配置脚本并没有适配各种发行版本的操作系统，
+经常导致在特定的系统上打包失败。而打包这种非高频操作经常是查不到资料，而各种 CMake 脚本的调整选项，
+configure 的选项等要修复门槛比较高。
+
+因此遇到打包问题，我们最好参考各个发行版本打包的脚本，基本上他们可以打包成功，那么把相关的参数，补丁拷贝过来就可以了。
+
+比如：
+
+RPM 打包参考 Fedora 官方的打包脚本，链接为 [https://src.fedoraproject.org](https://src.fedoraproject.org/projects/rpms/%2A)
+
+RPM 打包也可以参考 CentOS 官方的打包脚本，链接为 [https://git.centos.org/projects/rpms/%2A](https://git.centos.org/projects/rpms/%2A)
+
+Deb 打包参考 debian 官方的打包脚本，链接为 [https://salsa.debian.org/public](https://salsa.debian.org/public)
+
+## spec 文件指定 strip
+
+```text
+/bin/strip: Unable to recognise the format of the input file
+`/usr/local/xdp-tools/lib/bpf/xsk_def_xdp_prog.o'
+```
+
+编译的时候遇到了这样的错误, 这个错误是因为这个 .o 文件是 llvm 编译的，而 strip 却
+试用了 /usr/bin/strip 这个工具，因此要换成 llvm-stip. 只要再 spec 文件中配置如下语句即可。
+
+```shell
+%define __strip %{llvm_prefix}/bin/llvm-strip
+```
+
+# mariner 系统上编译的注意事项
+
+微软的 mariner 系统上编译会出现各种奇怪的问题。
+
+1. rpm-build 太新导致缺少 debugedit 和 find-debuginfo.sh
+1. binutils 需要单独安装, 而通常情况下 gcc 是依赖 binutils的。我们可以通过 `rpm -qR gcc | grep binutils` 确认这点
+1. glibc-headers 和 kernel-headers 也需要单独安装，而其它系统 glibc 是依赖 kernel-headers
+1. dnf dnf-plugins-core 也需要单独安装，系统默认不带这些命令
+
+话不多说，具体需要执行的命令如下：
+
+```shell
+yum install -y binutils glibc-headers kernel-headers dnf dnf-plugins-core time
+
+ln -s /usr/bin/find-debuginfo /usr/lib/rpm/find-debuginfo.sh
+ln -s /usr/bin/debugedit /usr/lib/rpm/debugedit
+```

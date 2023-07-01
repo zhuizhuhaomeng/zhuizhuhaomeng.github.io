@@ -5,6 +5,10 @@ description: "How to compile opencc"
 date: 2023-04-23
 tags: [opencc, rpm, deb, spec]
 ---
+# 序列文章
+
+[怎么编译 OpenResty](./2023-02-28-how-to-compile-openresty.md)
+[怎么编译 OpenCC](./2023-04-23-how-to-compile-opencc.md)
 
 # 更新 cmake
 
