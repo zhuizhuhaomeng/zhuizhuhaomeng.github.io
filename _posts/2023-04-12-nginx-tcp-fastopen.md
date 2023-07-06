@@ -3,7 +3,7 @@ layout: post
 title: "给 nginx 开启 TCP Fast Open 的支持"
 description: "给 nginx 开启 TCP Fast Open 的支持"
 date: 2023-04-05
-tags: [TCP Fast Open, Delay]
+tags: [TCP]
 ---
 
 # 什么是 TCP Fast Open

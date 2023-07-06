@@ -3,7 +3,7 @@ layout: post
 title: "使用 jemalloc 检测内存问题"
 description: "内存改写，重复释放，访问已释放内存"
 date: 2023-04-06
-tags: [Jemalloc, Double Free, Memory corruption]
+tags: [Jemalloc, Memory]
 ---
 
 Jemalloc 虽然也可以用来检测内存重复释放，访问后还使用的问题，不够如果 AddressSanitizer

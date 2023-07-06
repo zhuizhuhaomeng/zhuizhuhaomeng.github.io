@@ -3,7 +3,7 @@ layout: post
 title: "LuaJIT FFI 的注意事项"
 description: "LuaJIT FFI 的注意事项"
 date: 2023-02-23
-tags: [luajit, FFI]
+tags: [LuaJIT, FFI]
 ---
 
 # NULL指针 与 nil 比较

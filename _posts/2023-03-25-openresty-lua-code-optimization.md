@@ -3,7 +3,7 @@ layout: post
 title: "OpenResty Lua GC 优化"
 description: "OpenResty Lua GC 优化"
 date: 2023-03-25
-tags: [OpenResty, Nginx, Lua, LuaJIT, GC]
+tags: [OpenResty, Nginx, LuaJIT, GC]
 ---
 
 OpenResty 是一个非常优秀的网关，很多企业采用 OpenResty 网关作来管理所有的入口流量。

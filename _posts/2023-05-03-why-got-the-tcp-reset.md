@@ -3,7 +3,7 @@ layout: post
 title: "Why got the TCP reset pakcet"
 description: "Why got the TCP reset Packet"
 date: 2023-05-03
-tags: [TCP reset]
+tags: [TCP]
 ---
 
 我们在排查网络问题的时候有时候会发现由于收到 TCP reset 报文导致连接中断或者连接不上的问题。

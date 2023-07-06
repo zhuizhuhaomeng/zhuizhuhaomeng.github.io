@@ -4,7 +4,7 @@ title: "LuaJIT 的参数传递"
 description: "LuaJIT 参数传递的注意事项"
 date: 2023-02-05
 feature_image: img/luajit-ffi.png
-tags: [luajit, FFI]
+tags: [LuaJIT, FFI]
 ---
 
 FFI 的方式调用 C 函数可以说是很简单，但是有时候缺个例子也是非常的难。

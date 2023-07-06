@@ -3,7 +3,7 @@ layout: post
 title: "LuaJIT 代码片段"
 description: "LuaJIT 代码片段"
 date: 2023-02-23
-tags: [luajit, FFI]
+tags: [LuaJIT, FFI]
 ---
 
 # 如何判断 IPv4 地址是内网地址

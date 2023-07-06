@@ -128,13 +128,29 @@ Deb 打包参考 debian 官方的打包脚本，链接为 [https://salsa.debian.
 %define __strip %{llvm_prefix}/bin/llvm-strip
 ```
 
+这里面就涉及到一个问题，我们怎么才知道 rpm 中定义了哪些值呢？
+可以试用 `rpmbuild --showrc` 命令查看。比如厦门是一部分输出
+
+```shell
+$ rpmbuild --showrc | grep -- "-13:"
+-13: __7zip	/usr/bin/7za
+-13: ___build_args	-e
+-13: ___build_cmd	%{?_sudo:%{_sudo} }%{?_remsh:%{_remsh} %{_remhost} }%{?_remsudo:%{_remsudo} }%{?_remchroot:%{_remchroot} %{_remroot} }%{___build_shell} %{___build_args}
+-13: ___build_post	exit $?
+-13: ___build_pre	
+-13: ___build_shell	%{?_buildshell:%{_buildshell}}%{!?_buildshell:/bin/sh}
+-13: ___build_template	#!%{___build_shell}
+-13: __aclocal	aclocal
+-13: __ar	ar
+```
+
 # mariner 系统上编译的注意事项
 
 微软的 mariner 系统上编译会出现各种奇怪的问题。
 
 1. rpm-build 太新导致缺少 debugedit 和 find-debuginfo.sh
 1. binutils 需要单独安装, 而通常情况下 gcc 是依赖 binutils的。我们可以通过 `rpm -qR gcc | grep binutils` 确认这点
-1. glibc-headers 和 kernel-headers 也需要单独安装，而其它系统 glibc 是依赖 kernel-headers
+1. glibc-headers 和 kernel-headers 也需要单独安装，而其它系统 glibc-headers 是依赖 kernel-headers。
 1. dnf dnf-plugins-core 也需要单独安装，系统默认不带这些命令
 
 话不多说，具体需要执行的命令如下：
