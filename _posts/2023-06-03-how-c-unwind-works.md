@@ -13,6 +13,14 @@ tags: [unwind, eh_frame, debug_frame, eh_frame_header]
 这个文章通过一步步的手动解码告诉我们 C/C++ 的调用栈回溯是怎么处理的。
 https://lesenechal.fr/en/linux/unwinding-the-stack-the-hard-way
 
+这里面有一个很重要的概念是 CFA。
+
+```text
+CFA: canonical frame address
+
+The CFA, or canonical frame address is of paramount importance: it is, in essence, our “base pointer”, that points at the top of our call frame. By definition, the CFA is the value of the stack pointer, %rsp, at the call site in the previous frame, just before the call instruction; which is not the same as the value of %rsp once in the callee function. The CFA is our anchor point from which we can address elements of our frame.
+```
+
 # 测试程序
 
 ```C
