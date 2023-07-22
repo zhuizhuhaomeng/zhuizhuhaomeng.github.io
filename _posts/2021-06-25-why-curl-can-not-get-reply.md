@@ -3,7 +3,7 @@ layout: post
 title: "为什么CURL没有收到响应"
 description: "在异步框架中通过系统调用同步调用CURL的诡异现象"
 date: 2021-06-25
-tags: [OpenResty, CURL, Test]
+tags: [OpenResty, Curl, Test]
 ---
 
 # 问题的由来

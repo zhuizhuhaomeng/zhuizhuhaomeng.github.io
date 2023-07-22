@@ -3,7 +3,7 @@ layout: post
 title: "使用 Python 脚本删除重复的图片"
 description: "使用 Python 脚本删除重复的图片"
 date: 2023-05-03
-tags: [python, duplicated, picture]
+tags: [python, picture]
 ---
 
 由于各种原因导致电脑上备份的照片有大量的重复，因此希望能够删除这些重复的照片。

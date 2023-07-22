@@ -3,7 +3,7 @@ layout: post
 title: "给 TLS 添加扩展头部"
 description: "给 TLS 添加扩展头部"
 date: 2023-04-05
-tags: [SSL, TLS, extension, client hello]
+tags: [SSL/TLS, extension, client hello]
 ---
 
 TLS 协议本身已经定义了很多标准的扩展头字段，同事它允许用户添加自定义的扩展头字段，

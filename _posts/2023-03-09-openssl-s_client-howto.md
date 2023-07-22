@@ -3,7 +3,7 @@ layout: post
 title: "Google Baidu 哪家强"
 description: "openssl s_client 查看服务器的 TLS 配置"
 date: 2023-03-05
-tags: [openssl s_client]
+tags: [OpenSSL]
 ---
 
 openssl s_client 可以将握手信息打印出来，因此可以得到不少的信息。

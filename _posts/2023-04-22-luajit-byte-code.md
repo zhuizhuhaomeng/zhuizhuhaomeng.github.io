@@ -3,7 +3,7 @@ layout: post
 title: "LuaJIT 字节码学习"
 description: "LuaJIT 字节码学习"
 date: 2023-04-22
-tags: [LuaJIT，bytecode]
+tags: [LuaJIT, bytecode]
 ---
 
 # 两个立即数相加

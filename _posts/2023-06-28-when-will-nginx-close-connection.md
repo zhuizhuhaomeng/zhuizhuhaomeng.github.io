@@ -3,7 +3,7 @@ layout: post
 title: "When Will Nginx Send 'Connection: close' Header"
 description: "Nginx 什么时候会发送 Connection: close 的头部"
 date: 2023-06-28
-tags: [Nginx, connection close]
+tags: [Nginx, OpenResty]
 ---
 
 长链接对于降低请求延时，减少服务器开销是非常有好处的。然而有时候由于配置不当，导致

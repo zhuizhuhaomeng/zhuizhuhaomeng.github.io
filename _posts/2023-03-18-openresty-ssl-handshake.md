@@ -3,7 +3,7 @@ layout: post
 title: "SSL/TLS 握手开销测试"
 description: "SSL/TLS 握手开销测试"
 date: 2023-03-18
-tags: [OpenResty, SSL/TLS, Nginx]
+tags: [OpenResty, SSL/TLS, Nginx, OpenSSL]
 ---
 
 # TLS 握手的性能问题
