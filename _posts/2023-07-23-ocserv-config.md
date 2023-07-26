@@ -2,7 +2,7 @@
 layout: post
 title: "ocserv 组网配置"
 description: ""
-date: 2023-07-19
+date: 2023-07-23
 tags: [ocserv, VPN, Admin]
 ---
 
