@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Ubuntu coredump 配置和分析"
+title: "Linux coredump 配置"
 description: ""
 date: 2023-08-18
 tags: [coredump]
