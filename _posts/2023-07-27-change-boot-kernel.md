@@ -10,7 +10,7 @@ tags: [boot, grubby]
 # 查看当前安装的内核
 
 ```shell
-$ sudo grubby --info=ALL                         
+$ sudo grubby --info=ALL
 index=0
 kernel="/boot/vmlinuz-4.18.0-477.10.1.el8_8.x86_64+debug"
 args="ro crashkernel=auto resume=/dev/mapper/rl-swap rd.lvm.lv=rl/root rd.lvm.lv=rl/swap rhgb quiet console=ttyS0,115200n8 console=tty1"
@@ -36,9 +36,9 @@ id="fe8567dfe90b49c5a4f20a22a12cbc66-0-rescue"
 # 查看当前的启动内核
 
 ```shell
-$ sudo grubby --default-kernel      
+$ sudo grubby --default-kernel
 /boot/vmlinuz-4.18.0-477.10.1.el8_8.x86_64+debug
-$ sudo grubby --default-index 
+$ sudo grubby --default-index
 0
 ```
 
