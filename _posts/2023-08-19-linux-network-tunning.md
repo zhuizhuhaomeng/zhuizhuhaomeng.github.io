@@ -525,6 +525,25 @@ $ cat /proc/irq/106/smp_affinity
 echo 00000000,00000000,00000003,00000003 > /proc/irq/106/smp_affinity
 ```
 
+### 单队列接口的中断亲和性设置
+
+由于 loopback 接口跟物理网卡不一样，不存在硬件中断。因此就 loopback 接口就没有办法通过绑定硬件中断的 CPU 亲缘性来调整 CPU的使用。
+虽然没有硬件中断，但是 loopback 接口一样存在接收队列，可以通过设置接收队列的 CPU 亲缘性来分散到不同的 CPU。
+很多物理网卡不支持多队列，可以像设置 loopback 一样来设置接收队列的 rps_cpu.
+
+举例如下：
+
+```shell
+echo FFFFFFFF > /sys/devices/virtual/net/lo/queues/rx-0/rps_cpus
+```
+
+**注意：**
+
+对于具有单传输队列的网络设备，可以通过将 RPS 配置为使用同一内存域中的 CPU 来实现最佳性能。
+在非 NUMA 系统上，这意味着可以使用所有可用的 CPU。如果网络中断率非常高，除处理网络中断的 CPU 外，也可以提高性能。
+对于具有多个队列的网络设备，配置 RPS 和 RSS 时通常没有好处，因为 RSS 被配置为默认将 CPU 映射到每个接收队列。
+但是，如果硬件队列比 CPU 少，并且 RPS 配置为在同一内存域中使用 CPU，则 RPS 可能仍然很有用。
+
 ## /proc/net/softnet_stat 各字段说明
 
 如果 budget 或者 time limit 到了而仍有包需要处理，那 net_rx_action 在退出 循环之前会更新统计信息。这个信息存储在该 CPU 的 struct softnet_data 变量中。
@@ -588,5 +607,124 @@ $ sudo sysctl -w net.core.netdev_budget_usecs = 10000
 
 要保证重启不丢失，需要将这个配置写到 /etc/sysctl.conf。
 
+# 协议层调优
 
-本文主要自己实践 http://arthurchiao.art/blog/linux-net-stack-tuning-rx-zh/ 这个博文并加上自己的一些经验。
+## 端口范围
+
+由于压测经常是两台机器之间进行的，短链接会在短时间耗尽临时端口。为了缓解端口不够的问题，可以将可用的临时端口范围调大。
+
+举例如下：
+
+```shell
+sysctl -w net.ipv4.ip_local_port_range="1024 60999"
+```
+
+## socket 队列
+
+如果SYN队列已满，新的连接请求可能会被丢弃或拒绝。增加 `net.ipv4.tcp_max_syn_backlog` 的值可以提高服务器处理连接请求的能力，尤其在面对短时间内涌入大量连接请求的情况下。然而，过大的值可能会占用过多内存资源。
+
+```conf
+sysctl -w net.ipv4.tcp_max_syn_backlog=8192
+```
+
+有半连接的限制，也存在全连接的限制。全连接是指已经完成三次握手，但是还没有被应用层处理的连接。
+`net.core.somaxconn` 限制一个 socket 的全连接队列的连接数的上限。
+
+```conf
+sysctl -w net.core.somaxconn=16384
+```
+
+通过 man proc 可以查看 somaxconn的解释。
+
+```text
+ /proc/sys/net/core/somaxconn
+              This file defines a ceiling value for the backlog argument of listen(2); see the listen(2) manual page for details.
+```
+
+但是上面这个配置只是系统范围的的 socket 的全连接队列的上限。对于一个指定的应用 (比如 Nginx) 还需要指定 backlog 值。
+这里的 backlog 值就是该 sock 的全连接的上限。该参数最终是会传递给 listen(sockfd, backlog) 这个系统调用。一下是 man 手册对 listen backlog 参数的解释。
+
+```text
+The backlog argument defines the maximum length to which the queue of pending connections for sockfd may grow.
+If  a  connection  request  arrives when the queue is full, the client may receive an error with an indication of ECONNREFUSED or,
+if the underlying protocol supports retransmission, the request may be ignored so that a later reattempt  at  connection  succeeds.
+```
+
+## 文件句柄调整
+
+Linux 默认的文件句柄的数量是 1024，可以通过 `ulimit -n` 进行查看当前的数量。
+对于压测来说， 1024 这个值是远远不够的。可以使用下面的命令进行临时调整：
+
+```shell
+ulimit -n 1000000
+```
+
+对于系统服务，可以通过修改 systemd 的配置文件来实现。
+
+## 防火墙
+
+防火墙对于性能的影响可能也不小，具体数值需要测试，可以关闭防火墙来提升性能。
+
+```shell
+sudo systemctl stop firewalld
+sudo systemctl disable firewalld
+```
+
+# 超线程的开启和关闭
+
+超线程是否对提升性能有帮助需要根据实际场景进行测试。可以使用下面的脚本来开启和关超线程。
+
+```python
+#!/bin/bash
+# file: hyperthread-toggle.sh
+HYPERTHREADING=1
+
+function toggleHyperThreading() {
+  for CPU in /sys/devices/system/cpu/cpu[0-9]*; do
+      CPUID=`basename $CPU | cut -b4-`
+      echo -en "CPU: $CPUID\t"
+      [ -e $CPU/online ] && echo "1" > $CPU/online
+      THREAD1=`cat $CPU/topology/thread_siblings_list | cut -f1 -d,`
+      if [ $CPUID = $THREAD1 ]; then
+          echo "-> enable"
+          [ -e $CPU/online ] && echo "1" > $CPU/online
+      else
+        if [ "$HYPERTHREADING" -eq "0" ]; then echo "-> disabled"; else echo "-> enabled"; fi
+          echo "$HYPERTHREADING" > $CPU/online
+      fi
+  done
+}
+
+function enabled() {
+        echo -en "Enabling HyperThreading\n"
+        HYPERTHREADING=1
+        toggleHyperThreading
+}
+
+function disabled() {
+        echo -en "Disabling HyperThreading\n"
+        HYPERTHREADING=0
+        toggleHyperThreading
+}
+
+#
+ONLINE=$(cat /sys/devices/system/cpu/online)
+OFFLINE=$(cat /sys/devices/system/cpu/offline)
+echo "---------------------------------------------------"
+echo -en "CPU's online: $ONLINE\t CPU's offline: $OFFLINE\n"
+echo "---------------------------------------------------"
+while true; do
+    read -p "Type in e to enable or d disable hyperThreading or q to quit [e/d/q] ?" ed
+    case $ed in
+        [Ee]* ) enabled; break;;
+        [Dd]* ) disabled;exit;;
+        [Qq]* ) exit;;
+        * ) echo "Please answer e for enable or d for disable hyperThreading.";;
+    esac
+done
+```
+
+# 参考资料
+
+1. https://access.redhat.com/documentation/zh-cn/red_hat_enterprise_linux/7/html/performance_tuning_guide/index
+2. http://arthurchiao.art/blog/linux-net-stack-tuning-rx-zh/
