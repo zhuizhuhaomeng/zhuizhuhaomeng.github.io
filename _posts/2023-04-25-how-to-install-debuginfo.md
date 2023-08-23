@@ -147,7 +147,8 @@ sudo apt update
 dpkg -S $(which nginx)
 ```
 
-和 Debian 类似，有些调试包以 -dbg 为后缀，有些以 -dbgsym 作为后缀：
+和 Debian 类似，有些调试包以 -dbg 为后缀，有些以 -dbgsym 作为后缀。
+有些包甚至更奇怪，比如 perl-base 的调试信息在 perl-debug 中。
 
 ```shell
 sudo apt install python3-dbg
