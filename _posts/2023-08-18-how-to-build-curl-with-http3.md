@@ -6,8 +6,10 @@ date: 2023-08-18
 tags: [curl, http3]
 ---
 
-# install the dependences first
+I build the curl on ubuntu-20.
+You need to change the dependences if you want to build on other OS.
 
+# install the dependences first
 
 ```shell
  sudo apt-get install libsystemd-dev
