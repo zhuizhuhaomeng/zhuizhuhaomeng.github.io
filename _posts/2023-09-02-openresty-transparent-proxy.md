@@ -22,6 +22,12 @@ OpenResty Gateway 节点要把从指定接口收上来的流量重定向到 Open
 因此需要使用 iptables 的 redirect 功能。
 
 ```shell
+# 防止循环
+iptables -t mangle -A OUTPUT -p tcp  -j MARK --set-mark 0x80
+iptables -t mangle -I INPUT -p tcp --dport 8880 -m mark --mark 0x80 -j DROP
+iptables -t mangle -I INPUT -p tcp --dport 8843 -m mark --mark 0x80 -j DROP
+
+# 报文重定向
 iptables -t nat -I PREROUTING -i wg0 -p tcp --dport 80 -j REDIRECT --to-port 8880
 iptables -t nat -I PREROUTING -i wg0 -p tcp --dport 443 -j REDIRECT --to-port 8843
 ```
