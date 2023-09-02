@@ -107,9 +107,11 @@ stream {
             local upstream_sock = ngx.socket.tcp()
             upstream_sock:settimeout(10000)
 
-            local ok, err = upstream_sock:connect(host, port)
+            local proxy_host = ngx.proxy_cfg["proxy_host"]
+            local proxy_port = ngx.proxy_cfg["proxy_port"]
+            local ok, err = upstream_sock:connect(proxy_host, proxy_port)
             if not ok then
-                ngx.log(ngx.ERR, "failed to connect to ", host, ":", port, ", error: ", err)
+                ngx.log(ngx.ERR, "failed to connect to ", proxy_host, ":", proxy_port, ", error: ", err)
                 upstream_sock:close()
                 ngx.exit(1)
             end
