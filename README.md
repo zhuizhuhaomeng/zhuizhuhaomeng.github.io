@@ -1,4 +1,4 @@
-[zhuizhuhaomeng Blog](https://huangxuan.me)
+[zhuizhuhaomeng Blog](https://zhuizhuhaomeng.github.io)
 ================================
 
 > I never expect this becomes popular.
