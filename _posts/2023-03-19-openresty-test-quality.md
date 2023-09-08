@@ -320,3 +320,46 @@ ASAN_OPTIONS=detect_leaks=0 ./sbin/nginx -t
 mkdir -p /var/asan; chmod a+w /var/asan
 ASAN_OPTIONS=log_path=/var/asan/asan,log_exe_name=true ./sbin/nginx
 ```
+
+# systemctl 启动的一个例子
+
+
+这里通过使用 Environment 设置 address sanity 的环境变量。
+
+有几个注意点：
+
+1. 这里不想检测内存泄漏，因此增加了 detect_leaks=0。
+2. 同时希望产生 coredump 文件，因此增加了 abort_on_error=1。
+3. 因为是后台运行，因此需要指定日志文件，使用 log_path 的选项。
+
+总之，按照我的来就是最佳实践。
+
+
+```config
+[Unit]
+Description=The Talent Program
+Wants=network-online.target
+After=network-online.target nss-lookup.target
+
+[Service]
+LimitNOFILE=2048
+Type=forking
+WorkingDirectory=/usr/local/talent-calc
+PIDFile=/usr/local/talent-calc/logs/nginx.pid
+ExecStartPre=/usr/local/talent-calc/bin/talent-master -p /usr/local/talent-calc -t
+ExecStartPre=/bin/rm -f /usr/local/talent-calc/agent.sock
+ExecStart=/usr/local/talent-calc/bin/talent-master -p /usr/local/talent-calc
+ExecReload=/usr/local/talent-calc/bin/talent-master -p /usr/local/talent-calc -t
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s QUIT $MAINPID
+Environment="HOSTNAME=%H"
+Environment="ASAN_OPTIONS=log_path=/var/asan/asan,log_exe_name=true,detect_leaks=0,abort_on_error=1"
+TimeoutStopSec=10s
+PrivateTmp=false
+CPUQuota=50%
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
+```
