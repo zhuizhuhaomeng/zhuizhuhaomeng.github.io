@@ -114,7 +114,7 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
 ```
 
 上面虽然得到了第一现场，但是我们还是没有很好的办法定位问题，因为不知道具体哪个 Lua 源文件的代码触发的问题。
-比较土的笨办法也有，可以通过搜索 ffi.copy 去分析所有的相关代码。但是如果事先不知道 `ffi.copy` 拷贝字符串的那个深坑，看代理哪里都没有问题。
+比较土的笨办法也有，可以通过搜索 ffi.copy 去分析所有的相关代码。但是如果事先不知道 `ffi.copy` 拷贝字符串的那个深坑，看代码哪里都没有问题。
 
 ## 通过 coredump 文件定位 Lua 代码行
 
