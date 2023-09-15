@@ -57,10 +57,20 @@ wireguard 的两个节点是对等的，因此需要登陆到对端把本机的�
 这里添加的目的就是为了让本机作为软路由，代理其它的设备数据转发，这样就可以做到一台机器配置 wiregurad 的 VPN 隧道，
 其它设备将配置了 VPN 的机器作为网关。
 
+# 系统配置
+
+```shell
+echo "net.ipv4.ip_forward = 1" | sudo tee -a /etc/sysctl.conf
+sysctl -p
+systemctl enable  wg-quick@wg0
+systemctl start  wg-quick@wg0
+```
 
 # 重启软件
 
+```shell
 sudo systemctl restart wg-quick@wg0
+```
 
 # 故障和调试
 
