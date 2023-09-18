@@ -443,6 +443,176 @@ ngx_bpf(enum bpf_cmd cmd, union bpf_attr *attr, unsigned int size)
 }
 ```
 
+# nginx binary upgrade 是否继承 http3 的 udp socket
+
+如果继承的话就会导致 Nginx 在 binary upgarde 或者 reload 的时候无法将报文分发给正确的进程。
+那么 Nginx 是如何做到这点的呢？
+
+Nginx 只是设置了 ignore 的标志位，就表示不继承该 socket 了。
+这个操作是在 ngx_quic_bpf_group_add_socket(ngx_cycle_t *cycle,  ngx_listening_t *ls) 函数中进行的。
+
+## nginx 如何继承 socket
+
+nginx 继承 socket 是在 ngx_add_inherited_sockets 实现的。在调用了 ngx_add_inherited_sockets 之后才进行配置解析，也就是配置解析完成再调用 ngx_init_cycle 函数。
+但是 nginx 是什么时候复制多份 reuseport 的 listen socket的呢? 是在 函数 ngx_clone_listening(ngx_cycle_t *cycle, ngx_listening_t *ls) 复制的。
+而该函数又是被函数 ngx_event_init_conf(ngx_cycle_t *cycle, void *conf) 所调用。
+
+因此，从函数调用关系上是下面这样子。
+
+```
+ngx_add_inherited_sockets
+ngx_init_cycle
+    ngx_event_init_conf
+    compare & copy fd from old_cycle
+    ngx_open_listening_sockets
+    ngx_configure_listening_sockets
+```
+
+ngx_init_cycle 中重要的相关代码如下:
+
+
+```C
+ngx_cycle_t *
+ngx_init_cycle(ngx_cycle_t *old_cycle)
+{
+    if (ngx_conf_parse(&conf, &cycle->conf_file) != NGX_CONF_OK) {
+        environ = senv;
+        ngx_destroy_cycle_pools(&conf);
+        return NULL;
+    }
+
+    ...
+
+    for (i = 0; cycle->modules[i]; i++) {
+        if (cycle->modules[i]->type != NGX_CORE_MODULE) {
+            continue;
+        }
+
+        module = cycle->modules[i]->ctx;
+
+        if (module->init_conf) {
+            // 这里会调用 ngx_event_init_conf
+            if (module->init_conf(cycle,
+                                  cycle->conf_ctx[cycle->modules[i]->index])
+                == NGX_CONF_ERROR)
+            {
+                environ = senv;
+                ngx_destroy_cycle_pools(&conf);
+                return NULL;
+            }
+        }
+    }
+    /* handle the listening sockets */
+
+    if (old_cycle->listening.nelts) {
+        ls = old_cycle->listening.elts;
+        for (i = 0; i < old_cycle->listening.nelts; i++) {
+            ls[i].remain = 0;
+        }
+
+        nls = cycle->listening.elts;
+        for (n = 0; n < cycle->listening.nelts; n++) {
+
+            for (i = 0; i < old_cycle->listening.nelts; i++) {
+                if (ls[i].ignore) {
+                    continue;
+                }
+
+                if (ls[i].remain) {
+                    continue;
+                }
+
+                if (ls[i].type != nls[n].type) {
+                    continue;
+                }
+
+                if (ngx_cmp_sockaddr(nls[n].sockaddr, nls[n].socklen,
+                                     ls[i].sockaddr, ls[i].socklen, 1)
+                    == NGX_OK)
+                {
+                    nls[n].fd = ls[i].fd;  // 这里只是把继承的 socket 的 fd 赋值给新的结构，因此 nls[n].worker 不受影响。
+                    nls[n].inherited = ls[i].inherited;
+                    nls[n].previous = &ls[i];
+                    ls[i].remain = 1;
+
+                    if (ls[i].backlog != nls[n].backlog) {
+                        nls[n].listen = 1;
+                    }
+
+#if (NGX_HAVE_DEFERRED_ACCEPT && defined SO_ACCEPTFILTER)
+
+                    /*
+                     * FreeBSD, except the most recent versions,
+                     * could not remove accept filter
+                     */
+                    nls[n].deferred_accept = ls[i].deferred_accept;
+
+                    if (ls[i].accept_filter && nls[n].accept_filter) {
+                        if (ngx_strcmp(ls[i].accept_filter,
+                                       nls[n].accept_filter)
+                            != 0)
+                        {
+                            nls[n].delete_deferred = 1;
+                            nls[n].add_deferred = 1;
+                        }
+
+                    } else if (ls[i].accept_filter) {
+                        nls[n].delete_deferred = 1;
+
+                    } else if (nls[n].accept_filter) {
+                        nls[n].add_deferred = 1;
+                    }
+#endif
+
+#if (NGX_HAVE_DEFERRED_ACCEPT && defined TCP_DEFER_ACCEPT)
+
+                    if (ls[i].deferred_accept && !nls[n].deferred_accept) {
+                        nls[n].delete_deferred = 1;
+
+                    } else if (ls[i].deferred_accept != nls[n].deferred_accept)
+                    {
+                        nls[n].add_deferred = 1;
+                    }
+#endif
+
+#if (NGX_HAVE_REUSEPORT)
+                    if (nls[n].reuseport && !ls[i].reuseport) {
+                        nls[n].add_reuseport = 1;
+                    }
+#endif
+
+                    break;
+                }
+            }
+
+            if (nls[n].fd == (ngx_socket_t) -1) {
+                nls[n].open = 1;
+#if (NGX_HAVE_DEFERRED_ACCEPT && defined SO_ACCEPTFILTER)
+                if (nls[n].accept_filter) {
+                    nls[n].add_deferred = 1;
+                }
+#endif
+#if (NGX_HAVE_DEFERRED_ACCEPT && defined TCP_DEFER_ACCEPT)
+                if (nls[n].deferred_accept) {
+                    nls[n].add_deferred = 1;
+                }
+#endif
+            }
+        }
+
+    }
+
+    if (ngx_open_listening_sockets(cycle) != NGX_OK) {
+        goto failed;
+    }
+
+    if (!ngx_test_config) {
+        ngx_configure_listening_sockets(cycle);
+    }
+
+}
+```
+
 # 参考文档
 
 https://medium.com/nttlabs/nginx-quic-ebpf-soreuseport-127c62112a8d
