@@ -7,19 +7,19 @@ tags: [curl, http3]
 ---
 
 I build the curl on ubuntu-20.
-You need to change the dependences if you want to build on other OS.
+You need to change the dependences if you want to build on other OSes.
 
 # install the dependences first
 
 ```shell
- sudo apt-get install libsystemd-dev
- sudo apt-get install cython
- sudo apt-get install cython3
- sudo apt-get install libcunit1-dev
- sudo apt-get install libev-dev
- sudo apt-get install libc-ares-dev
- sudo apt-get install libpython3-dev libpython2-dev
- sudo apt-get install libjansson-dev
+ sudo apt-get install -y libsystemd-dev
+ sudo apt-get install -y cython
+ sudo apt-get install -y cython3
+ sudo apt-get install -y libcunit1-dev
+ sudo apt-get install -y libev-dev
+ sudo apt-get install -y libc-ares-dev
+ sudo apt-get install -y libpython3-dev libpython2-dev
+ sudo apt-get install -y libjansson-dev
 ```
 
 # build from the source
