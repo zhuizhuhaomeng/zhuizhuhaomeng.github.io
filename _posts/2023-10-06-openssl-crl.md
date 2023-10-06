@@ -11,6 +11,11 @@ tags: [openssl]
 lua-ngix-module 的测试用例中用到了撤销证书 t/cert/test.crl。在更新 t/cert/test.key 和 t/cert/test.crt 后忘记更新撤销证书列表导致用例失败。
 那么如何生成撤销证书列表呢？
 
+# 生成撤销证书列表
+
+生成撤销证书列表需要用到 CA 证书，但是因为这里是自签名证书，因此就 CA 就算自签名证书本身。
+下面的命令列表中给出了一些使用 CA 证书的例子，这些例子存放在注释中。
+
 ```shell
 cd t/cert
 
