@@ -2,7 +2,7 @@
 layout: post
 title: "How to use OpenResty shared dictionary"
 description: "How ot use OpenResty shared dictionary"
-date:
+date: 2023-10-01
 tags: [OpenResty, ngx.shared]
 ---
 
