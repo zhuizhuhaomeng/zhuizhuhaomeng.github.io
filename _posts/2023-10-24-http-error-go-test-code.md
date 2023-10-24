@@ -9,6 +9,8 @@ tags: [HTTP]
 
 # 1. 模拟 HTTP 上游服务器不响应
 
+以下 Go 程序作为源站
+
 ```go
 package main
 
@@ -70,6 +72,8 @@ location /http_504 {
 
 # 2. 模拟客户的提前断开连接
 
+以下 Go 程序作为客户的
+
 ```go
 package main
 
@@ -124,5 +128,66 @@ location /http_499 {
         ngx.sleep(2)
         ngx.say("Hello world")
     }
+}
+```
+
+# 模拟 HTTP 服务器，返回指定的文件
+
+以下 Go 程序作为源站
+
+```go
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"net"
+	"os"
+)
+
+func main() {
+	arguments := os.Args
+	if len(arguments) != 3 {
+		fmt.Printf("usage: %s addr file", arguments[0])
+		return
+	}
+
+	servAddr := arguments[1]
+	file := arguments[1]
+
+	l, err := net.Listen("tcp", servAddr)
+
+	if err != nil {
+		fmt.Println("Error listening:", err.Error())
+		os.Exit(1)
+	}
+	defer l.Close()
+	fmt.Println("Listening on " + servAddr)
+	for {
+		conn, err := l.Accept()
+		if err != nil {
+			fmt.Println("Error accepting: ", err.Error())
+			os.Exit(1)
+		}
+		go handleRequest(conn, file)
+	}
+}
+
+// Handles incoming requests.
+func handleRequest(conn net.Conn, file string) {
+	buf := make([]byte, 1024)
+	_, err := conn.Read(buf)
+	if err != nil {
+		fmt.Println("Error reading:", err.Error())
+	}
+
+	content, err := ioutil.ReadFile("resp.data")
+	if err != nil {
+		fmt.Println("读取文件时发生错误:", err)
+		return
+	}
+
+	conn.Write(content)
+	conn.Close()
 }
 ```
