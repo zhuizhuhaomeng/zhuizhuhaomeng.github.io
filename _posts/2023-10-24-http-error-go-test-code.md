@@ -153,7 +153,7 @@ func main() {
 	}
 
 	servAddr := arguments[1]
-	file := arguments[1]
+	file := arguments[2]
 
 	l, err := net.Listen("tcp", servAddr)
 
@@ -181,7 +181,7 @@ func handleRequest(conn net.Conn, file string) {
 		fmt.Println("Error reading:", err.Error())
 	}
 
-	content, err := ioutil.ReadFile("resp.data")
+	content, err := ioutil.ReadFile(file)
 	if err != nil {
 		fmt.Println("读取文件时发生错误:", err)
 		return
