@@ -165,3 +165,24 @@ for i in {1..10000}; do
     curl -k --resolve test$i.com:4443:127.0.0.1 https://test$i.com:4443/http_504
 done
 ```
+
+模拟对数曲线的发送，6 个小时发送 10000 个不同域名的请求。
+```lua
+local log = math.log
+local last = 0
+local total_req = 10000
+local total_sec = 6 * 3600
+
+for i = 1, total_sec do
+    local v = math.floor(1000 * log(i)) -- 10000 / math.log(6 * 3600) = 1001.958970696
+    if v ~= last then
+        for j = last + 1, v do
+	    local cmd = "curl -k --resolve test" .. j ..".com:4443:127.0.0.1 https://test" .. j .. ".com:4443/http_504"
+            os.execute(cmd)
+        end
+        last = v
+    end
+
+    os.execute("sleep 1")
+end
+```

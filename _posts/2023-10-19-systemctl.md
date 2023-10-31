@@ -25,6 +25,8 @@ WantedBy=multi-user.target
 
 ```shell
 for pid in `pgrep -f 'nginx: worker'`; do chrt -r -p 1 $pid; done
+
+sysctl -w kernel.sched_rr_timeslice_ms=3
 ```
 
 

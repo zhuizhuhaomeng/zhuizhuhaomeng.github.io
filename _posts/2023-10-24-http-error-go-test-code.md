@@ -7,7 +7,7 @@ tags: [HTTP]
 ---
 
 
-# 1. 模拟 HTTP 上游服务器不响应
+# 1. 模拟 HTTP 上游服务器不响应 (网关 504 超时)
 
 以下 Go 程序作为源站
 
@@ -69,8 +69,85 @@ location /http_504 {
 }
 ```
 
+# 2. 模拟上游服务器发送不完整的 HTTP 头部， 网关（502）
 
-# 2. 模拟客户的提前断开连接
+```go
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"net"
+	"os"
+	"time"
+)
+
+func handleConnection(c net.Conn) {
+	fmt.Printf("Serving %s\n", c.RemoteAddr().String())
+        reader := bufio.NewReader(c)
+	for {
+		line, err := reader.ReadString('\n')
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		if line == "\r\n" {
+			break
+		}
+	}
+        resp := "HTTP/1.1 200 OK\r\n" +
+                   "Date: Tue, 24 Oct 2023 13:13:05 GMT\r\n" +
+                   "Content-Type: text/css\r\n" +
+                   "Content-Length: 31022\r\n" +
+                   "Connection: keep-alive\r\n" +
+                   "Server: openresty+\r\n" +
+                   "Req-ID: 000000800004577246e8004b\r\n" +
+                   "Accept-Ranges: bytes\r\n"
+
+        c.Write([]byte(resp))
+
+	time.Sleep(time.Second)
+	c.Close()
+}
+
+func main() {
+	arguments := os.Args
+	if len(arguments) == 1 {
+		fmt.Println("Please provide a port number!")
+		return
+	}
+
+	PORT := ":" + arguments[1]
+	l, err := net.Listen("tcp4", PORT)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer l.Close()
+
+	for {
+		c, err := l.Accept()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		go handleConnection(c)
+	}
+}
+```
+
+nginx 配置
+
+```config
+location /http_502 {
+    proxy_connect_timeout 1s;
+    proxy_read_timeout 3s;
+    proxy_pass http://127.0.0.1:9998;
+}
+```
+
+# 3. 模拟客户的提前断开连接
 
 以下 Go 程序作为客户的
 
@@ -124,6 +201,7 @@ nginx 配置
 
 ```conf
 location /http_499 {
+    lua_check_client_abort on;
     content_by_lua_block {
         ngx.sleep(2)
         ngx.say("Hello world")
@@ -131,7 +209,7 @@ location /http_499 {
 }
 ```
 
-# 模拟 HTTP 服务器，返回指定的文件
+# 4. 模拟 HTTP 服务器，返回指定的文件
 
 以下 Go 程序作为源站
 
