@@ -176,6 +176,13 @@ apt-get download python3.9-minimal
 
 更多信息查看官方文档 [调试信息包](https://wiki.ubuntu.com/Debug%20Symbol%20Packages)
 
+## 内核软件包
+
+apt-get -y install linux-image
+apt-get -y install linux-headers-$(uname -r)
+apt-get -y install linux-image-$(uname -r)-dbgsym
+apt-get -y install linux-libc-dev
+
 # 使用 debuginfod 自动下载调试信息
 
 因为下载 debuginfo 包是很麻烦，而且不熟悉的人还经常下载错了版本，因此衍生了 debuginfod 的服务。
