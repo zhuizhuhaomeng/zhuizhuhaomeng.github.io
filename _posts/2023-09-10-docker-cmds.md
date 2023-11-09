@@ -95,7 +95,7 @@ systemctl start jenkins-agent
 使用 nsenter 进入目标容器，然后使用 hostname 修改目标容器的 hostname
 
 ```shell
-$ sudo docker inspect -f "\{\{ .State.Pid \}\}" 378dd3233752
+$ sudo docker inspect -f "[[ .State.Pid ]]" 378dd3233752  # 这里是大括号，md 展示有问题，就用中括号替代
 2868
 $ sudo nsenter --target 2868 --uts
 $ hostname "biz-app-03"
