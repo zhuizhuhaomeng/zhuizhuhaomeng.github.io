@@ -185,3 +185,9 @@ sudo systemctl restart <service-name>
 将<service-name>替换为你编辑过的服务的名称。
 
 通过上述步骤，你可以在systemd服务配置文件中指定特定服务的核心文件大小限制。请注意，该限制可能会受到系统配置和安全策略的限制
+
+# 为什么不生成 coredump
+
+1. /proc/sys/kernel/core_pattern 配置没有修改
+1. 进程没有目标目录的写入权限 (master/worker 这种模式要求 master/worker 都有写权限)
+1. CORE 大小被限制为 0

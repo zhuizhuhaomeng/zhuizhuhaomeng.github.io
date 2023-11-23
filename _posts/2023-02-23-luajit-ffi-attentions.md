@@ -31,3 +31,11 @@ end
 #参考连接
 
 nil-equality-of-pointers: https://luapower.com/luajit-notes#nil-equality-of-pointers
+
+# OpenResty LuaJIT 调试
+
+想查看 luajit 生成的 trace 信息，可以使用下面的命令
+
+```shell
+init_worker_by_lua_block { require "jit.dump".on("tbirsm", "/tmp/traces.txt." .. ngx.worker.pid()) }
+```
