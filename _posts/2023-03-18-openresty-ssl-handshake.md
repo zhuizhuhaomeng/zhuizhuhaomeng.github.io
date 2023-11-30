@@ -147,7 +147,7 @@ Transfer/sec:    165.35KB
 我们使用 openssl s_client -reconnect 参数验证会话复用是否生效.
 
 ```shell
-$ openssl s_client  -connect 127.0.0.10:2048 -reconnect 2>&1 | grep -i Reused 
+$ openssl s_client -servername test.com -connect 127.0.0.10:2048 -reconnect 2>&1 | grep -i Reused 
 Reused, TLSv1.2, Cipher is ECDHE-RSA-AES128-GCM-SHA256
 Reused, TLSv1.2, Cipher is ECDHE-RSA-AES128-GCM-SHA256
 Reused, TLSv1.2, Cipher is ECDHE-RSA-AES128-GCM-SHA256
@@ -159,7 +159,7 @@ Reused, TLSv1.2, Cipher is ECDHE-RSA-AES128-GCM-SHA256
 比如这个是给 nginx 配置加上 `ssl_session_cache builtin:1000 shared:SSL:10m;` 后验证的效果。
 
 ```shell
-$ echo | openssl s_client -connect 127.0.0.10:2048 -no_ticket -reconnect 2>&1  | grep -i Reuse
+$ echo | openssl s_client -servername test.com -connect 127.0.0.10:2048 -no_ticket -reconnect 2>&1  | grep -i Reuse
 Reused, TLSv1.2, Cipher is ECDHE-RSA-AES128-GCM-SHA256
 Reused, TLSv1.2, Cipher is ECDHE-RSA-AES128-GCM-SHA256
 Reused, TLSv1.2, Cipher is ECDHE-RSA-AES128-GCM-SHA256
@@ -174,7 +174,7 @@ Reused, TLSv1.2, Cipher is ECDHE-RSA-AES128-GCM-SHA256
 具体命令如下：
 
 ```shell
-$ echo | openssl s_client -sess_out sess.data -connect 127.0.0.10:2048 >/dev/null 2>&1
+$ (echo; sleep 0.3) | openssl s_client -servername test.com -sess_out sess.data -connect 127.0.0.10:2048 >/dev/null 2>&1
 $ echo | openssl s_client -sess_in sess.data -connect 127.0.0.10:2048 2>&1 | grep Reuse
 Reused, TLSv1.2, Cipher is ECDHE-RSA-AES128-GCM-SHA256
 ```
@@ -185,7 +185,7 @@ Reused, TLSv1.2, Cipher is ECDHE-RSA-AES128-GCM-SHA256
 这个是 openssl s_client 实现的问题。
 
 ```shell
-openssl s_client -reconnect -connect 127.0.0.10:2048 2>&1 | grep -i Reuse
+openssl s_client -servername test.com -reconnect -connect 127.0.0.10:2048 2>&1 | grep -i Reuse
 ```
 
 这个时候我们可以采用上面说的先保存会话信息到文件再读取发送的方式.
