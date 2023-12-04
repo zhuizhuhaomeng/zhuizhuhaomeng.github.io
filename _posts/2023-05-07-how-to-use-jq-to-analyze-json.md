@@ -281,6 +281,24 @@ jq '.data[] | select(.keywords[] == "go") | .name' programming_languag_languages
 jq '.data | sort_by(.version)' programming_languages_keywords.json
 ```
 
+# 一个案例
+
+这个是 docker hub 上的镜像配置 https://hub.docker.com/v2/repositories/library/php/tags/7.4-fpm-alpine/images
+
+这个文件是 https://hub.docker.com/layers/library/php/7.4-fpm-alpine/images/sha256-4ca7fd8bea83cb12e43d192531576ca9a6b6a2d995763d3aaaee34f0d643f206?context=explore 引用的。
+
+```shell
+curl -o a.json https://hub.docker.com/v2/repositories/library/php/tags/7.4-fpm-alpine/images
+cat a.json | jq -r '.[0].layers[].instruction' | sed 's/bin\/sh -c/RUN/g' |sed 's/^ //g' | sed -e 's/ENV \([A-Z_]\+\)=\(.*\)$/ENV \1="\2"/g'
+```
+
+注意上面 ENV 一行里面可能有多个换行变量的设置，上面的替换会导致替换错误，需要手工修正。比如
+
+```shell
+ENV PHP_URL="https://www.php.net/distributions/php-7.4.33.tar.xz PHP_ASC_URL=https://www.php.net/distributions/php-7.4.33.tar.xz.asc"
+```
+
+
 # 参考文档
 
 执行 `man jq` 查询帮助是最快捷的方式
