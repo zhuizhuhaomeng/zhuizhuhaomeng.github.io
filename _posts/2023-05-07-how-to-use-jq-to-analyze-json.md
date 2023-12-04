@@ -42,9 +42,10 @@ jq 的语法是清晰的:
 | 描述 | 命令 |
 | ------------| :-----: |
 | 提取所有的键值 | `jq 'keys'` |
-| 给所有的简直加 1 | `jq 'map_values(.+1)'` |
+| 给所有的键值加 1 | `jq 'map_values(.+1)'` |
 | 删除一个键值 | `jq 'del(.foo)'` |
 | 将一个对象转换为一个数组 | `to_entries &#124; map([.key, .value])` |
+| 提取一个对象下面的数组的所有 instruction 成员 | `cat docker.json \| jq '.[0].layers[].instruction'`, 特别注意，访问layers对象下面的数组，不需要加上点号 |
 
 ## 处理成员
 
