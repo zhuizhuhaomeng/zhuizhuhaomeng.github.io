@@ -11,13 +11,21 @@ tags: [systemtap, test]
 
 # 安装依赖
 
-测试的时候要用到runtest这个组件，需要安装dejagnu。
+测试的时候要用到 runtest 这个组件，需要安装 dejagnu。
 编译的时候依赖 elfutils-devel, 因此需要安装改组件。
-其它的python3的系统应该默认就存在了。
+其它的 python3 的系统应该默认就存在了。
 
 ```shell
 sudo yum install -y dejagnu
 sudo yum install -y elfutils-devel
+
+# or apt
+
+sudo apt-get install dejagnu
+sudo apt-get install libdw-dev
+sudo apt-get install lib-dev
+sudo apt-get install libdebuginfod-dev
+sudo apt-get install elfutils
 ```
 
 # 编译
