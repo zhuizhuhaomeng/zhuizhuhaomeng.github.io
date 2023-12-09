@@ -16,8 +16,8 @@ tags: [systemtap, test]
 其它的 python3 的系统应该默认就存在了。
 
 ```shell
-sudo yum install -y dejagnu
-sudo yum install -y elfutils-devel
+sudo yum install --enablerepo="*" -y dejagnu
+sudo yum install --enablerepo="*" -y elfutils-devel
 
 # or apt
 
