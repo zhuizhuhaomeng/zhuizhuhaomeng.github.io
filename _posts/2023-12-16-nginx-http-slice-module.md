@@ -212,10 +212,6 @@ Breakpoint 4, ngx_http_slice_range_variable (r=0x6f3470, v=0x6f4238, data=0) at 
 #17 0x000000000046a24b in ngx_epoll_process_events (cycle=0x6e4760, timer=456, flags=1) at src/event/modules/ngx_epoll_module.c:901
 #18 0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #19 0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#20 0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#21 0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#22 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#23 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 
 # 添加请求头
 Breakpoint 4, ngx_http_slice_range_variable (r=0x6f3470, v=0x6f4238, data=0) at src/http/modules/ngx_http_slice_filter_module.c:402
@@ -238,10 +234,6 @@ Breakpoint 4, ngx_http_slice_range_variable (r=0x6f3470, v=0x6f4238, data=0) at 
 #15 0x000000000046a24b in ngx_epoll_process_events (cycle=0x6e4760, timer=456, flags=1) at src/event/modules/ngx_epoll_module.c:901
 #16 0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #17 0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#18 0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#19 0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#20 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#21 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 
 # 向上游发送请求
 Breakpoint 9, __GI___writev (fd=17, iov=0x7fffffffd110, iovcnt=1) at ../sysdeps/unix/sysv/linux/writev.c:25
@@ -258,10 +250,6 @@ Breakpoint 9, __GI___writev (fd=17, iov=0x7fffffffd110, iovcnt=1) at ../sysdeps/
 #9  0x000000000046a339 in ngx_epoll_process_events (cycle=0x6e4760, timer=439, flags=1) at src/event/modules/ngx_epoll_module.c:930
 #10 0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #11 0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#12 0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#13 0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#14 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#15 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 
 #上游返回的响应头过滤，注意这里的 r 值是客户端发起的主请求
 Breakpoint 1, ngx_http_slice_header_filter (r=0x6f3470) at src/http/modules/ngx_http_slice_filter_module.c:111
@@ -274,10 +262,6 @@ Breakpoint 1, ngx_http_slice_header_filter (r=0x6f3470) at src/http/modules/ngx_
 #5  0x000000000046a24b in ngx_epoll_process_events (cycle=0x6e4760, timer=439, flags=1) at src/event/modules/ngx_epoll_module.c:901
 #6  0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #7  0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#8  0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#9  0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#10 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#11 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 
 # 过滤请求体
 Breakpoint 3, ngx_http_slice_body_filter (r=0x6f3470, in=0x7b5fa8) at src/http/modules/ngx_http_slice_filter_module.c:225
@@ -292,10 +276,6 @@ Breakpoint 3, ngx_http_slice_body_filter (r=0x6f3470, in=0x7b5fa8) at src/http/m
 #7  0x000000000046a24b in ngx_epoll_process_events (cycle=0x6e4760, timer=432, flags=1) at src/event/modules/ngx_epoll_module.c:901
 #8  0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #9  0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#10 0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#11 0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#12 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#13 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 
 # 将响应返回给客户端, 这里的 iovcnt 是 2
 Breakpoint 9, __GI___writev (fd=15, iov=0x7fffffffcb20, iovcnt=2) at ../sysdeps/unix/sysv/linux/writev.c:25
@@ -328,10 +308,6 @@ Breakpoint 9, __GI___writev (fd=15, iov=0x7fffffffcb20, iovcnt=2) at ../sysdeps/
 #25 0x000000000046a24b in ngx_epoll_process_events (cycle=0x6e4760, timer=432, flags=1) at src/event/modules/ngx_epoll_module.c:901
 #26 0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #27 0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#28 0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#29 0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#30 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#31 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 
 # 将响应返回给客户端, 这里的 iovcnt 是 1
 Breakpoint 9, __GI___writev (fd=15, iov=0x7fffffffcb20, iovcnt=1) at ../sysdeps/unix/sysv/linux/writev.c:25
@@ -364,10 +340,6 @@ Breakpoint 9, __GI___writev (fd=15, iov=0x7fffffffcb20, iovcnt=1) at ../sysdeps/
 #25 0x000000000046a24b in ngx_epoll_process_events (cycle=0x6e4760, timer=432, flags=1) at src/event/modules/ngx_epoll_module.c:901
 #26 0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #27 0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#28 0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#29 0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#30 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#31 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 
 # 过滤响应头，这里是 ngx_http_upstream_finalize_request 调用 ngx_http_send_special
 Breakpoint 3, ngx_http_slice_body_filter (r=0x6f3470, in=0x7fffffffd630) at src/http/modules/ngx_http_slice_filter_module.c:225
@@ -382,10 +354,6 @@ Breakpoint 3, ngx_http_slice_body_filter (r=0x6f3470, in=0x7fffffffd630) at src/
 #7  0x000000000046a24b in ngx_epoll_process_events (cycle=0x6e4760, timer=432, flags=1) at src/event/modules/ngx_epoll_module.c:901
 #8  0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #9  0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#10 0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#11 0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#12 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#13 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 
 # 可以看到这是 ngx_http_run_posted_requests 发起的子请求
 Breakpoint 4, ngx_http_slice_range_variable (r=0x7f9910, v=0x6f4238, data=0) at src/http/modules/ngx_http_slice_filter_module.c:402
@@ -407,10 +375,6 @@ Breakpoint 4, ngx_http_slice_range_variable (r=0x7f9910, v=0x6f4238, data=0) at 
 #14 0x000000000046a24b in ngx_epoll_process_events (cycle=0x6e4760, timer=432, flags=1) at src/event/modules/ngx_epoll_module.c:901
 #15 0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #16 0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#17 0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#18 0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#19 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#20 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 
 # 这个是子请求发起上游请求
 Breakpoint 4, ngx_http_slice_range_variable (r=0x7f9910, v=0x6f4238, data=0) at src/http/modules/ngx_http_slice_filter_module.c:402
@@ -430,10 +394,6 @@ Breakpoint 4, ngx_http_slice_range_variable (r=0x7f9910, v=0x6f4238, data=0) at 
 #12 0x000000000046a24b in ngx_epoll_process_events (cycle=0x6e4760, timer=432, flags=1) at src/event/modules/ngx_epoll_module.c:901
 #13 0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #14 0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#15 0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#16 0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#17 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#18 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 
 # 子请求向上游发送请求
 Breakpoint 9, __GI___writev (fd=17, iov=0x7fffffffd110, iovcnt=1) at ../sysdeps/unix/sysv/linux/writev.c:25
@@ -450,10 +410,6 @@ Breakpoint 9, __GI___writev (fd=17, iov=0x7fffffffd110, iovcnt=1) at ../sysdeps/
 #9  0x000000000046a339 in ngx_epoll_process_events (cycle=0x6e4760, timer=427, flags=1) at src/event/modules/ngx_epoll_module.c:930
 #10 0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #11 0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#12 0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#13 0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#14 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#15 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 
 # 子请求响应头的过滤
 Breakpoint 1, ngx_http_slice_header_filter (r=0x7f9910) at src/http/modules/ngx_http_slice_filter_module.c:111
@@ -466,10 +422,6 @@ Breakpoint 1, ngx_http_slice_header_filter (r=0x7f9910) at src/http/modules/ngx_
 #5  0x000000000046a24b in ngx_epoll_process_events (cycle=0x6e4760, timer=383, flags=1) at src/event/modules/ngx_epoll_module.c:901
 #6  0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #7  0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#8  0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#9  0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#10 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#11 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 
 # 子请求响应体过滤
 Breakpoint 3, ngx_http_slice_body_filter (r=0x7f9910, in=0x7ff9a0) at src/http/modules/ngx_http_slice_filter_module.c:225
@@ -486,11 +438,8 @@ Breakpoint 3, ngx_http_slice_body_filter (r=0x7f9910, in=0x7ff9a0) at src/http/m
 #9  0x000000000046a24b in ngx_epoll_process_events (cycle=0x6e4760, timer=383, flags=1) at src/event/modules/ngx_epoll_module.c:901
 #10 0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #11 0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#12 0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#13 0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#14 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#15 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 
+# 子请求发送数据
 Breakpoint 9, __GI___writev (fd=15, iov=0x7fffffffca80, iovcnt=1) at ../sysdeps/unix/sysv/linux/writev.c:25
 25	../sysdeps/unix/sysv/linux/writev.c: No such file or directory.
 #0  __GI___writev (fd=15, iov=0x7fffffffca80, iovcnt=1) at ../sysdeps/unix/sysv/linux/writev.c:25
@@ -523,11 +472,8 @@ Breakpoint 9, __GI___writev (fd=15, iov=0x7fffffffca80, iovcnt=1) at ../sysdeps/
 #27 0x000000000046a24b in ngx_epoll_process_events (cycle=0x6e4760, timer=383, flags=1) at src/event/modules/ngx_epoll_module.c:901
 #28 0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #29 0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#30 0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#31 0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#32 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#33 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 
+#子请求过滤响应头
 Breakpoint 3, ngx_http_slice_body_filter (r=0x7f9910, in=0x7ffa30) at src/http/modules/ngx_http_slice_filter_module.c:225
 225	    ctx = ngx_http_get_module_ctx(r, ngx_http_slice_filter_module);
 #0  ngx_http_slice_body_filter (r=0x7f9910, in=0x7ffa30) at src/http/modules/ngx_http_slice_filter_module.c:225
@@ -540,11 +486,8 @@ Breakpoint 3, ngx_http_slice_body_filter (r=0x7f9910, in=0x7ffa30) at src/http/m
 #7  0x000000000046a24b in ngx_epoll_process_events (cycle=0x6e4760, timer=378, flags=1) at src/event/modules/ngx_epoll_module.c:901
 #8  0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #9  0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#10 0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#11 0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#12 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#13 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 
+#子请求向下游发送数据
 Breakpoint 9, __GI___writev (fd=15, iov=0x7fffffffcb20, iovcnt=1) at ../sysdeps/unix/sysv/linux/writev.c:25
 25	../sysdeps/unix/sysv/linux/writev.c: No such file or directory.
 #0  __GI___writev (fd=15, iov=0x7fffffffcb20, iovcnt=1) at ../sysdeps/unix/sysv/linux/writev.c:25
@@ -575,11 +518,8 @@ Breakpoint 9, __GI___writev (fd=15, iov=0x7fffffffcb20, iovcnt=1) at ../sysdeps/
 #25 0x000000000046a24b in ngx_epoll_process_events (cycle=0x6e4760, timer=378, flags=1) at src/event/modules/ngx_epoll_module.c:901
 #26 0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #27 0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#28 0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#29 0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#30 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#31 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 
+#子请求想下游发送数据
 Breakpoint 9, __GI___writev (fd=15, iov=0x7fffffffcb20, iovcnt=1) at ../sysdeps/unix/sysv/linux/writev.c:25
 25	in ../sysdeps/unix/sysv/linux/writev.c
 #0  __GI___writev (fd=15, iov=0x7fffffffcb20, iovcnt=1) at ../sysdeps/unix/sysv/linux/writev.c:25
@@ -610,11 +550,8 @@ Breakpoint 9, __GI___writev (fd=15, iov=0x7fffffffcb20, iovcnt=1) at ../sysdeps/
 #25 0x000000000046a24b in ngx_epoll_process_events (cycle=0x6e4760, timer=378, flags=1) at src/event/modules/ngx_epoll_module.c:901
 #26 0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #27 0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#28 0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#29 0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#30 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#31 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 
+# 子请求响应头过滤，send_special
 Breakpoint 3, ngx_http_slice_body_filter (r=0x7f9910, in=0x7fffffffd630) at src/http/modules/ngx_http_slice_filter_module.c:225
 225	    ctx = ngx_http_get_module_ctx(r, ngx_http_slice_filter_module);
 #0  ngx_http_slice_body_filter (r=0x7f9910, in=0x7fffffffd630) at src/http/modules/ngx_http_slice_filter_module.c:225
@@ -627,10 +564,6 @@ Breakpoint 3, ngx_http_slice_body_filter (r=0x7f9910, in=0x7fffffffd630) at src/
 #7  0x000000000046a24b in ngx_epoll_process_events (cycle=0x6e4760, timer=378, flags=1) at src/event/modules/ngx_epoll_module.c:901
 #8  0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #9  0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#10 0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#11 0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#12 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#13 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 
 Breakpoint 3, ngx_http_slice_body_filter (r=0x6f3470, in=0x0) at src/http/modules/ngx_http_slice_filter_module.c:225
 225	    ctx = ngx_http_get_module_ctx(r, ngx_http_slice_filter_module);
@@ -642,10 +575,6 @@ Breakpoint 3, ngx_http_slice_body_filter (r=0x6f3470, in=0x0) at src/http/module
 #5  0x000000000046a24b in ngx_epoll_process_events (cycle=0x6e4760, timer=378, flags=1) at src/event/modules/ngx_epoll_module.c:901
 #6  0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #7  0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#8  0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#9  0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#10 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#11 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 
 Breakpoint 4, ngx_http_slice_range_variable (r=0x7fffc0, v=0x6f4238, data=0) at src/http/modules/ngx_http_slice_filter_module.c:402
 402	    ctx = ngx_http_get_module_ctx(r, ngx_http_slice_filter_module);
@@ -666,10 +595,6 @@ Breakpoint 4, ngx_http_slice_range_variable (r=0x7fffc0, v=0x6f4238, data=0) at 
 #14 0x000000000046a24b in ngx_epoll_process_events (cycle=0x6e4760, timer=378, flags=1) at src/event/modules/ngx_epoll_module.c:901
 #15 0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #16 0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#17 0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#18 0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#19 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#20 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 
 Breakpoint 4, ngx_http_slice_range_variable (r=0x7fffc0, v=0x6f4238, data=0) at src/http/modules/ngx_http_slice_filter_module.c:402
 402	    ctx = ngx_http_get_module_ctx(r, ngx_http_slice_filter_module);
@@ -688,10 +613,6 @@ Breakpoint 4, ngx_http_slice_range_variable (r=0x7fffc0, v=0x6f4238, data=0) at 
 #12 0x000000000046a24b in ngx_epoll_process_events (cycle=0x6e4760, timer=378, flags=1) at src/event/modules/ngx_epoll_module.c:901
 #13 0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #14 0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#15 0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#16 0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#17 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#18 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 
 Breakpoint 9, __GI___writev (fd=17, iov=0x7fffffffd110, iovcnt=1) at ../sysdeps/unix/sysv/linux/writev.c:25
 25	../sysdeps/unix/sysv/linux/writev.c: No such file or directory.
@@ -707,10 +628,6 @@ Breakpoint 9, __GI___writev (fd=17, iov=0x7fffffffd110, iovcnt=1) at ../sysdeps/
 #9  0x000000000046a339 in ngx_epoll_process_events (cycle=0x6e4760, timer=359, flags=1) at src/event/modules/ngx_epoll_module.c:930
 #10 0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #11 0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#12 0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#13 0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#14 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#15 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 
 Breakpoint 1, ngx_http_slice_header_filter (r=0x7fffc0) at src/http/modules/ngx_http_slice_filter_module.c:111
 111	    ctx = ngx_http_get_module_ctx(r, ngx_http_slice_filter_module);
@@ -722,10 +639,6 @@ Breakpoint 1, ngx_http_slice_header_filter (r=0x7fffc0) at src/http/modules/ngx_
 #5  0x000000000046a24b in ngx_epoll_process_events (cycle=0x6e4760, timer=318, flags=1) at src/event/modules/ngx_epoll_module.c:901
 #6  0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #7  0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#8  0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#9  0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#10 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#11 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 
 Breakpoint 3, ngx_http_slice_body_filter (r=0x7fffc0, in=0x810100) at src/http/modules/ngx_http_slice_filter_module.c:225
 225	    ctx = ngx_http_get_module_ctx(r, ngx_http_slice_filter_module);
@@ -741,10 +654,6 @@ Breakpoint 3, ngx_http_slice_body_filter (r=0x7fffc0, in=0x810100) at src/http/m
 #9  0x000000000046a24b in ngx_epoll_process_events (cycle=0x6e4760, timer=318, flags=1) at src/event/modules/ngx_epoll_module.c:901
 #10 0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #11 0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#12 0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#13 0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#14 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#15 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 
 Breakpoint 9, __GI___writev (fd=15, iov=0x7fffffffca80, iovcnt=1) at ../sysdeps/unix/sysv/linux/writev.c:25
 25	../sysdeps/unix/sysv/linux/writev.c: No such file or directory.
@@ -778,10 +687,6 @@ Breakpoint 9, __GI___writev (fd=15, iov=0x7fffffffca80, iovcnt=1) at ../sysdeps/
 #27 0x000000000046a24b in ngx_epoll_process_events (cycle=0x6e4760, timer=318, flags=1) at src/event/modules/ngx_epoll_module.c:901
 #28 0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #29 0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#30 0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#31 0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#32 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#33 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 
 Breakpoint 3, ngx_http_slice_body_filter (r=0x7fffc0, in=0x7fffffffd590) at src/http/modules/ngx_http_slice_filter_module.c:225
 225	    ctx = ngx_http_get_module_ctx(r, ngx_http_slice_filter_module);
@@ -797,10 +702,6 @@ Breakpoint 3, ngx_http_slice_body_filter (r=0x7fffc0, in=0x7fffffffd590) at src/
 #9  0x000000000046a24b in ngx_epoll_process_events (cycle=0x6e4760, timer=318, flags=1) at src/event/modules/ngx_epoll_module.c:901
 #10 0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #11 0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#12 0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#13 0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#14 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#15 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 
 Breakpoint 3, ngx_http_slice_body_filter (r=0x6f3470, in=0x0) at src/http/modules/ngx_http_slice_filter_module.c:225
 225	    ctx = ngx_http_get_module_ctx(r, ngx_http_slice_filter_module);
@@ -812,10 +713,6 @@ Breakpoint 3, ngx_http_slice_body_filter (r=0x6f3470, in=0x0) at src/http/module
 #5  0x000000000046a24b in ngx_epoll_process_events (cycle=0x6e4760, timer=318, flags=1) at src/event/modules/ngx_epoll_module.c:901
 #6  0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #7  0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#8  0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#9  0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#10 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#11 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 
 Breakpoint 3, ngx_http_slice_body_filter (r=0x6f3470, in=0x7fffffffd610) at src/http/modules/ngx_http_slice_filter_module.c:225
 225	    ctx = ngx_http_get_module_ctx(r, ngx_http_slice_filter_module);
@@ -830,10 +727,6 @@ Breakpoint 3, ngx_http_slice_body_filter (r=0x6f3470, in=0x7fffffffd610) at src/
 #8  0x000000000046a24b in ngx_epoll_process_events (cycle=0x6e4760, timer=318, flags=1) at src/event/modules/ngx_epoll_module.c:901
 #9  0x0000000000459ef2 in ngx_process_events_and_timers (cycle=0x6e4760) at src/event/ngx_event.c:258
 #10 0x0000000000467cf1 in ngx_worker_process_cycle (cycle=0x6e4760, data=0x0) at src/os/unix/ngx_process_cycle.c:793
-#11 0x0000000000464abd in ngx_spawn_process (cycle=0x6e4760, proc=0x467c43 <ngx_worker_process_cycle>, data=0x0, name=0x6115e1 "worker process", respawn=-3) at src/os/unix/ngx_process.c:199
-#12 0x0000000000466ef8 in ngx_start_worker_processes (cycle=0x6e4760, n=1, type=-3) at src/os/unix/ngx_process_cycle.c:382
-#13 0x0000000000466560 in ngx_master_process_cycle (cycle=0x6e4760) at src/os/unix/ngx_process_cycle.c:135
-#14 0x0000000000424723 in main (argc=1, argv=0x7fffffffddf8) at src/core/nginx.c:387
 ```
 
 ### 调用栈解说
