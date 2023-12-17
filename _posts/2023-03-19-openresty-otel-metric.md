@@ -14,6 +14,7 @@ tags: [OpenResty, Nginx, OpenTelemetry]
 
 ```shell
 git clone git@github.com:nginxinc/nginx-otel.git
+cd nginx-otel
 mkdir build
 cd build
 cmake -DNGX_OTEL_NGINX_BUILD_DIR=/var/code/openresty-1.25.3.1rc1/build/nginx-1.25.3/objs -DOPENSSL_ROOT_DIR=/usr/local/openresty/openssl111 -DZLIB_ROOT=/usr/local/openresty/zlib ..
