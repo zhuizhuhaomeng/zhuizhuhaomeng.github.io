@@ -2,7 +2,7 @@
 layout: post
 title: "为 OpenResty 编译 OpenTelemetry"
 description: "为 OpenResty 编译 OpenTelemetry"
-date: 2023-03-19
+date: 2023-12-18
 tags: [OpenResty, Nginx, OpenTelemetry]
 ---
 
