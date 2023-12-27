@@ -22,7 +22,7 @@ cd ~
 wget -O openresty-1.19.3.1.tar.gz  https://openresty.org/download/openresty-1.19.3.1.tar.gz
 ```
 
-这个tar包是通过这个脚本生成的 https://github.com/openresty/openresty/blob/master/util/mirror-tarballs
+这个 tar 包是通过这个脚本生成的 https://github.com/openresty/openresty/blob/master/util/mirror-tarballs
 
 
 # 下载打包脚本
@@ -55,14 +55,14 @@ make openresty-build
 
 ## 如何增加自己的模块
 
-一个很简单的方法就是在修改mirror-tarballs，然后将模块加入openresty-1.19.3.1.tar.gz， 在 openresty.spec 的文件中增加--add-module指定要添加的模块。
+一个很简单的方法就是在修改 mirror-tarballs，然后将模块加入 openresty-1.19.3.1.tar.gz，在 openresty.spec 的文件中增加--add-module 指定要添加的模块。
 
 如果是 deb 包，那么修改 deb 目录下相应的 文件即可。比如：
 openresty-packaging/deb/openresty/debian/rules 这个文件。
 
 ## 如何给 spec 文件传递参数
 
-假设 spec 中使用 enable-valgrind 来控制是否启用valgrind，如下所示。
+假设 spec 中使用 enable-valgrind 来控制是否启用 valgrind，如下所示。
 
 ```spec
 %if 0%{?enable-valgrind}
@@ -121,7 +121,7 @@ Deb 打包参考 debian 官方的打包脚本，链接为 [https://salsa.debian.
 `/usr/local/xdp-tools/lib/bpf/xsk_def_xdp_prog.o'
 ```
 
-编译的时候遇到了这样的错误, 这个错误是因为这个 .o 文件是 llvm 编译的，而 strip 却
+编译的时候遇到了这样的错误，这个错误是因为这个 .o 文件是 llvm 编译的，而 strip 却
 试用了 /usr/bin/strip 这个工具，因此要换成 llvm-stip. 只要再 spec 文件中配置如下语句即可。
 
 ```shell
@@ -149,7 +149,7 @@ $ rpmbuild --showrc | grep -- "-13:"
 微软的 mariner 系统上编译会出现各种奇怪的问题。
 
 1. rpm-build 太新导致缺少 debugedit 和 find-debuginfo.sh
-1. binutils 需要单独安装, 而通常情况下 gcc 是依赖 binutils的。我们可以通过 `rpm -qR gcc | grep binutils` 确认这点
+1. binutils 需要单独安装，而通常情况下 gcc 是依赖 binutils 的。我们可以通过 `rpm -qR gcc | grep binutils` 确认这点
 1. glibc-headers 和 kernel-headers 也需要单独安装，而其它系统 glibc-headers 是依赖 kernel-headers。
 1. dnf dnf-plugins-core 也需要单独安装，系统默认不带这些命令
 

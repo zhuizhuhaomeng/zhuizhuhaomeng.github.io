@@ -16,7 +16,7 @@ tags: [Dynamic link, GCC, GDB]
 
 # 测试代码
 
-这是一个最小化的代码，调用的 printf 函数是libc提供的，因此就涉及到动态链接了。
+这是一个最小化的代码，调用的 printf 函数是 libc 提供的，因此就涉及到动态链接了。
 
 ```C
 #include<stdio.h>
@@ -60,8 +60,8 @@ End of assembler dump.
 (gdb)
 ```
 
-我们看到,反汇编代码重并没有 printf 的调用, 取而代之的是puts函数的调用。
-这是因为 printf 的调用只有常量字符串没有参数，因此被 gcc 优化成 puts的调用。
+我们看到，反汇编代码重并没有 printf 的调用，取而代之的是 puts 函数的调用。
+这是因为 printf 的调用只有常量字符串没有参数，因此被 gcc 优化成 puts 的调用。
 
 => 0x000000000040112a <+4>:	mov    $0x402010,%edi 这条指令其实就是将 "hello world!\n"
 的地址放在%edi。我们可以通过 x 这个 gdb 命令来确认。
@@ -83,12 +83,12 @@ Dump of assembler code for function puts@plt:
 End of assembler dump.
 ```
 
-可以看到这个反汇编很短，只有3个指令。第一个指令的 jmpq 到另一个地址 0x404000 存储的指令地址去执行。
+可以看到这个反汇编很短，只有 3 个指令。第一个指令的 jmpq 到另一个地址 0x404000 存储的指令地址去执行。
 `0x0000000000401030 <+0>:	jmpq   *0x2fca(%rip)` 这个指令的 * 对理解 plt 的原来很重要。并不是直接
-跳转到 `0x2fca(%rip)` 这个地址，而是跳转到 `0x2fca(%rip)` 这个地址存储的指令地址去执行，这里相当于是C语言的双重指针。
+跳转到 `0x2fca(%rip)` 这个地址，而是跳转到 `0x2fca(%rip)` 这个地址存储的指令地址去执行，这里相当于是 C 语言的双重指针。
 第二条指令是将一个常数参数压栈，第三个指令调整到另一个地址 0x401020 去执行。
 
-0x404000 这个地址是如何得到的呢？这个是通过 0x2fca(%rip)计算得到的，而 %rip 的值是下一条指令的地址,
+0x404000 这个地址是如何得到的呢？这个是通过 0x2fca(%rip) 计算得到的，而 %rip 的值是下一条指令的地址，
 也就是 0x401036。所以 0x2fca + 0x401036 = 0x404000。我们来看看 0x404000 这个地址存储的是什么值。
 因为 0x404000 存储的是一个地址，因此我们使用 `x /a` 的方式来查看该地址存储的值。
 
@@ -112,7 +112,7 @@ End of assembler dump.
 ```
 
 我们再回顾一下上面的 plt 函数。可以看到下一条指令把 常数 0 压栈，然后跳转到 0x401020 去执行。我们看看 0x401020 这个地方的指令。
-因为查看的是指令，因此使用 `x /i` 这样的gdb命令，下面的6表示打印6条指令。
+因为查看的是指令，因此使用 `x /i` 这样的 gdb 命令，下面的 6 表示打印 6 条指令。
 
 ```gdb
 (gdb) x /6i 0x401020
@@ -126,7 +126,7 @@ End of assembler dump.
 ```
 
 通过上面的指令，我们看到 把 `0x2fca(%rip)        # 0x403ff0` 这个值压栈了，然后跳转到
-`*0x2fcc(%rip)        # 0x403ff8` 所存储的指令去执行了。 压栈的这两个参数分别是代表什么呢？
+`*0x2fcc(%rip)        # 0x403ff8` 所存储的指令去执行了。压栈的这两个参数分别是代表什么呢？
 第一个代表的是 puts 这个动态链接函数的索引，第二个代表 link_map 的结构。具体的可以参考 https://ypl.coffee/dl-resolve/ 这篇文章。
 
 我们接下来看看 0x403ff8 这个位置存储的是指令地址是什么。
@@ -137,7 +137,7 @@ End of assembler dump.
 ```
 
 可以看到 0x403ff8 地址存储的是 _dl_runtime_resolve_xsave , 用来解析 puts 的函数。关于该函数的原理可以参考 https://ypl.coffee/dl-resolve/ 。
-我们接下来用 gdb 来分析一下 _dl_runtime_resolve_xsave 是如何获取 puts 这个字符串的。因为上面的参数一个是0， 一个是 link_map，并没有 puts这个字符串参数。
+我们接下来用 gdb 来分析一下 _dl_runtime_resolve_xsave 是如何获取 puts 这个字符串的。因为上面的参数一个是 0，一个是 link_map，并没有 puts 这个字符串参数。
 
 ```shell
 [ljl@rocky8 openresty-develop]$ readelf -r ./a.out
@@ -154,11 +154,11 @@ Relocation section '.rela.plt' at offset 0x4b8 contains 1 entry:
 000000404000  000200000007 R_X86_64_JUMP_SLO 0000000000000000 puts@GLIBC_2.2.5 + 0
 ```
 
-我们使用 `readelf -r ./a.out` 这个命令查询所有的 plt函数，可以看到就只有一个 puts。
-puts排在第一个，以 0 作为起始值的索引计算，puts的索引值为0。
+我们使用 `readelf -r ./a.out` 这个命令查询所有的 plt 函数，可以看到就只有一个 puts。
+puts 排在第一个，以 0 作为起始值的索引计算，puts 的索引值为 0。
 
 
-我们可以通过readelf来查看各个 section的加载地址。因为这里是exe并且没有编译成共享类型的，因此加载的地址是不变的。
+我们可以通过 readelf 来查看各个 section 的加载地址。因为这里是 exe 并且没有编译成共享类型的，因此加载的地址是不变的。
 比如 我们可以看到 .rela.plt 这个段的加载地址是 4004b8。这些段的信息也存储在 link_map 中。
 
 ```shell
@@ -234,7 +234,7 @@ $7 = {
 ```
 # 通过 link_map 来解析 puts 这个符号
 
-上面说过在调用 _dl_runtime_resolve_xsave 前向堆栈压入两个参数。第一个参数是0，第二个参数是 0x403ff0。
+上面说过在调用 _dl_runtime_resolve_xsave 前向堆栈压入两个参数。第一个参数是 0，第二个参数是 0x403ff0。
 我们通过 `info symbol 0x403ff0` 可以知道该地址是 got.plt 的第二个表项，这个表项存储的是 `struct link_map *` 的指针。
 因此我们可以通过 `x /a 0x403ff0` 获取 `struct link_map *` 的指针值。
 
@@ -285,12 +285,12 @@ $14 = {
   r_addend = 0
 }
 
-// #define ELF64_R_SYM(i)                  ((i) >> 32) 高 32 bit得到在 dynsym表中的索引值
+// #define ELF64_R_SYM(i)                  ((i) >> 32) 高 32 bit 得到在 dynsym 表中的索引值
 
 (gdb) print ((Elf64_Rela *)4195576)[0].r_info >> 32
 $15 = 2
 
-// 获取 dynsym段的值 DT_SYMTAB 6
+// 获取 dynsym 段的值 DT_SYMTAB 6
 
 (gdb) print *((struct link_map *)0x7ffff7ffe1f0)->l_info[6]
 $16 = {
@@ -301,7 +301,7 @@ $16 = {
   }
 }
 
-// 获取索引值为2的表项
+// 获取索引值为 2 的表项
 
 (gdb) print ((Elf64_Sym*)4195112)[2]
 $17 = {
@@ -313,7 +313,7 @@ $17 = {
   st_size = 0
 }
 
-// 获取 dynstr段  DT_STRTAB 5
+// 获取 dynstr 段  DT_STRTAB 5
 
 (gdb) print *((struct link_map *)0x7ffff7ffe1f0)->l_info[5]
 $20 = {
@@ -329,4 +329,4 @@ $20 = {
 
 ```
 
-上面的 gdb 命令我们一步步执行，通过 plt 的索引值 和 got.plt 的link_map地址得到了 `puts` 的值。
+上面的 gdb 命令我们一步步执行，通过 plt 的索引值 和 got.plt 的 link_map 地址得到了 `puts` 的值。

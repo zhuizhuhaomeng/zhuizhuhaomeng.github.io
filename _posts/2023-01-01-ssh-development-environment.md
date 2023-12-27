@@ -15,7 +15,7 @@ sudo firewall-cmd --permanent --zone=public --add-port=8080/tcp
 ssh -qTfnN -D 0.0.0.0:8080 user@remote-host
 ```
 
-使用 SSH 构建一个 SOCK5代理，我们使用到如下的 SSH 选项:
+使用 SSH 构建一个 SOCK5 代理，我们使用到如下的 SSH 选项：
 
 ```text
   -q      Quiet mode.  Causes most warning and diagnostic messages to be suppressed
@@ -29,7 +29,7 @@ ssh -qTfnN -D 0.0.0.0:8080 user@remote-host
 
 # 办公室访问家庭机器
 
-通过下面的命令把家庭的机器的22端口映射到公网的9022端口，这样就可以通过访问公网的9022端口来访问家庭的机器。
+通过下面的命令把家庭的机器的 22 端口映射到公网的 9022 端口，这样就可以通过访问公网的 9022 端口来访问家庭的机器。
 
 ```shell
 ssh -qfnNT -R  0.0.0.0:9022:127.0.0.1:22 user@remote-host
@@ -37,7 +37,7 @@ ssh -qfnNT -R  0.0.0.0:9022:127.0.0.1:22 user@remote-host
 
 # 本机访问虚拟机里的 Web 服务
 
-下面的命令将远程的80端口映射为本机的8080端口，这样就可以通过浏览器访问8080端口实现访问远程机器的目的。
+下面的命令将远程的 80 端口映射为本机的 8080 端口，这样就可以通过浏览器访问 8080 端口实现访问远程机器的目的。
 
 ```shell
 ssh -qfnNT -L R 127.0.0.1:8080:127.0.0.1:80 user@remote-host

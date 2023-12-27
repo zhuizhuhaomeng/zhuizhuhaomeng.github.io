@@ -3,7 +3,7 @@ layout: post
 title: "OpenResty 开发环境搭建"
 description: "OpenResty 开发环境搭建"
 date: 2023-02-26
-tags: [OpenResty, 开发环境, How-To]
+tags: [OpenResty, 开发环境，How-To]
 ---
 
 在开发 OpenResty 功能的时候需要能够本地执行所有的用例，因此就需要构建本地的开发环境。
@@ -68,7 +68,7 @@ cpanm JSON::XS
 
 # 配置软件
 
-这些配置是根据.travis.yml的如下位置代码获取的，随时间的变化可能有所变化。
+这些配置是根据.travis.yml 的如下位置代码获取的，随时间的变化可能有所变化。
 
 https://github.com/openresty/lua-nginx-module/blob/master/.travis.yml#L56
 
@@ -108,11 +108,11 @@ echo "kernel.pid_max = 10000" | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p
 ```
 
-# github设置
+# github 设置
 
-## 添加ssh的公钥
+## 添加 ssh 的公钥
 
-下载源码推荐使用ssh的方式，因此需要将公钥添加到github上。
+下载源码推荐使用 ssh 的方式，因此需要将公钥添加到 github 上。
 
 ```shell
 ssh-keygen
@@ -129,11 +129,11 @@ chmod 600 ~/.ssh/id_rsa
 
 # 下载源码
 
-1. github fork分支到个人空间
+1. github fork 分支到个人空间
 
-   https://github.com/openresty/lua-nginx-module 右上角的Fork
+   https://github.com/openresty/lua-nginx-module 右上角的 Fork
 
-2. clone代码到本地
+2. clone 代码到本地
 
    git clone git@github.com:zhuizhuhaomeng/lua-nginx-module.git
 
@@ -143,7 +143,7 @@ chmod 600 ~/.ssh/id_rsa
 
 # 配置工具
 
-下载到指定路径，并将这个库添加到/etc/bashrc的PATH环境变量。
+下载到指定路径，并将这个库添加到/etc/bashrc 的 PATH 环境变量。
 
 ``` shell
 git clone git@github.com:openresty/openresty-devel-utils.git
@@ -155,7 +155,7 @@ git clone git@github.com:openresty/openresty-devel-utils.git
 
 **注意**
 
-1. 因为 orxray 依赖 python3。 为了防止残留导致后续开发遇到问题，下面脚本给python2 做软链，使用完后立即删除
+1. 因为 orxray 依赖 python3。为了防止残留导致后续开发遇到问题，下面脚本给 python2 做软链，使用完后立即删除
 2. 使用脚本需要注意，这个跟脚本并没有随 travis 更新，遇到问题需要排查一下。比如依赖的库是否齐全，版本号是否一致
 3. 这里将依赖下载，依赖库编译，openresty 编译分成三个函数。开发中第一次全部执行，后续基本只需要执行 openresty 编译即可。
 4. 因为 openresty 相关的库经常有更新，比如 lua-resty-core。因此不重新下载库的情况下最好经常更新相关的库。
@@ -298,7 +298,7 @@ export TEST_NGINX_RESOLVER=8.8.4.4
 # export TEST_NGINX_INIT_BY_LUA="debug.sethook(function () collectgarbage() end, 'l') jit.off() package.path = '/usr/share/lua/5.1/?.lua;$PWD/../lua-resty-core/lib/?.lua;$PWD/../lua-resty-lrucache/lib/?.lua;' .. (package.path or '') require 'resty.core' require('resty.core.base').set_string_buf_size(1) require('resty.core.regex').set_buf_grow_ratio(1)"
 ```
 
-上述脚本有加入代码风格检查，因为检查到问题并没有让脚本退出执行。所以要注意脚本的输出结果，如果检查到问题要立即修改。代码风格不能够依靠这个检查脚本，这个脚本是帮助大家养成符合nginx风格的习惯。
+上述脚本有加入代码风格检查，因为检查到问题并没有让脚本退出执行。所以要注意脚本的输出结果，如果检查到问题要立即修改。代码风格不能够依靠这个检查脚本，这个脚本是帮助大家养成符合 nginx 风格的习惯。
 
 # 软件测试
 
@@ -310,9 +310,9 @@ export TEST_NGINX_RESOLVER=8.8.4.4
 
 ### 单独执行用例
 
-如果某个用例通不过，需要单独跑一个用例，可以添加 --- ONLY单独跑指定的用例。
+如果某个用例通不过，需要单独跑一个用例，可以添加 --- ONLY 单独跑指定的用例。
 
-用例执行相关的结果存在t/servroot/目录下。比如
+用例执行相关的结果存在 t/servroot/目录下。比如
 
 ```shell
 $ ls t/servroot/
@@ -321,7 +321,7 @@ client_body_temp  conf  fastcgi_temp  html  logs  proxy_temp  scgi_temp  uwsgi_t
 
 想要查看生成的配置文件，错误日志等可以在这里查看。
 
-有时候开发过程并不想跑完整的用例集合。但是需要注意，这种情况下要初始化好环境。包括(不限于)如下部分：
+有时候开发过程并不想跑完整的用例集合。但是需要注意，这种情况下要初始化好环境。包括 (不限于) 如下部分：
 
 1. iptables 相关规则的添加
 1. 启动 util/nc_server.py
@@ -354,9 +354,9 @@ OPTIONS="-U 11211 -l 127.0.0.1,::1"
 
 ```
 
-出现如下错误，就是用例个数对不上。预期应该是3的倍数，基本可以判断是某个用例有4个测试判断，所以变成了40个。因此上面的paln tests 可以修改成repeat_each() * (blocks() * 3 + 1)。 
+出现如下错误，就是用例个数对不上。预期应该是 3 的倍数，基本可以判断是某个用例有 4 个测试判断，所以变成了 40 个。因此上面的 paln tests 可以修改成 repeat_each() * (blocks() * 3 + 1)。 
 
-当然最好是每个用例保持3个测试判断比较合适。
+当然最好是每个用例保持 3 个测试判断比较合适。
 
 ```shell
 t/iter.t .. 29/39 # Looks like you planned 39 tests but ran 40.
@@ -371,7 +371,7 @@ t/iter.t (Wstat: 65280 Tests: 40 Failed: 1)
   Parse errors: Bad plan.  You planned 39 tests but ran 40.
 ```
 
-一般情况下都是一个指令一个判断，但是对于--- response_headers，则是一个 header是一个判断。比如下下面的测试指令的测试计数为3。
+一般情况下都是一个指令一个判断，但是对于--- response_headers，则是一个 header 是一个判断。比如下下面的测试指令的测试计数为 3。
 
 ```text
 --- response_body
@@ -386,11 +386,11 @@ t/iter.t (Wstat: 65280 Tests: 40 Failed: 1)
 
 export TEST_NGINX_NO_CLEAN=1
 
-执行prove后，nginx不会被关闭。
+执行 prove 后，nginx 不会被关闭。
 
 ## 相关资料
 
-介绍Test::Nginx这个测试框架，各种各样的测试模式。
+介绍 Test::Nginx 这个测试框架，各种各样的测试模式。
 
 https://openresty.gitbooks.io/programming-openresty/content/
 
@@ -400,7 +400,7 @@ https://openresty.gitbooks.io/programming-openresty/content/
 
 https://metacpan.org/pod/Test::Nginx::Socket
 
-# 提交PR
+# 提交 PR
 
 ## 保存本地的修改
 
@@ -410,7 +410,7 @@ https://metacpan.org/pod/Test::Nginx::Socket
 
    git commit -m "feature: add FFI interface to verify SSL client certificate"
 
-## 提交PR
+## 提交 PR
 
 1. 将代码更新到最新
 
@@ -422,21 +422,21 @@ git checkout feature_xxx
 git rebase master
 ```
 
-2. 更新到自己的github空间
+2. 更新到自己的 github 空间
 
    ``` shell
    git push self feature_xxx
    ```
 
-3. 创建pr
+3. 创建 pr
 
-   根据上一个步骤给的提示连接登录github创建pr。
+   根据上一个步骤给的提示连接登录 github 创建 pr。
 
 ## git 工作流
 
 https://openresty.org/en/git-workflow.html
 
-主要是commit的日志怎么写，需要符合这个规范。
+主要是 commit 的日志怎么写，需要符合这个规范。
 
 # 编码风格
 
@@ -448,13 +448,13 @@ https://openresty.org/en/c-coding-style-guide.html
 
 https://github.com/openresty/openresty-devel-utils.git
 
-ngx-releng 检查openresty 相关的C代码（文件名称需要以ngx_开头）
+ngx-releng 检查 openresty 相关的 C 代码（文件名称需要以 ngx_开头）
 
-lua-releng  检查openresty 相关的lua代码
+lua-releng  检查 openresty 相关的 lua 代码
 
 
 
-因为ngx-releng只检查ngx开头的代码文件，因此如果不是openresty相关的工程，但是又要符合openresty的规范，那么可以用ngx-style.pl来检查,不过比ngx-releng少检查一点。
+因为 ngx-releng 只检查 ngx 开头的代码文件，因此如果不是 openresty 相关的工程，但是又要符合 openresty 的规范，那么可以用 ngx-style.pl 来检查，不过比 ngx-releng 少检查一点。
 
 # 代码阅读
 

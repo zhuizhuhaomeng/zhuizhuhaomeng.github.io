@@ -21,11 +21,11 @@ gzip access.log.0    # do something with access.log.0
 
 那么在 OpenResty 中我们可以怎么做呢？
 
-# logrotate in openresty
+# logrotate in OpenResty
 
-openresty 有特权进程，因此我们可以在特权进程中来进行日志轮转。
+OpenResty 有特权进程，因此我们可以在特权进程中来进行日志轮转。
 
-## openresty 初始化配置
+## OpenResty 初始化配置
 
 http 模块中需要先启用特权进程，配置如下
 

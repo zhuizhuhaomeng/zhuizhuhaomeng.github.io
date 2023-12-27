@@ -69,7 +69,7 @@ location /http_504 {
 }
 ```
 
-# 2. 模拟上游服务器发送不完整的 HTTP 头部， 网关（502）
+# 2. 模拟上游服务器发送不完整的 HTTP 头部，网关（502）
 
 ```go
 package main
@@ -261,7 +261,7 @@ func handleRequest(conn net.Conn, file string) {
 
 	content, err := ioutil.ReadFile(file)
 	if err != nil {
-		fmt.Println("读取文件时发生错误:", err)
+		fmt.Println("读取文件时发生错误：", err)
 		return
 	}
 

@@ -12,7 +12,7 @@ tags: [opencc, rpm, deb, spec]
 
 # 更新 cmake
 
-如果机器上的cmake比较老，需要更新cmake，那么最快的方式就是使用已经编译好的包。
+如果机器上的 cmake 比较老，需要更新 cmake，那么最快的方式就是使用已经编译好的包。
 
 ```shell
 wget https://github.com/Kitware/CMake/releases/download/v3.26.3/cmake-3.26.3-linux-x86_64.sh
@@ -40,7 +40,7 @@ $ opencc
 opencc: error while loading shared libraries: libopencc.so.1.1: cannot open shared object file: No such file or directory
 ```
 
-不知道为什么 opencc 不去搜索默认的 /usr/local/lib/ 目录, 使用 strace 命令跟踪结果如下。
+不知道为什么 opencc 不去搜索默认的 /usr/local/lib/ 目录，使用 strace 命令跟踪结果如下。
 从这个输出可以看到 opencc 会查找 /lib64/libopencc.so.1.1 的文件。这里正确的解法是修改 CMakeLists.txt。
 但是对于 CMake 不熟悉，不知道怎么修改，因此就修改编译选项来得容易多了。
 

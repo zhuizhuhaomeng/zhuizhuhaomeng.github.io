@@ -12,7 +12,7 @@ tags: [OpenResty, Nginx, DDOS, ipset]
 
 如果在应用层识别攻击流量并将其丢弃，虽然可以缓解部分问题问题，但是这对于 DDOS 的大流量攻击还是力不从心。
 显然拦截报文应该在越靠近网卡收包的位置越好。目前比较理想的是用 ebpf，XDP 来实现报文的过滤。
-虽然ebpf，XDP 性能很高，但是他们不是简单的命令行操作就可以搞定的事情。
+虽然 ebpf，XDP 性能很高，但是他们不是简单的命令行操作就可以搞定的事情。
 
 # 简单的重现
 
@@ -37,7 +37,7 @@ stream {
 我们使用这个仓库 [udp-flood](https://github.com/araujo88/udpflood) 的代码稍微修改一下
 固定源 IP 和 目的 IP 地址。
 
-可以看到，nginx 的 CPU 被打到 99.7%， 收包速率高达 113306 rxpck/s。
+可以看到，nginx 的 CPU 被打到 99.7%，收包速率高达 113306 rxpck/s。
 
 ```shell
 $ top
@@ -67,7 +67,7 @@ sudo ipset add black_list 192.168.0.181
 sudo ipset add black_list 192.168.0.199
 ```
 
-再次查看 CPU 利用率，可以看到 nginx 的CPU 利用率已经为0，报文全部被拦截了。
+再次查看 CPU 利用率，可以看到 nginx 的 CPU 利用率已经为 0，报文全部被拦截了。
 这时候就有查看软中断的开销了。
 
 ```shell
@@ -76,7 +76,7 @@ Tasks: 638 total,   3 running, 633 sleeping,   2 stopped,   0 zombie
 %Cpu0  :  0.0 us,  0.0 sy,  0.0 ni, 83.5 id,  0.0 wa,  3.3 hi, 13.2 si,  0.0 st
 ```
 
-可以看到 CPU 0 的软中断开销为13.2%。如果使用bpf让网卡直接处理报文，不需要拷贝到 skb，
+可以看到 CPU 0 的软中断开销为 13.2%。如果使用 bpf 让网卡直接处理报文，不需要拷贝到 skb，
 那么这部分的 CPU 开销也可以进一步降低了。
 
 ## 批量添加操作
@@ -101,7 +101,7 @@ add black_list 192.168.0.181 timeout 2831
 
 ## ipset 的一些操作
 
-如果想要查看添加了哪些 IP,可以使用下面的命令
+如果想要查看添加了哪些 IP，可以使用下面的命令
 
 ```shell
 $ sudo ipset list black_list

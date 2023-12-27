@@ -208,7 +208,7 @@ main(int count, char *strings[])
 
 在服务端的代码中，我们一样通过 SSL_CTX_add_custom_ext 这个函数来添加扩展头的回调函数。与客户端不同的是，这里我们需要的是解析扩展头。
 
-同时我们展示了另一种获取 client 扩展头的技术： 通过设置 SSL_CTX_set_client_hello_cb 来解析 client Hello 中的扩展头。
+同时我们展示了另一种获取 client 扩展头的技术：通过设置 SSL_CTX_set_client_hello_cb 来解析 client Hello 中的扩展头。
 
 ```C
 #include "openssl/err.h"

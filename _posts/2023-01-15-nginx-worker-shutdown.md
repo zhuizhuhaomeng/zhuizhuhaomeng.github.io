@@ -12,9 +12,9 @@ tags: [Nginx, OpenResty]
 我们修改 nginx 的配置之后，为了让新的配置生效，我们需要重新载在 nginx 的配置文件。
 为了让配置生效，我们需要执行 `nginx -s reload` 这样的命令。根据实际情况可能会有所不同，
 比如有的系统上是 `systemctl reload nginx`, 如果是 openresty，那么是 `systemctl reload openresty`。
-这些命令最后都是向 nginx的 master 进程发送 SIGHUP 信号，可以参考 [Controlling nginx](http://nginx.org/en/docs/control.html) 进一步了解。
+这些命令最后都是向 nginx 的 master 进程发送 SIGHUP 信号，可以参考 [Controlling nginx](http://nginx.org/en/docs/control.html) 进一步了解。
 
-在执行 reload 后，旧的 nginx worker 进程会进入 shutting down 状态。比如:
+在执行 reload 后，旧的 nginx worker 进程会进入 shutting down 状态。比如：
 
 ```shell
 $ ps aux | grep nginx
@@ -93,7 +93,7 @@ ngx_worker_process_cycle(ngx_cycle_t *cycle, void *data)
 
             if (!ngx_exiting) {
                 ngx_exiting = 1;
-                ngx_set_shutdown_timer(cycle); //---> 这里启动 shutdown_timeout的定时器
+                ngx_set_shutdown_timer(cycle); //---> 这里启动 shutdown_timeout 的定时器
                 ngx_close_listening_sockets(cycle);
                 ngx_close_idle_connections(cycle);
             }
@@ -153,10 +153,10 @@ ngx_shutdown_timer_handler(ngx_event_t *ev)
 
 ```
 
-从上面的代码可以看到:
+从上面的代码可以看到：
 
 1. 在 nginx worker 接收到 ngx_quit 的指示之后会通过函数 ngx_set_shutdown_timer 启动一个定时器。
-2. 在定时器超时后，ngx_shutdown_timer_handler 回调函数被调用。该函数会将所有的连接设置上 close 和 error标志，然后调用连接的read->handler。
+2. 在定时器超时后，ngx_shutdown_timer_handler 回调函数被调用。该函数会将所有的连接设置上 close 和 error 标志，然后调用连接的 read->handler。
 3. read->handler 回调函数处理回调事件。
 
 而 nginx worker 进程的退出条件是 ngx_event_no_timers_left() == NGX_OK。
@@ -176,4 +176,4 @@ ngx_shutdown_timer_handler(ngx_event_t *ev)
 # 总结
 
 1. worker_shutdown_timeout 指令是关闭连接而不是强制进程退出
-2. 开发第三方模块的时候应该要注意处理 worker_shutdown_timeout 设置的 connection->close connection->error 标志，否则可能导致nginx worker 进程无法及时退出。
+2. 开发第三方模块的时候应该要注意处理 worker_shutdown_timeout 设置的 connection->close connection->error 标志，否则可能导致 nginx worker 进程无法及时退出。

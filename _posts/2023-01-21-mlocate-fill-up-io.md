@@ -14,7 +14,7 @@ tags: [disk, performance]
 
 # 分析过程
 
-我们使用 iotop 工具来分析磁盘 IO 的占用问题。 比如
+我们使用 iotop 工具来分析磁盘 IO 的占用问题。比如
 
 ```shell
 Total DISK READ :      66.61 K/s | Total DISK WRITE :       2.45 M/s
@@ -26,7 +26,7 @@ Actual DISK READ:      66.61 K/s | Actual DISK WRITE:    1630.07 K/s
 ```
 
 在使用 iotop 分析问题的过程当中我们发现有一个 updatedb 的进程占用了其中一块磁盘的大多数 IO。
-通过下面的命令我们很快确认该命令是 mlocate软件包提供的。
+通过下面的命令我们很快确认该命令是 mlocate 软件包提供的。
 
 ```shell
 rpm -qf `which updatedb`
@@ -73,7 +73,7 @@ nodevs=$(< /proc/filesystems awk '$1 == "nodev" && $2 != "rootfs" && $2 != "zfs"
 /usr/bin/updatedb -f "$nodevs"
 ```
 
-通过执行上述命令， 我们知道 mlocate-updatedb.service 的服务会调用 updatedb 命令。
+通过执行上述命令，我们知道 mlocate-updatedb.service 的服务会调用 updatedb 命令。
 updatedb 命令是一个不是后台常驻进程，因此执行结束进程就退出了。
 
 我们再看看 mlocate-updatedb.timer 是怎么工作的。
@@ -93,7 +93,7 @@ Persistent=true
 WantedBy=timers.target
 ```
 
-通过上述命令，我们知道这个服务是24小时执行一次的, 由timers 这个服务来调度。
+通过上述命令，我们知道这个服务是 24 小时执行一次的，由 timers 这个服务来调度。
 
 
 # 解决方案

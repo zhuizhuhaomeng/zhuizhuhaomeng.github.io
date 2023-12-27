@@ -73,15 +73,15 @@ systemctl disable apport
 
 # 修改 core_pattern
 
-## 查看当前的kernel.core_pattern参数值：
+## 查看当前的 kernel.core_pattern 参数值：
 
 ```shell
 sysctl kernel.core_pattern
 ```
 
-这将显示当前的kernel.core_pattern参数值。
+这将显示当前的 kernel.core_pattern 参数值。
 
-## 临时更改kernel.core_pattern参数值：
+## 临时更改 kernel.core_pattern 参数值：
 
 ```shell
 sudo sysctl -w kernel.core_pattern=<new_pattern>
@@ -89,7 +89,7 @@ sudo sysctl -w kernel.core_pattern=<new_pattern>
 
 将 <new_pattern> 替换为你想要的新的 core dump 文件路径和命名模板。这种更改只是临时的，重启系统后将恢复为默认值。
 
-## 永久更改kernel.core_pattern参数值：
+## 永久更改 kernel.core_pattern 参数值：
 
 在文件 /etc/sysctl.conf 的末尾添加或修改以下行：
 
@@ -109,25 +109,25 @@ sudo sysctl -p
 
 在 kernel.core_pattern 参数中，可以使用一些占位符来定义生成 core dump 文件时的文件名模板。这些占位符会被内核替换为相应的值。以下是一些常用的占位符及其意义：
 
-%p：进程ID（PID）。
-%u：实际用户ID（UID）。
-%g：实际组ID（GID）。
-%s：信号编号，导致core dump的信号。
-%t：时间戳，表示生成core dump的时间。
+%p：进程 ID（PID）。
+%u：实际用户 ID（UID）。
+%g：实际组 ID（GID）。
+%s：信号编号，导致 core dump 的信号。
+%t：时间戳，表示生成 core dump 的时间。
 %h：主机名。
 %e：可执行文件的名称。
 %E：可执行文件的路径。
-使用这些占位符可以方便地在生成的core dump文件名中包含相关的信息，以便更好地标识和组织这些文件。
+使用这些占位符可以方便地在生成的 core dump 文件名中包含相关的信息，以便更好地标识和组织这些文件。
 
 例如，如果 kernel.core_pattern 参数设置为 /var/core/core.%e.%p.%t，那么生成的 core dump 文件将会以以下格式命名：
 
 ```text
-core.<可执行文件名>.<进程ID>.<时间戳>
+core.<可执行文件名>.<进程 ID>.<时间戳>
 ```
 
 这样的命名模板可以使生成的 core dump 文件具有清晰的标识，并且可以根据特定的信息进行过滤和处理。
 
-注意：不同的操作系统和内核版本可能支持不同的占位符，具体的支持情况可以参考Linux内核文档或相关文档资源。
+注意：不同的操作系统和内核版本可能支持不同的占位符，具体的支持情况可以参考 Linux 内核文档或相关文档资源。
 
 # systemctl 设置 core 文件大小
 
@@ -162,16 +162,16 @@ LimitCORE=<size>
 
 将<size>替换为所需的核心文件大小限制。大小可以使用以下单位表示：K（千字节）、M（兆字节）、G（吉字节）等。
 
-例如，要将 openresty 核心文件大小限制为100兆字节，可以添加以下行：
+例如，要将 openresty 核心文件大小限制为 100 兆字节，可以添加以下行：
 
 ```conf
 [Service]
 LimitCORE=100M
 ```
 
-保存并关闭文件, 可以看到编辑器提示新增内容保存在 /etc/systemd/system/openresty.service.d/override.conf 。
+保存并关闭文件，可以看到编辑器提示新增内容保存在 /etc/systemd/system/openresty.service.d/override.conf。
 
-重新加载systemd配置：
+重新加载 systemd 配置：
 
 ```shell
 sudo systemctl daemon-reload
@@ -184,7 +184,7 @@ sudo systemctl restart <service-name>
 ```
 将<service-name>替换为你编辑过的服务的名称。
 
-通过上述步骤，你可以在systemd服务配置文件中指定特定服务的核心文件大小限制。请注意，该限制可能会受到系统配置和安全策略的限制
+通过上述步骤，你可以在 systemd 服务配置文件中指定特定服务的核心文件大小限制。请注意，该限制可能会受到系统配置和安全策略的限制
 
 # 为什么不生成 coredump
 

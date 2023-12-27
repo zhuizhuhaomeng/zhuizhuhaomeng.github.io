@@ -35,10 +35,10 @@ In the second syntax, the source of the copy must be a Lua string. All bytes of 
 Performance notice: ffi.copy() may be used as a faster (inlinable) replacement for the C library functions memcpy(), strcpy() and strncpy().
 ```
 
-这里说得很清楚，对于字符串，使用 `ffi.copy(dst, str)` 的形式，将会拷贝字符串末尾的 '\0'。 然而，我们分配内存的时候只分配了字符串的长度而没看考虑结尾的 '\0'。
+这里说得很清楚，对于字符串，使用 `ffi.copy(dst, str)` 的形式，将会拷贝字符串末尾的 '\0'。然而，我们分配内存的时候只分配了字符串的长度而没看考虑结尾的 '\0'。
 
-大部分情况下并不会导致内存写越界导致崩溃的问题，因为内存分配器分配内存一般都是 8 的整数倍，至少是8字节对齐的方式。比如申请分配 13 字节的内存，实际分配了 16 字节的内存。
-因此，即使写越界了，很大概率也不会真的影响其它被分配的内存数据。当然，对于计算机来说还是大概率的，因为这里只有 7/8 的概率写超过1字节没有影响。
+大部分情况下并不会导致内存写越界导致崩溃的问题，因为内存分配器分配内存一般都是 8 的整数倍，至少是 8 字节对齐的方式。比如申请分配 13 字节的内存，实际分配了 16 字节的内存。
+因此，即使写越界了，很大概率也不会真的影响其它被分配的内存数据。当然，对于计算机来说还是大概率的，因为这里只有 7/8 的概率写超过 1 字节没有影响。
 
 关于内存分配的块大小，可以查看[这里](https://github.com/bminor/glibc/blob/master/malloc/malloc.c#L1535)。
 
@@ -121,7 +121,7 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
 得到调用栈有了极大的帮助，但是像这种需要 Lua 调用栈来进一步分析问题的情况我们需要有 coredump 才能够进一步分析。
 在生成 coredump 文件后，我们就可以借助 [OpenResty XRay](https://xray.openresty.com) 来进一步分析问题了。
 
-比如本次 coredump， OpenResty XRay 给出了这样的 Lua 调用栈。
+比如本次 coredump，OpenResty XRay 给出了这样的 Lua 调用栈。
 
 ```shell
 __index

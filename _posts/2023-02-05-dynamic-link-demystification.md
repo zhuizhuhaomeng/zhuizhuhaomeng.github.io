@@ -16,7 +16,7 @@ tags: [gdb, link]
 
 # 测试代码
 
-这是一个最小化的代码，调用的printf函数是libc提供的，因此就涉及到动态链接的过程了。
+这是一个最小化的代码，调用的 printf 函数是 libc 提供的，因此就涉及到动态链接的过程了。
 
 ```C
 #include<stdio.h>
@@ -60,8 +60,8 @@ End of assembler dump.
 (gdb)
 ```
 
-我们看到,反汇编代码重并没有 printf 的调用, 取而代之的是puts函数的调用。
-这是因为 printf 的调用只有常量字符串没有参数，因此被 gcc 优化成 puts的调用。
+我们看到，反汇编代码重并没有 printf 的调用，取而代之的是 puts 函数的调用。
+这是因为 printf 的调用只有常量字符串没有参数，因此被 gcc 优化成 puts 的调用。
 
 => 0x000000000040112a <+4>:	mov    $0x402010,%edi 这条指令其实就是将 "hello world!\n"
 的地址放在%edi。我们可以通过 x 这个 gdb 命令来确认。
@@ -83,12 +83,12 @@ Dump of assembler code for function puts@plt:
 End of assembler dump.
 ```
 
-可以看到这个反汇编很短，只有3个指令。第一个指令的 jmpq 到另一个地址 0x404000 存储的指令地址去执行。
+可以看到这个反汇编很短，只有 3 个指令。第一个指令的 jmpq 到另一个地址 0x404000 存储的指令地址去执行。
 `0x0000000000401030 <+0>:	jmpq   *0x2fca(%rip)` 这个指令的 * 对理解 plt 的原理很重要。这里并不是直接
-跳转到 `0x2fca(%rip)` 这个地址，而是跳转到 `0x2fca(%rip)` 这个地址存储的指令地址去执行，这里相当于是C语言的双重指针。
+跳转到 `0x2fca(%rip)` 这个地址，而是跳转到 `0x2fca(%rip)` 这个地址存储的指令地址去执行，这里相当于是 C 语言的双重指针。
 第二条指令是将一个常数参数压栈，第三个指令跳转到另一个地址 0x401020 去执行。
 
-0x404000 这个地址是如何得到的呢？这个是通过 0x2fca(%rip)计算得到的，而 %rip 的值是下一条指令的地址,
+0x404000 这个地址是如何得到的呢？这个是通过 0x2fca(%rip) 计算得到的，而 %rip 的值是下一条指令的地址，
 也就是 0x401036。所以 0x2fca + 0x401036 = 0x404000。我们来看看 0x404000 这个地址存储的是什么值。
 因为 0x404000 存储的是一个地址，因此我们使用 `x /a` 的方式来查看该地址存储的值。
 
@@ -99,9 +99,9 @@ End of assembler dump.
 
 从上面的输出可以看到 0x404000 存储的指令地址是 `0x401036 <puts@plt+6>`, 这个是上面的 plt 函数的下一条要执行的指令。
 也就是说 `jmpq   *0x2fca(%rip)` 这个指令是跳转到另一个地址上存储的指令地址去执行，而这个存储的地址就是下一条指令。
-如果不是跳转指令，那么上一条指令执行结束就是执行下一条指令。这里为什么要多此一举，通过 `jmp` 指令跳转到下一条指令呢?
+如果不是跳转指令，那么上一条指令执行结束就是执行下一条指令。这里为什么要多此一举，通过 `jmp` 指令跳转到下一条指令呢？
 这就是 plt 动态链接的关键之处了。 `0x2fca(%rip)` 原来存储的是 plt 的下一条指令，第一次执行会解析 puts 的函数地址，
-将解析得到的函数地址存储在 `0x2fca(%rip)` 这个位置，下一次执行的时候就直接跳转到 puts函数了。
+将解析得到的函数地址存储在 `0x2fca(%rip)` 这个位置，下一次执行的时候就直接跳转到 puts 函数了。
 
 ``` shell
 (gdb) disassemble 0x401030
@@ -113,7 +113,7 @@ End of assembler dump.
 ```
 
 我们再回顾一下上面的 plt 函数。可以看到下一条指令把 常数 0 压栈，然后跳转到 0x401020 去执行。我们看看 0x401020 这个地方的指令。
-因为查看的是指令，因此使用 `x /i` 这样的gdb命令，下面的6表示打印6条指令。
+因为查看的是指令，因此使用 `x /i` 这样的 gdb 命令，下面的 6 表示打印 6 条指令。
 
 ```gdb
 (gdb) x /6i 0x401020
@@ -127,7 +127,7 @@ End of assembler dump.
 ```
 
 通过上面的指令，我们看到 把 `0x2fca(%rip)        # 0x403ff0` 这个值压栈了，然后跳转到
-`*0x2fcc(%rip)        # 0x403ff8` 所存储的指令去执行了。 压栈的这两个参数分别是代表什么呢？
+`*0x2fcc(%rip)        # 0x403ff8` 所存储的指令去执行了。压栈的这两个参数分别是代表什么呢？
 第一个代表的是 puts 这个动态链接函数的索引，第二个代表 link_map 的结构。具体的可以参考 https://ypl.coffee/dl-resolve/ 这篇文章。
 
 我们接下来看看 0x403ff8 这个位置存储的是指令地址是什么。
@@ -138,7 +138,7 @@ End of assembler dump.
 ```
 
 可以看到 0x403ff8 地址存储的是 _dl_runtime_resolve_xsave , 用来解析 puts 的函数。关于该函数的原理可以参考 https://ypl.coffee/dl-resolve/ 。
-我们接下来用 gdb 来分析一下 _dl_runtime_resolve_xsave 是如何获取 puts 这个字符串的。因为上面的参数一个是 0， 一个是 link_map，并没有 puts这个字符串参数。
+我们接下来用 gdb 来分析一下 _dl_runtime_resolve_xsave 是如何获取 puts 这个字符串的。因为上面的参数一个是 0，一个是 link_map，并没有 puts 这个字符串参数。
 
 ```shell
 [ljl@rocky8 openresty-develop]$ readelf -r ./a.out
@@ -156,7 +156,7 @@ Relocation section '.rela.plt' at offset 0x4b8 contains 1 entry:
 ```
 
 我们使用 `readelf -r ./a.out` 这个命令查询所有的 plt 函数，可以看到就只有一个 puts。
-puts排在第一个，以 0 作为起始值的索引计算，puts 的索引值为 0。
+puts 排在第一个，以 0 作为起始值的索引计算，puts 的索引值为 0。
 
 
 我们可以通过 readelf 来查看各个 section 的加载地址。因为这里是 exe 并且没有编译成共享类型的，因此加载的地址是不变的。
@@ -201,11 +201,11 @@ Key to Flags:
 
 ## 使用 readelf 得到的加载地址来分析获取 puts 符号的过程
 
-使用下面两个宏得到 symbol的索引和符号的类型。
+使用下面两个宏得到 symbol 的索引和符号的类型。
 
 gdb 查看 符号。因为 .rela.plt 这个段的加载地址是 0x4004b8，而 puts 这个函数的 plt 索引是 0。
 因此我们使用下面命令得到 put 函数的 Elf64_Rela 结构体。然后我们使用下面这两个宏对 r_info 字段
-做运算，得到 puts 在 .dynsym 的索引是 2。 然后我们打印 Elf64_Sym 结构体，通过st_name字段知道
+做运算，得到 puts 在 .dynsym 的索引是 2。然后我们打印 Elf64_Sym 结构体，通过 st_name 字段知道
 puts 函数在字符串 .dynstr 段的偏移量是 1。
 
 ```C
@@ -237,7 +237,7 @@ $7 = {
 
 # 通过 link_map 来解析 puts 这个符号
 
-上面说过在调用 _dl_runtime_resolve_xsave 前向堆栈压入两个参数。第一个参数是0，第二个参数是 0x403ff0。
+上面说过在调用 _dl_runtime_resolve_xsave 前向堆栈压入两个参数。第一个参数是 0，第二个参数是 0x403ff0。
 我们通过 `info symbol 0x403ff0` 可以知道该地址是 got.plt 的第二个表项，这个表项存储的是 `struct link_map *` 的指针。
 因此我们可以通过 `x /a 0x403ff0` 获取 `struct link_map *` 的指针值。
 
@@ -300,7 +300,7 @@ $14 = {
   r_addend = 0
 }
 
-// #define ELF64_R_SYM(i)                  ((i) >> 32) 高 32 bit得到在 dynsym表中的索引值
+// #define ELF64_R_SYM(i)                  ((i) >> 32) 高 32 bit 得到在 dynsym 表中的索引值
 
 (gdb) print ((Elf64_Rela *)4195576)[0].r_info >> 32
 $15 = 2
@@ -328,7 +328,7 @@ $17 = {
   st_size = 0
 }
 
-// 获取 dynstr段  DT_STRTAB 5
+// 获取 dynstr 段  DT_STRTAB 5
 
 (gdb) print *((struct link_map *)0x7ffff7ffe1f0)->l_info[5]
 $20 = {
@@ -344,11 +344,11 @@ $20 = {
 
 ```
 
-上面的 gdb 命令我们一步步执行，通过 plt 的索引值 和 got.plt 的link_map地址得到了 `puts` 的值。
+上面的 gdb 命令我们一步步执行，通过 plt 的索引值 和 got.plt 的 link_map 地址得到了 `puts` 的值。
 
 # 总结
 
 上面我们通过两种方法来获取 puts 这个字符串的来源。
-一个是 gdb 结合 readelf 的方法， 一个是 gdb 结合 link_map 字段的方法。
-两种方法我们最终都得到代理 puts这个字符串。
+一个是 gdb 结合 readelf 的方法，一个是 gdb 结合 link_map 字段的方法。
+两种方法我们最终都得到代理 puts 这个字符串。
 

@@ -22,7 +22,7 @@ rpm -qf $(which nginx)
 ```
 
 Fedora 安装调试信息报的方式非常的简单，只要使用 DNF 默认已经安装好的 debuginfo-install 插件即可。 
-通过运行命令 `sudo dnf debuginfo-install $package` 来安装:
+通过运行命令 `sudo dnf debuginfo-install $package` 来安装：
 
 ```shell
 sudo dnf debuginfo-install openresty
@@ -55,7 +55,7 @@ sudo debuginfo-install --enablerepo="*" openresty
 rpm -qf $(which nginx)
 ```
 
-CentOS 的高版本也支持了 DNF， 跟 Fedora 序列一样安装的方法 ，但是需要增加 --enablerepo 选项。 --enablerepo 可以指定具体的仓库，但是如果你不清楚仓库的情况下，用 "*" 指代所有的仓库，这时候会更新所有仓库元数据，执行会慢很多。
+CentOS 的高版本也支持了 DNF，跟 Fedora 序列一样安装的方法，但是需要增加 --enablerepo 选项。 --enablerepo 可以指定具体的仓库，但是如果你不清楚仓库的情况下，用 "*" 指代所有的仓库，这时候会更新所有仓库元数据，执行会慢很多。
 
 ```shell
 sudo dnf --enablerepo="*" debuginfo-install openresty
@@ -81,7 +81,7 @@ yumdownloader --source coreutils
 
 # Rocky 序列
 
-Rocky 序列相当于 CentOS 的高版本。Rocky8 对应 CentOS8， Rocky 9 对应 CentOS 9.
+Rocky 序列相当于 CentOS 的高版本。Rocky8 对应 CentOS8，Rocky 9 对应 CentOS 9.
 
 # Debian 序列
 
@@ -101,13 +101,13 @@ sudo apt update
 sudo apt-get install openresty-dbg
 ```
 
-有的软件后缀可能是 dbgsym，因此使用如下命令:
+有的软件后缀可能是 dbgsym，因此使用如下命令：
 
 ```shell
 sudo apt-get install openresty-dbgsym
 ```
 
-也可以使用 debian-goodies 软件包中的 find-dbgsym-packages 命令来找到正确的调试信息的包名:
+也可以使用 debian-goodies 软件包中的 find-dbgsym-packages 命令来找到正确的调试信息的包名：
 
 ```shell
 sudo apt install debian-goodies
@@ -155,7 +155,7 @@ sudo apt install python3-dbg
 sudo apt install coreutils-dbgsym
 ```
 
-也可以使用 debian-goodies 软件包中的 find-dbgsym-packages 命令来找到正确的调试信息的包名:
+也可以使用 debian-goodies 软件包中的 find-dbgsym-packages 命令来找到正确的调试信息的包名：
 
 ```shell
 sudo apt install debian-goodies
@@ -188,15 +188,15 @@ apt-get -y install linux-libc-dev
 因为下载 debuginfo 包是很麻烦，而且不熟悉的人还经常下载错了版本，因此衍生了 debuginfod 的服务。
 特别是如果你想在宿主机上调试 docker 容器进程的时候，那么更应该使用 debuginfod 的服务。不过有个缺点是不是所有的发行版本都支持 debuginfod，有些发现版本虽然支持了，但是老版本的系统是不支持的。比如 CentOS 7 的 GDB 默认就不支持。
 
-我们只要先设置环境变量 `export DEBUGINFOD_URLS="xxx"`， 然后执行 gdb，readelf等命令的时候就会自动下载相关的调试信息了。
+我们只要先设置环境变量 `export DEBUGINFOD_URLS="xxx"`，然后执行 gdb，readelf 等命令的时候就会自动下载相关的调试信息了。
 
-1. debian 的链接为： https://debuginfod.debian.net/
-1. Ubuntu 的链接为： https://debuginfod.ubuntu.com/
-1. CentOS 的链接为： https://debuginfod.centos.org/
-1. Fedora 的链接为： https://debuginfod.fedoraproject.org/
-1. Arch Linux的链接为： https://debuginfod.archlinux.org/
+1. debian 的链接为：https://debuginfod.debian.net/
+1. Ubuntu 的链接为：https://debuginfod.ubuntu.com/
+1. CentOS 的链接为：https://debuginfod.centos.org/
+1. Fedora 的链接为：https://debuginfod.fedoraproject.org/
+1. Arch Linux 的链接为：https://debuginfod.archlinux.org/
 
-举例如下:
+举例如下：
 
 ```shell
 $ export DEBUGINFOD_URLS="https://debuginfod.debian.net"

@@ -23,10 +23,10 @@ tags: [tunning, Network]
 使用 top 命令有两个目的：
 
     1. 查看目标进程的 CPU 利用率有多高
-    2. 查看系统的各个 CPU 利用率是否均衡，软中断，硬中断，用户态 的CPU 占比各是多少
+    2. 查看系统的各个 CPU 利用率是否均衡，软中断，硬中断，用户态 的 CPU 占比各是多少
 
-比如，下面这个例子显示 Luajit 的 CPU 利用率 高达93.8%。同时，我们可以看到 CPU5 的 空闲 CPU 是 0。
-并且 CPU5 的用户态开销是 100%，其它的用户态，软中断，硬中断都是 0 。
+比如，下面这个例子显示 Luajit 的 CPU 利用率 高达 93.8%。同时，我们可以看到 CPU5 的 空闲 CPU 是 0。
+并且 CPU5 的用户态开销是 100%，其它的用户态，软中断，硬中断都是 0。
 
 ```shell
 $ top -1
@@ -46,7 +46,7 @@ MiB Swap:   8092.0 total,   8085.4 free,      6.5 used.   5296.4 avail Mem
 ```
 
 再比如，下面这个例子显示，ksoftirq 的 CPU 利用率很高。
-因为软中断都集中在单核的上，这就导致单核的性能瓶颈, 同时也造成了CPU利用率不均衡。
+因为软中断都集中在单核的上，这就导致单核的性能瓶颈，同时也造成了 CPU 利用率不均衡。
 
 ```shell
 KiB Swap:  8388604 total,  8388604 free,        0 used. 20625841+avail Mem
@@ -59,7 +59,7 @@ KiB Swap:  8388604 total,  8388604 free,        0 used. 20625841+avail Mem
   2397 resty     20   0 6689712 618244   5040 R  39.9  0.2   0:11.22 nginx
 ```
 
-在下面这个例子， 软中断分散到 4 个CPU，这样就不会被单核的瓶颈束缚了。
+在下面这个例子，软中断分散到 4 个 CPU，这样就不会被单核的瓶颈束缚了。
 
 ```shell
 Tasks: 144 total,   5 running, 139 sleeping,   0 stopped,   0 zombie
@@ -163,15 +163,15 @@ Other:		1
 Combined:	4
 ```
 
-从上面的输出可以看到，该网卡有 4 个 组合队列（输入/输出合在一起），还有一个 Others的队列。
-因此这个网卡总共 5个队列，对应 5 个中断。上面的 RX 是输入队列， TX是输出队列。这两个的值
+从上面的输出可以看到，该网卡有 4 个 组合队列（输入/输出合在一起），还有一个 Others 的队列。
+因此这个网卡总共 5 个队列，对应 5 个中断。上面的 RX 是输入队列，TX 是输出队列。这两个的值
 都是 n/a, 表示不支持单独是输入/输出队列。
 
 注意，上面一个是 Pre-set maximums, 一个是 Current hardware settings。前者是硬件的能力值，
 后者是当前生效的配置。
 
 在可能的情况下，可以将队列的数量调整为和 CPU 的数量一致。
-调整的命令为： ethtool -L 。
+调整的命令为：ethtool -L。
 
 比如：
 ```shell
@@ -224,7 +224,7 @@ TX:		256
 
 ## 查看和修改网卡的队列权重
 
-一些网卡支持给不同的 queue 设置不同的权重（weight），权重越大， 分发到该队列的包越多。
+一些网卡支持给不同的 queue 设置不同的权重（weight），权重越大，分发到该队列的包越多。
 
 ```shell
 ethtool -x enp68s0
@@ -323,7 +323,7 @@ RSS hash function:
     crc32: off
 ```
 
-可以看到，这次 0 ~ 127 分别是 0，1交叉的队列。
+可以看到，这次 0 ~ 127 分别是 0，1 交叉的队列。
 
 
 ## 查看调整 RSS RX 哈希字段（ethtool -n/-N）
@@ -349,11 +349,11 @@ $ sudo ethtool -N eth0 rx-flow-hash udp4 sdfn
 
 ## Flow 绑定到 CPU：ntuple filtering（ethtool -k/-K, -u/-U）
 
-一些网卡支持 “ntuple filtering” 特性。该特性允许用户（通过 ethtool ）指定一些参数来 在硬件上过滤收到的包，然后将其直接放到特定的 RX queue。例如，用户可以指定到特定目 端口的 TCP 包放到 RX queue 1。
+一些网卡支持“ntuple filtering”特性。该特性允许用户（通过 ethtool）指定一些参数来 在硬件上过滤收到的包，然后将其直接放到特定的 RX queue。例如，用户可以指定到特定目 端口的 TCP 包放到 RX queue 1。
 
-Intel 的网卡上这个特性叫 Intel Ethernet Flow Director，其他厂商可能也有他们的名字 ，这些都是出于市场宣传原因，底层原理是类似的。
+Intel 的网卡上这个特性叫 Intel Ethernet Flow Director，其他厂商可能也有他们的名字，这些都是出于市场宣传原因，底层原理是类似的。
 
-ntuple filtering 其实是 Accelerated Receive Flow Steering (aRFS) 功能的核心部分之一， 这个功能在原理篇中已经介绍过了。aRFS 使得 ntuple filtering 的使用更加方便。
+ntuple filtering 其实是 Accelerated Receive Flow Steering (aRFS) 功能的核心部分之一，这个功能在原理篇中已经介绍过了。aRFS 使得 ntuple filtering 的使用更加方便。
 
 适用场景：最大化数据局部性（data locality），提高 CPU 处理网络数据时的 缓存命中率。例如，考虑运行在 80 口的 web 服务器：
 
@@ -454,11 +454,11 @@ Total 0 rules
 $ sudo ethtool -U enp68s0 flow-type tcp4 dst-port 80 action 0
 ```
 
-也可以用 ntuple filtering 在硬件层面直接 drop 某些 flow 的包。 当特定 IP 过来的流量太大时，这种功能可能会派上用场。更多关于 ntuple 的信息，参考 ethtool man page。
+也可以用 ntuple filtering 在硬件层面直接 drop 某些 flow 的包。当特定 IP 过来的流量太大时，这种功能可能会派上用场。更多关于 ntuple 的信息，参考 ethtool man page。
 
-ethtool -S <DEVICE> 的输出统计里，Intel 的网卡有 fdir_match 和 fdir_miss 两项， 是和 ntuple filtering 相关的。关于具体、详细的统计计数，需要查看相应网卡的设备驱 动和 data sheet。
+ethtool -S <DEVICE> 的输出统计里，Intel 的网卡有 fdir_match 和 fdir_miss 两项，是和 ntuple filtering 相关的。关于具体、详细的统计计数，需要查看相应网卡的设备驱 动和 data sheet。
 
-来自： http://arthurchiao.art/blog/linux-net-stack-tuning-rx-zh/
+来自：http://arthurchiao.art/blog/linux-net-stack-tuning-rx-zh/
 
 ## 查看和配置网卡中断合并（Interrupt coalescing，ethtool -c/-C）
 
@@ -527,7 +527,7 @@ echo 00000000,00000000,00000003,00000003 > /proc/irq/106/smp_affinity
 
 ### 单队列接口的中断亲和性设置
 
-由于 loopback 接口跟物理网卡不一样，不存在硬件中断。因此就 loopback 接口就没有办法通过绑定硬件中断的 CPU 亲缘性来调整 CPU的使用。
+由于 loopback 接口跟物理网卡不一样，不存在硬件中断。因此就 loopback 接口就没有办法通过绑定硬件中断的 CPU 亲缘性来调整 CPU 的使用。
 虽然没有硬件中断，但是 loopback 接口一样存在接收队列，可以通过设置接收队列的 CPU 亲缘性来分散到不同的 CPU。
 很多物理网卡不支持多队列，可以像设置 loopback 一样来设置接收队列的 rps_cpu.
 
@@ -548,7 +548,7 @@ echo FFFFFFFF > /sys/devices/virtual/net/lo/queues/rx-0/rps_cpus
 
 如果 budget 或者 time limit 到了而仍有包需要处理，那 net_rx_action 在退出 循环之前会更新统计信息。这个信息存储在该 CPU 的 struct softnet_data 变量中。
 
-这些统计信息打到了/proc/net/softnet_stat，但不幸的是，关于这个的文档很少。每一 列代表什么并没有标题，而且列的内容会随着内核版本可能发生变化，所以应该以内核源码为准， 下面是内核 5.10，可以看到每列分别对应什么：
+这些统计信息打到了/proc/net/softnet_stat，但不幸的是，关于这个的文档很少。每一 列代表什么并没有标题，而且列的内容会随着内核版本可能发生变化，所以应该以内核源码为准，下面是内核 5.10，可以看到每列分别对应什么：
 
 // https://github.com/torvalds/linux/blob/v5.10/net/core/net-procfs.c#L172
 
@@ -574,9 +574,9 @@ $ cat /proc/net/softnet_stat
 6488cb92 00000000 00000001 00000000 00000000 00000000 00000000 00000000 00000000 00000000
 ```
 
-每一行代表一个 struct softnet_data 变量。因为每个 CPU 只有一个该变量，所以每行其实代表一个 CPU； 数字都是 16 进制表示。字段说明：
+每一行代表一个 struct softnet_data 变量。因为每个 CPU 只有一个该变量，所以每行其实代表一个 CPU；数字都是 16 进制表示。字段说明：
 
-第一列 sd->processed：处理的网络帧数量。如果用了 ethernet bonding，那这个值会大于总帧数， 因为 bond 驱动有时会触发帧的重处理（re-processed）；
+第一列 sd->processed：处理的网络帧数量。如果用了 ethernet bonding，那这个值会大于总帧数，因为 bond 驱动有时会触发帧的重处理（re-processed）；
 第二列 sd->dropped：因为处理不过来而 drop 的网络帧数量；具体见原理篇；
 第三列 sd->time_squeeze：由于 budget 或 time limit 用完而退出 net_rx_action() 循环的次数；原理篇中有更多分析；
 接下来的 5 列全是 0；
@@ -586,7 +586,7 @@ $ cat /proc/net/softnet_stat
 5.2 调整 softirq 收包预算：sysctl netdev_budget/netdev_budget_usecs
 权威解释见 内核文档。
 
-netdev_budget：一个 CPU 单次轮询所允许的最大收包数量。 单次 poll 收包时，所有注册到这个 CPU 的 NAPI 变量收包数量之和不能大于这个阈值。
+netdev_budget：一个 CPU 单次轮询所允许的最大收包数量。单次 poll 收包时，所有注册到这个 CPU 的 NAPI 变量收包数量之和不能大于这个阈值。
 netdev_budget_usecs：每次 NAPI poll cycle 的最长允许时间，单位是 us。
 触发二者中任何一个条件后，都会导致一次轮询结束。
 
@@ -621,7 +621,7 @@ sysctl -w net.ipv4.ip_local_port_range="1024 60999"
 
 ## socket 队列
 
-如果SYN队列已满，新的连接请求可能会被丢弃或拒绝。增加 `net.ipv4.tcp_max_syn_backlog` 的值可以提高服务器处理连接请求的能力，尤其在面对短时间内涌入大量连接请求的情况下。然而，过大的值可能会占用过多内存资源。
+如果 SYN 队列已满，新的连接请求可能会被丢弃或拒绝。增加 `net.ipv4.tcp_max_syn_backlog` 的值可以提高服务器处理连接请求的能力，尤其在面对短时间内涌入大量连接请求的情况下。然而，过大的值可能会占用过多内存资源。
 
 ```conf
 sysctl -w net.ipv4.tcp_max_syn_backlog=8192
@@ -634,7 +634,7 @@ sysctl -w net.ipv4.tcp_max_syn_backlog=8192
 sysctl -w net.core.somaxconn=16384
 ```
 
-通过 man proc 可以查看 somaxconn的解释。
+通过 man proc 可以查看 somaxconn 的解释。
 
 ```text
  /proc/sys/net/core/somaxconn
@@ -653,7 +653,7 @@ if the underlying protocol supports retransmission, the request may be ignored s
 ## 文件句柄调整
 
 Linux 默认的文件句柄的数量是 1024，可以通过 `ulimit -n` 进行查看当前的数量。
-对于压测来说， 1024 这个值是远远不够的。可以使用下面的命令进行临时调整：
+对于压测来说，1024 这个值是远远不够的。可以使用下面的命令进行临时调整：
 
 ```shell
 ulimit -n 1000000

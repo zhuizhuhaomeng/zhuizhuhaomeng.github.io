@@ -35,7 +35,7 @@ KGC    0    "print"
 
 # 两个变量相加
 
-## lua代码
+## lua 代码
 
 ```
 1	local a
@@ -175,7 +175,7 @@ KGC    2    "print"
 5	print(mret())
 ```
 
-## luajit字节码
+## luajit 字节码
 
 ```
 $ luajit -bL t.lua
@@ -244,7 +244,7 @@ KGC    1    "print"
 5	print(123,mret())
 ```
 
-## lua字节码
+## lua 字节码
 
 ```lua
 -- BYTECODE -- t.lua:1-3
@@ -286,7 +286,7 @@ KGC    1    "print"
 6	print(123, a, b)
 ```
 
-### lua字节码
+### lua 字节码
 
 ``` lua
 -- BYTECODE -- t.lua:1-3
@@ -311,7 +311,7 @@ KGC    1    "print"
 
 ## 返回值个数少于赋值参数个数
 
-### lua代码
+### lua 代码
 
 ```lua
 1	local function mret(a, b, c)
@@ -347,7 +347,7 @@ KGC    1    "print"
 
 ## 返回值个数少于赋值参数个数
 
-### lua代码
+### lua 代码
 
 ```lua
 1	local function mret(a, b, c)
@@ -385,7 +385,7 @@ KGC    1    "print"
 
 # 简单 for 循环
 
-## lua代码
+## lua 代码
 
 ```lua
 1	local array = {"Google", "Runoob"}
@@ -418,8 +418,8 @@ KGC    2    "print"
 0012     [6]    RET0     0   1
 ```
 
-这里有点解释不通，ITERC下一次执行还是用 reg[1],reg[2],reg[3] 覆盖 reg[4], reg[5], reg[6],
-但是reg[2], reg[3] 并没有用 新的 reg[5], reg[6] 覆盖.
+这里有点解释不通，ITERC 下一次执行还是用 reg[1],reg[2],reg[3] 覆盖 reg[4], reg[5], reg[6],
+但是 reg[2], reg[3] 并没有用 新的 reg[5], reg[6] 覆盖。
 
 
 |OP |A |B |C/D| Description|

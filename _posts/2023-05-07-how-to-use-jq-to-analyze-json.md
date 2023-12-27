@@ -23,7 +23,7 @@ apt-get install -y jq
 
 ## 基本概念
 
-jq 的语法是清晰的:
+jq 的语法是清晰的：
 
 | 语法 |  描述  |
 | --------| :------------:|
@@ -45,7 +45,7 @@ jq 的语法是清晰的:
 | 给所有的键值加 1 | `jq 'map_values(.+1)'` |
 | 删除一个键值 | `jq 'del(.foo)'` |
 | 将一个对象转换为一个数组 | `to_entries &#124; map([.key, .value])` |
-| 提取一个对象下面的数组的所有 instruction 成员 | `cat docker.json \| jq '.[0].layers[].instruction'`, 特别注意，访问layers对象下面的数组，不需要加上点号 |
+| 提取一个对象下面的数组的所有 instruction 成员 | `cat docker.json \| jq '.[0].layers[].instruction'`, 特别注意，访问 layers 对象下面的数组，不需要加上点号 |
 
 ## 处理成员
 
@@ -224,7 +224,7 @@ jq "[ .data[] | [ .name, .summary ] ]" programming_languages_keywords.json
 jq "[ .data[].name, .data[].summary ]" programming_languages_keywords.json
 ```
 
-虽然上面得到的是一个数组，但是我们希望是 KV 格式, 因此使用下面的格式。
+虽然上面得到的是一个数组，但是我们希望是 KV 格式，因此使用下面的格式。
 注意作为 KEY 的 .name 要加上圆括号。
 
 ```shell
@@ -235,13 +235,13 @@ jq "[ .data[] | { (.name):.summary } ]" programming_languages_keywords.json
 jq ".data | map({(.name): .summary})" programming_languages_keywords.json
 ```
 
-我们想要知道有多少个编程语言，可以是使用如下的命令:
+我们想要知道有多少个编程语言，可以是使用如下的命令：
 
 ```shell
 jq ".data | length" programming_languages_keywords.json
 ```
 
-选择指定范围的数组成员, 比如我们想选择前 10 名的编程语言
+选择指定范围的数组成员，比如我们想选择前 10 名的编程语言
 
 ```shell
 jq ".data[0:9]" programming_languages_keywords.json
@@ -263,7 +263,7 @@ jq ".data | map(select(.keywords | length > 100))" programming_languages_keyword
 如果我们要选择的是包含 submodule 这个关键词的编程语言又应该怎么选择呢？
 注意下面的命令中外层引号使用的是单引号，内层使用的的双引号。
 这个是以为 jq 的语法要求使用双引号表示字符串。外层的使用单引号是为了让
-shell 识别这是一个字符串。如果没有外层的单引号，那么就会被shell识别成好多个不同的命令行参数。
+shell 识别这是一个字符串。如果没有外层的单引号，那么就会被 shell 识别成好多个不同的命令行参数。
 
 ```shell
 jq '.data[] | select(.keywords[] | contains ("submodule")) | .name' programming_languag_languages_keywords.json

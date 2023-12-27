@@ -9,10 +9,10 @@ tags: [nginx, dynamic module]
 社区有人反馈说把 lua-nginx-module 模块编译成动态模块后，在加载模块的时候失败了。报错信息是： `unknown directive "lua_ssl_trusted_certificate" in /etc/nginx/conf.d/crowdsec_nginx.conf`。
 具体的问题可以参考 [lua-nginx-module/issues/2180](https://github.com/openresty/lua-nginx-module/issues/2180)。
 
-为什么会造成编译的模块没有办法使用呢? 归根结底还是编译参数搞错了。
+为什么会造成编译的模块没有办法使用呢？归根结底还是编译参数搞错了。
 如果是编译 Nginx 的同时编译动态模块，那么是不会出现这样的错误的。因为编译 Nginx 的时候就知道自己是否需要支持 HTTPS 了。
 
-但是很多时候, Nginx 和 Nginx 动态模块分开编译的。比如使用了 官方的 OpenResty 二进程程序，现在想增加编译一个第三方模块，那边就没有必要完整编译整个 OpenResty。
+但是很多时候，Nginx 和 Nginx 动态模块分开编译的。比如使用了 官方的 OpenResty 二进程程序，现在想增加编译一个第三方模块，那边就没有必要完整编译整个 OpenResty。
 
 编译动态模块的时候我们最好是参考 [Nginx 官方的文档](https://www.nginx.com/blog/compiling-dynamic-modules-nginx-plus/)。
 
@@ -42,7 +42,7 @@ $ make modules
 
 要知道原来的编译参数是啥，就得利用 `Nginx -V` 这个命令了。
 
-比如:
+比如：
 
 ```shell
 $ /usr/local/openresty/bin/openresty -V

@@ -11,51 +11,51 @@ openssl s_client 可以将握手信息打印出来，因此可以得到不少的
 
 我们需要关注那些信息呢？
 
-1. Certificate chain： 证书链信息可以看到服务端发送的证书链是否完整。
+1. Certificate chain：证书链信息可以看到服务端发送的证书链是否完整。
 2. Subject: 可以确认证书是否是泛域名证书
 3. Peer signing digest: 证书签名的摘要算法
 4. Peer signature type: 证书的签名类型
 5. Server Temp Key: 
 6. Verification: 证书校验是否通过
 7. TLSv1.3:  TLS 的版本
-8. Cipher： 加密协议族
-9. Server public key：服务器的公钥长度, 这个和上面的签名类型关联
+8. Cipher：加密协议族
+9. Server public key：服务器的公钥长度，这个和上面的签名类型关联
 
-[openssl s_client测试结果](#openssl-s_client-结果) 中包含了 *.google.com 和 www.baidu.com 的结果。
+[openssl s_client 测试结果](#openssl-s_client-结果) 中包含了 *.google.com 和 www.baidu.com 的结果。
 
-我们可以看到:
+我们可以看到：
 1.  Google 使用的是  ECDSA 256bit 签名 SHA256 摘要的证书，TLSv1.3 TLS_AES_256_GCM_SHA384。
-2. 百度使用的是 RSA 2048 bit 签名 SHA512 摘要的证书. TLSv1.2 ECDHE-RSA-AES128-GCM-SHA256
+2. 百度使用的是 RSA 2048 bit 签名 SHA512 摘要的证书。TLSv1.2 ECDHE-RSA-AES128-GCM-SHA256
 
 在这里，我想问问 google baidu 那家强？那么让我们先了解一下 TLS 的基本信息吧。
 
 一个 TLS 加密协议族一般包含 4 个部分：
 
 1. 密钥交换算法 - 规定了交换对称密钥的方式。
-1. 认证算法 - 规定如何进行服务器认证和客户端认证(可选)。
+1. 认证算法 - 规定如何进行服务器认证和客户端认证 (可选)。
 1. 块加密算法 - 规定了将使用哪种对称密钥算法来加密实际数据。
 1. 消息摘要算法 - 决定了连接将使用何种方法来进行数据完整性检查。
 
 比如：
 
-1. 密钥交换算法: RSA, DH, ECDH, ECDHE;
-1. 认证算法: RSA, DSA, ECDSA;
-1. 对称加密算法: AES, 3DES, CAMELLIA;
-1. 消息摘要算法: SHA, MD5
+1. 密钥交换算法：RSA, DH, ECDH, ECDHE;
+1. 认证算法：RSA, DSA, ECDSA;
+1. 对称加密算法：AES, 3DES, CAMELLIA;
+1. 消息摘要算法：SHA, MD5
 
 比如 TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384:
 
 TLS：传输层安全
 ECDHE：密钥交换算法是 ECDHE（Elliptic curve Diffie-Hellman，ephemeral）。
-ECDSA：认证算法是ECDSA（椭圆曲线数字签名算法）。证书颁发机构使用 ECDH 密钥来签署公共密钥。
-WITH_AES_256_CBC: 这是用来加密信息流的。(AES=高级加密标准，CBC=密码块链）。数字256表示块的大小。
+ECDSA：认证算法是 ECDSA（椭圆曲线数字签名算法）。证书颁发机构使用 ECDH 密钥来签署公共密钥。
+WITH_AES_256_CBC: 这是用来加密信息流的。(AES=高级加密标准，CBC=密码块链）。数字 256 表示块的大小。
 SHA_384: 这是所谓的消息验证码（MAC）算法。SHA=安全哈希算法。它用于创建一个消息摘要或消息流块的哈希值。这可以用来验证消息内容是否被改变。数字表示哈希值的大小。较大的是更安全的。
 
-google 使用的加密协议族为 TLS_AES_256_GCM_SHA384。 该协议族只包含 对称加密算法和消息摘要算法。
+google 使用的加密协议族为 TLS_AES_256_GCM_SHA384。该协议族只包含 对称加密算法和消息摘要算法。
 因为 TLS1.3 中 RSA 被取消了，密钥交换是通过 Diffie-Hellman 算法进行。
 
-百度使用的协议族是 ECDHE-RSA-AES128-GCM-SHA256， 这个对应的名称是 TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256。
-该算法的密钥交换算法是 ECDHE, 认证算法是 RSA， 对称加密算法是 AES128-GCM, 消息摘要算法是 SHA256.
+百度使用的协议族是 ECDHE-RSA-AES128-GCM-SHA256，这个对应的名称是 TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256。
+该算法的密钥交换算法是 ECDHE, 认证算法是 RSA，对称加密算法是 AES128-GCM, 消息摘要算法是 SHA256.
 
 查询标准名称可以使用这样的命令 `openssl ciphers -stdname | grep ECDHE-RSA-AES128-GCM-SHA256`
 
@@ -315,7 +315,7 @@ SSL-Session:
 
 另外 openssl s_client 一个常用的功能是检查网关是否支持 http2。
 
-比如这样子:
+比如这样子：
 
 ```shell
 $ openssl s_client -alpn h2 -servername openresty.org -connect openresty.org:443 < /dev/null | grep 'ALPN'
@@ -333,7 +333,7 @@ ALPN protocol: h2
 
 如果想要检查是否支持基于 session id 的会话恢复，可以使用如下命令 -reconnect 的参数
 
-比如, 下面的例子中 `drop connection and then reconnect` 就是断开当前连接并使用 获得的 session id 进行连接，`Reuse` 表明复用了链接。
+比如，下面的例子中 `drop connection and then reconnect` 就是断开当前连接并使用 获得的 session id 进行连接，`Reuse` 表明复用了链接。
 注意，这里的命令行参数一定要有 `-tls1_2`。
 
 ```shell
@@ -452,7 +452,7 @@ ALPN protocol: h2
    113	---
 ```
 
-如果我们使用 tls1_3 进行测试, 可以看到每次都是 `new`，比如 70 行， 89 行。
+如果我们使用 tls1_3 进行测试，可以看到每次都是 `new`，比如 70 行，89 行。
 因为 tls1_3 支持的是 session ticket，而不支持 session id 的会话复用
 
 ```shell
@@ -784,4 +784,4 @@ Verify return code: 0 (ok)
 DONE
 ```
 
-有些术语可能使用的不准确，欢迎指正。请发邮件联系： zhuizhuhaomeng@gmail.com
+有些术语可能使用的不准确，欢迎指正。请发邮件联系：zhuizhuhaomeng@gmail.com

@@ -47,7 +47,7 @@ sudo make install LUA_LIBDIR=/usr/local/openresty/lualib
 
 # lfs 模块的使用
 
-具体的接口 API 参考： https://lunarmodules.github.io/luafilesystem/manual.html#reference
+具体的接口 API 参考：https://lunarmodules.github.io/luafilesystem/manual.html#reference
 
 ```Lua
 local lfs = require "lfs"

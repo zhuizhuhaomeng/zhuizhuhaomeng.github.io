@@ -9,7 +9,7 @@ tags: [ocserv, VPN, Admin]
 
 # 参考文档
 
-搭建过程主要基于官方文档： https://ocserv.gitlab.io/www/manual.html 
+搭建过程主要基于官方文档：https://ocserv.gitlab.io/www/manual.html 
 
 # 主要参数
 
@@ -32,9 +32,9 @@ cd /etc/ocserv/ssl
 
 # 生成相关证书
 
-## 生成CA证书
+## 生成 CA 证书
 
-执行以下脚本生成CA证书
+执行以下脚本生成 CA 证书
 
 ```shell
 cd /etc/ocserv/ssl
@@ -108,7 +108,7 @@ certtool --generate-certificate --load-privkey ${ocserv_user}-key.pem \
 
 配置文件的路径是：/etc/ocserv/ocserv.conf
 
-该文件重点修改 auth，tcp-port，udp-port 以及 server-cert， server-key，ca-cert，ipv4-network， route-add-cmd， route-del-cmd, config-per-user 这些参数。
+该文件重点修改 auth，tcp-port，udp-port 以及 server-cert，server-key，ca-cert，ipv4-network，route-add-cmd，route-del-cmd, config-per-user 这些参数。
 
 route-add-cmd 主要是为了添加路由并做 SNAT，实现访问内网其它网段的机器。
 
@@ -162,11 +162,11 @@ route=192.168.50.0/24
 
 route 表示该客户端连接过来时，通告客户端应该添加那些路由。在主配置文件中配置了 route 后，如果个人配置又配置了 route，那么以个人配置为主。
 
-iroute表示客户端连接后，这些路由会指向该客户端。
+iroute 表示客户端连接后，这些路由会指向该客户端。
 
-route 和 iroute的方向是相反的。
+route 和 iroute 的方向是相反的。
 
-如果要配置固定IP地址，使用 explicit-ipv4。
+如果要配置固定 IP 地址，使用 explicit-ipv4。
 
 ```shell
 $ cat config-per-user/sz-intel.dev 
@@ -185,7 +185,7 @@ systemctl start ocserv
 
 # 客户端配置
 
-这个证书是上面生成的 CA 证书, 需要保存到客户端上。如果是使用公开签名的证书，那么不需要指定 CA 证书。
+这个证书是上面生成的 CA 证书，需要保存到客户端上。如果是使用公开签名的证书，那么不需要指定 CA 证书。
 
 ```text
 -----BEGIN CERTIFICATE-----

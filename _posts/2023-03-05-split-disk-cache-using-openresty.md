@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "如何利用多块不同规格的磁盘来打造高效的缓存"
-description: "如果仅仅使用一块巨大的磁盘，那么磁盘 IO 就会成为性能瓶颈；如果使用多块盘就必须得做RAID,而扩展容量则很不方便。"
+description: "如果仅仅使用一块巨大的磁盘，那么磁盘 IO 就会成为性能瓶颈；如果使用多块盘就必须得做 RAID，而扩展容量则很不方便。"
 date: 2023-03-05
 tags: [OpenResty, Cache, Nginx]
 ---

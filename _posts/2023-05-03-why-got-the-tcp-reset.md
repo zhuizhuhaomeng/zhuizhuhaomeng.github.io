@@ -7,7 +7,7 @@ tags: [TCP]
 ---
 
 我们在排查网络问题的时候有时候会发现由于收到 TCP reset 报文导致连接中断或者连接不上的问题。
-那么到底有哪些情况会导致收到 TCP reset 报文呢？ 下面列举一些常见的例子，如果有更多的情况，欢迎补充。
+那么到底有哪些情况会导致收到 TCP reset 报文呢？下面列举一些常见的例子，如果有更多的情况，欢迎补充。
 
 [TOC]
 
@@ -57,8 +57,8 @@ telnet: connect to address 192.168.0.203: Connection refused
 ```
 
 一般来说，不会单独添加这样的 iptables 语句，而是类似下面这样的语句。
-这样配置的问题是，如果 TCP 的状态是 INVALID，那么就会发送 Reset报文出去。
-比如一条 TCP 连接已经关闭, 但是一些报文由于被中间路由器缓存等原因导致在连接关闭后收到，那么这个时候的流表状态就是 INVALID。
+这样配置的问题是，如果 TCP 的状态是 INVALID，那么就会发送 Reset 报文出去。
+比如一条 TCP 连接已经关闭，但是一些报文由于被中间路由器缓存等原因导致在连接关闭后收到，那么这个时候的流表状态就是 INVALID。
 
 https://stackoverflow.com/questions/251243/what-causes-a-tcp-ip-reset-rst-flag-to-be-sent
 
@@ -83,7 +83,7 @@ iptables -A FORWARD -p tcp -j REJECT --reject-with tcp-reset
 
 # socket linger timeout 设置为 0
 
-在关闭一个套接字之前，SO_LINGER 选项被设置为超时值为 0。 当套接字被关闭时，TCP RST 被发送到客户端，并且这个套接字占用的所有内存被释放。这有助于避免让一个已经关闭的套接字的缓冲区长时间处于FIN_WAIT1状态。
+在关闭一个套接字之前，SO_LINGER 选项被设置为超时值为 0。当套接字被关闭时，TCP RST 被发送到客户端，并且这个套接字占用的所有内存被释放。这有助于避免让一个已经关闭的套接字的缓冲区长时间处于 FIN_WAIT1 状态。
 
 Nginx 服务器通过配置 `reset_timedout_connection on` 来达到上述功能。可以通过下面的配置来快速模拟。
 
@@ -103,7 +103,7 @@ GET / HTTP/1.1
 Connection closed by foreign host.
 ```
 
-在另一个终端上，我们通过 tcpdump 可以看到发送了 reset 报文。这次 seq 不再是0，而是 1。这里的 1 是 tcpdump 计算的相对序列号。
+在另一个终端上，我们通过 tcpdump 可以看到发送了 reset 报文。这次 seq 不再是 0，而是 1。这里的 1 是 tcpdump 计算的相对序列号。
 
 ```shell
 08:37:08.186174 IP 127.0.0.1.48672 > 127.0.0.1.80: Flags [S], seq 3753585494, win 43690, options [mss 65495,sackOK,TS val 3691146521 ecr 0,nop,wscale 7], length 0
@@ -157,12 +157,12 @@ if __name__ == '__main__':
 
 # 半开放连接
 
-如果TCP连接的一端打开，而另一端在其他端不知情的情况下关闭了它，则称为半打开的连接。
-这有很多原因: 一种可能是一方崩溃，另一种可能是机器突然断电。连接将保持半开状态，直到没有数据传输。
+如果 TCP 连接的一端打开，而另一端在其他端不知情的情况下关闭了它，则称为半打开的连接。
+这有很多原因：一种可能是一方崩溃，另一种可能是机器突然断电。连接将保持半开状态，直到没有数据传输。
 
 因此，假设您有 Client1 和 Server1，并且有一个 TCP 连接处于已建立状态。
 此时，Client1 没有请求任何数据，处于空闲状态。突然，Server1 崩溃，或者在物理层出现问题，导致网络接口崩溃。
-这将冲掉携带连接信息的 Server1 传输控制块(TCB)。现在，Client1不知道这一点，并向Server1发送一些请求。
+这将冲掉携带连接信息的 Server1 传输控制块 (TCB)。现在，Client1 不知道这一点，并向 Server1 发送一些请求。
 Serve1 收到此请求，但是由于没有先前的 TCB 信息，如旧序列和确认号码，Serve1 将拒绝此请求并向客户端发送 Reset。
 这导致客户端发起一个新的连接。
 
@@ -170,7 +170,7 @@ Serve1 收到此请求，但是由于没有先前的 TCB 信息，如旧序列�
 
 当服务器关闭监听的 socket 的时候，还未被应用程序处理的全连接/半连接队列里的连接会被直接关闭，并向客户端发送 reset 报文。
 
-我们以这个代码作为服务端的代码, 在一台机器上执行  python3 ./server.py。
+我们以这个代码作为服务端的代码，在一台机器上执行  python3 ./server.py。
 
 ```python
 import socket
@@ -257,20 +257,20 @@ telnet: connect to address 192.168.0.203: Connection refused
 
 # Time-wait 暗杀 (Time-Wait Assassination)
 
-让我们来理解时间等待暗杀对TCP reset 是怎么回事。
+让我们来理解时间等待暗杀对 TCP reset 是怎么回事。
 
-1. 客户端发送SEQ = 1000 ACK = 5000的TCP FIN，转到FIN- wait1。
-1. 现在服务器为这个FIN发送ACK, SEQ = 5000, ACK = 1001。
-1. 下一个服务器发送他的FIN与SEQ = 5000 ACK = 1001
-1. 客户端收到FIN，发送SEQ = 1001 ACK = 5001的ACK，进入Time-Wait状态。
-1. 服务器接收到这个FIN并进入CLOSED状态。
-1. 稍后，在这个time - wait状态的某个时间，客户端接收到一些带有旧SEQ和ACK号的延迟到达的段。
-1. 像往常一样，客户端发送ACK给这个带有当前序列的后期段，并确认SEQ = 1001 ACK = 5001。
-1. 当服务器接收到这个ACK时，它的内存中没有关于这个连接的信息，因为它已经在步骤5中关闭了这个连接。这导致服务器向客户端发送TCP RESET。
+1. 客户端发送 SEQ = 1000 ACK = 5000 的 TCP FIN，转到 FIN- wait1。
+1. 现在服务器为这个 FIN 发送 ACK, SEQ = 5000, ACK = 1001。
+1. 下一个服务器发送他的 FIN 与 SEQ = 5000 ACK = 1001
+1. 客户端收到 FIN，发送 SEQ = 1001 ACK = 5001 的 ACK，进入 Time-Wait 状态。
+1. 服务器接收到这个 FIN 并进入 CLOSED 状态。
+1. 稍后，在这个 time - wait 状态的某个时间，客户端接收到一些带有旧 SEQ 和 ACK 号的延迟到达的段。
+1. 像往常一样，客户端发送 ACK 给这个带有当前序列的后期段，并确认 SEQ = 1001 ACK = 5001。
+1. 当服务器接收到这个 ACK 时，它的内存中没有关于这个连接的信息，因为它已经在步骤 5 中关闭了这个连接。这导致服务器向客户端发送 TCP RESET。
 
 # 如果 socket 中还存在未处理的数据
 
-如果 socket 已经被accept，但是里面的数据并没有被应用层处理，那么关闭 socket 的时候就会向对端发送一个 reset 报文。
+如果 socket 已经被 accept，但是里面的数据并没有被应用层处理，那么关闭 socket 的时候就会向对端发送一个 reset 报文。
 
 执行下面的代码，在另一个终端用 telnet 连接后输入一些数据，然后关闭服务端程序。
 
@@ -315,7 +315,7 @@ listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
 # NAT 流表项被删除的情况
 
 如果 TCP 连接涉及 NAT，那么 reset 报文也可能是 NAT 模块发送的。
-比如 NAT conntrack 的过期时间为5分钟，在超过5分钟没有报文的情况下，conntrack flow 被删除。
+比如 NAT conntrack 的过期时间为 5 分钟，在超过 5 分钟没有报文的情况下，conntrack flow 被删除。
 然后，这时候 NAT 收到了已经删除了的 TCP 连接的报文，这时候就会发送 reset 报文出去。
 
 

@@ -118,7 +118,7 @@ ngx_http_chunked_header_filter(ngx_http_request_t *r)
 
 # ngx_http_handler()
 
-http 1.0 以及以下， 如果没有 'Connection: keepalive' 的头部，那么默认也是不复用连接。
+http 1.0 以及以下，如果没有 'Connection: keepalive' 的头部，那么默认也是不复用连接。
 如果客户端发送了 'Connection: close' 的头部，那么就直接不复用链接。
 
 ```C

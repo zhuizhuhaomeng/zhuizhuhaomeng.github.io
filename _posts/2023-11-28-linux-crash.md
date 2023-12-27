@@ -8,13 +8,13 @@ tags: [crash, linux]
 
 # 总结
 
-Linux 内核崩溃应该怎么调试呢？这篇文件挺好的，包含了分析的实例， https://wiki.whamcloud.com/display/LNet/Crash+course+on+Crash 。
+Linux 内核崩溃应该怎么调试呢？这篇文件挺好的，包含了分析的实例，https://wiki.whamcloud.com/display/LNet/Crash+course+on+Crash。
 
 总结下来，关键的步骤就是：
 
 1. 要先配置 kdump 才能保存崩溃的现场。
 2. 需要安装 kernel-debuginfo
-3. 需要安装 crash 程序 （当然也要 gdb）
+3. 需要安装 crash 程序（当然也要 gdb）
 4. 使用 crash 分析崩溃的内核
 5. 我们需要具备汇编语言的知识
 

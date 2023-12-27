@@ -13,7 +13,7 @@ TLS 握手开销是很高的，因此就有了会话恢复这样的技术来缓�
 我们这里搭建了一个 [OpenResty](https://openresty.org) 的服务器来测试一下各种场景下的请求速率。
 
 # 证书生成脚本
-搭建的服务器是 2048 bits RSA 签名的证书, 使用如下的脚本生成。
+搭建的服务器是 2048 bits RSA 签名的证书，使用如下的脚本生成。
 
 ```shell
 #! /usr/bin/env bash
@@ -31,7 +31,7 @@ openssl x509 -req -days 365 -in server.csr -CA ca.crt -CAkey ca.key -set_serial 
 
 # OpenResty 配置
 
-OpenResty 服务器配置如下，这里关闭了访问日志, TLS 协议配置是 TLSv1.1 TLSv1.2。
+OpenResty 服务器配置如下，这里关闭了访问日志，TLS 协议配置是 TLSv1.1 TLSv1.2。
 
 ```nginx
 worker_processes  1;
@@ -134,7 +134,7 @@ Transfer/sec:    165.35KB
 | 短链接会话恢复 | 3068 r/s |
 | 短链接禁用会话恢复 | 877 r/s |
 
-通过上面可以看到:
+通过上面可以看到：
 1. 如果是 1000 个请求才切换一次 TCP 长链接，那么会话恢复看起来是没有效果。
 2. 如果是短链接，那么是否有会话恢复则相差很大。会话恢复的请求速率是没有会话恢复的请求速率的 3068/877 = 3.5 倍。
 
@@ -144,7 +144,7 @@ Transfer/sec:    165.35KB
 
 ## 确认 OpenResty 是否支持会话恢复
 
-我们使用 openssl s_client -reconnect 参数验证会话复用是否生效.
+我们使用 openssl s_client -reconnect 参数验证会话复用是否生效。
 
 ```shell
 $ openssl s_client -servername test.com -connect 127.0.0.10:2048 -reconnect 2>&1 | grep -i Reused 
@@ -188,7 +188,7 @@ Reused, TLSv1.2, Cipher is ECDHE-RSA-AES128-GCM-SHA256
 openssl s_client -servername test.com -reconnect -connect 127.0.0.10:2048 2>&1 | grep -i Reuse
 ```
 
-这个时候我们可以采用上面说的先保存会话信息到文件再读取发送的方式.
+这个时候我们可以采用上面说的先保存会话信息到文件再读取发送的方式。
 
 ## 性能影响因素
 

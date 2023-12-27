@@ -40,8 +40,8 @@ tfd:       14 events: 80002019 data:     7fd0008c61f0  pos:0 ino:2a5a sdev:e
 tfd:       13 events: 80000019 data:           613780  pos:0 ino:2a5a sdev:e
 ```
 
-我们看到，有些 events 是 2019，而有些是 80000019，有些是80002019。他们分别是什么意思呢？
-我们通过 sys/epoll.h 这个文件得到 events的定义如下：
+我们看到，有些 events 是 2019，而有些是 80000019，有些是 80002019。他们分别是什么意思呢？
+我们通过 sys/epoll.h 这个文件得到 events 的定义如下：
 
 ```c
 enum EPOLL_EVENTS
@@ -66,7 +66,7 @@ enum EPOLL_EVENTS
 
 因此，80002019 就是 EPOLLET | EPOLLRDHUP | EPOLLHUP |EPOLLRDBAND | EPOLLIN
 
-# 将 fd 和 socket对应起来
+# 将 fd 和 socket 对应起来
 
 这个时候我们可以通过 lsof 将 fd 和 socket 的 IP 地址对应起来。
 

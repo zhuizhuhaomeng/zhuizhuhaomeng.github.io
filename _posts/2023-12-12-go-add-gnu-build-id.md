@@ -30,7 +30,7 @@ $ eu-unstrip -n --core core.353189
 0x7ffff7c00000+0x208fb0 65a29d0b1cd88c15b44cfda562dd904e2cf35435@0x7ffff7c00390 /lib64/libc.so.6 /usr/lib/debug/usr/lib64/libc.so.6-2.34-83.el9.7.x86_64.debug libc.so.6
 ```
 
-上面的 eu-unstrip 得到的第一行结果的第二列是 `-`，也就是缺少对应的值。那么分析coredump 的时候，就不知道这个core 对应哪个版本的而二进制程序了。
+上面的 eu-unstrip 得到的第一行结果的第二列是 `-`，也就是缺少对应的值。那么分析 coredump 的时候，就不知道这个 core 对应哪个版本的而二进制程序了。
 
 增加给 go 程序添加 BuildID 呢？只需要给 -ldflags 增加 -B 参数即可。可以参考这个 [例子](https://gitlab.com/gitlab-org/gitlab/-/merge_requests/78721/diffs#0b7c17c837be4e82948dcc0b07b3e07c95d46a2b_58_60)。
 

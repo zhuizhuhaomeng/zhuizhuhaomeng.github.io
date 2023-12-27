@@ -1,16 +1,16 @@
 ---
 layout: post
-title: "为什么CURL没有收到响应"
-description: "在异步框架中通过系统调用同步调用CURL的诡异现象"
+title: "为什么 CURL 没有收到响应"
+description: "在异步框架中通过系统调用同步调用 CURL 的诡异现象"
 date: 2021-06-25
 tags: [OpenResty, Curl, Test]
 ---
 
 # 问题的由来
 
-在写测试用例的时候，需要指定源IP地址发起连接，这时候想到用 curl 的 --interface 来指定源 IP 地址。
+在写测试用例的时候，需要指定源 IP 地址发起连接，这时候想到用 curl 的 --interface 来指定源 IP 地址。
 
-以下是 OpenResty 中的 Lua 通过 os.execute 代码执行 curl的命令
+以下是 OpenResty 中的 Lua 通过 os.execute 代码执行 curl 的命令
 
 ``` lua
          content_by_lua_block {
@@ -47,7 +47,7 @@ ESTAB    78   0    127.0.0.1:1985     127.0.0.100:50969
 ESTAB    0    0    127.0.0.100:50969  127.0.0.1:1985    users:(("curl",pid=4168,fd=6))
 ```
 
-使用lsof查看 curl进程, 可以看到 curl 监听了好几个端口，同时有一个 ESTABLISHED 的链接。
+使用 lsof 查看 curl 进程，可以看到 curl 监听了好几个端口，同时有一个 ESTABLISHED 的链接。
 
 ``` shell
 [ljl@localhost lua-conf-nginx-module]$ lsof -P -n -p 4168 | grep TCP
@@ -71,17 +71,17 @@ nginx   4167  ljl    9u     IPv4  85963      0t0        TCP *:1984 (LISTEN)
 nginx   4167  ljl   12u     IPv4  84930      0t0        TCP 127.0.0.1:1984->127.0.0.1:33950 (CLOSE_WAIT)
 ```
 
-问题1：为什么curl会监听原本属于nginx的端口呢？
+问题 1：为什么 curl 会监听原本属于 nginx 的端口呢？
 
 这里为什么 curl 会监听 1985 端口呢？其实这个是因为 curl 是 OpenResty 进程通过 os.execute 执行导致的。
 也是就是说 curl 进程是 OpenResty/Nginx 进程 fork 出来的，所以会继承 OpenResty/Nginx 的 fd。
 因为 OpenResty/Nginx 没有设置 listen fd 的 FD_CLOEXEC/O_CLOEXEC 的属性，所以这些 listen fd 就最终出现在 curl 的 fd 中了。
 
-问题2：为什么连接建立成功了，但是却没有被应用层处理？
+问题 2：为什么连接建立成功了，但是却没有被应用层处理？
 
 内核应该是会通知 nginx 和 curl，而 curl 显然不会去 accept，因此就是 nginx 不处理导致的。为什么 nginx 不去 accept 呢？那就看看 nginx 在干嘛吧！
 
-通过 gdb 回溯堆栈问题就一目了然。因为 nginx 以同步阻塞的方式等待 os.execute 执行 curl 命令的结束；而 curl 正在等待nginx 给应答。这就造成了死循环。
+通过 gdb 回溯堆栈问题就一目了然。因为 nginx 以同步阻塞的方式等待 os.execute 执行 curl 命令的结束；而 curl 正在等待 nginx 给应答。这就造成了死循环。
 
 ```
 (gdb) bt

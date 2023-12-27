@@ -103,7 +103,7 @@ Contents of the .eh_frame section:
 gcc -S test.c
 ```
 
-编译得到的汇编代码在 a.s 中, 摘录部分结果如下:
+编译得到的汇编代码在 a.s 中，摘录部分结果如下：
 
 下面的汇编代码中有各种 .cfi_ 开头的指令，想要了解这些指令的意义可以查阅 https://sourceware.org/binutils/docs/as/CFI-directives.html。
 

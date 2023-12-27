@@ -33,8 +33,8 @@ $ qemu-img resize centos9.qcow2 +2G
 Image resized.
 ```
 
-将新增的磁盘扩展到 /dev/sda2。注意，上面添加的是 2G的空间，这里如果还用 2G 会提示空间不足。
-举例如下:
+将新增的磁盘扩展到 /dev/sda2。注意，上面添加的是 2G 的空间，这里如果还用 2G 会提示空间不足。
+举例如下：
 
 ```shell
 root@dragon:/var/lib/libvirt/images# virt-resize --resize /dev/sda2=+2G --expand /dev/sda2 --LV-expand /dev/cs_centos9/root centos9.qcow2 centos9-n.qcow2

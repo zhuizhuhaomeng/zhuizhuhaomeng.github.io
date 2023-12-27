@@ -147,7 +147,7 @@ http {
 }
 ```
 
-使用下面的命令进行测试:
+使用下面的命令进行测试：
 
 ```shell
 # 如果不删除，那么走的是缓存的代码路径
@@ -743,9 +743,9 @@ Breakpoint 3, ngx_http_slice_body_filter (r=0x6f3470, in=0x7fffffffd610) at src/
 1. 客户端发送请求
 2. OpenResty 网关代理到上游服务器，带上了 `bytes=0-1023` 这样的请求头
 3. 上游服务器返回请求的内容
-4. 过滤上游服务器响应头，解析 `Content-Range: bytes 0-1023/146515` 这样的响应头, 设置下一个要发起的请求的开始值 ctx->start
-5. 过滤上游服务器的响应体: 创建子请求，将 Content-Range 的范围修改为 `ctx->start, ctx->start + (off_t) slcf->size - 1`
+4. 过滤上游服务器响应头，解析 `Content-Range: bytes 0-1023/146515` 这样的响应头，设置下一个要发起的请求的开始值 ctx->start
+5. 过滤上游服务器的响应体：创建子请求，将 Content-Range 的范围修改为 `ctx->start, ctx->start + (off_t) slcf->size - 1`
     - 这里跳过了子请求：`if (ctx == NULL || r != r->main) { return ngx_http_next_body_filter(r, in); }`
     - 如果子请求还没有完成，那么不再创建子请求：`if (ctx->sr && !ctx->sr->done) { return rc; }`
-    - 如果请求结束，发送LAST 结束请求： `if (ctx->start >= ctx->end) ngx_http_set_ctx(r, NULL, _http_slice_filter_module); ngx_http_send_special(r, NGX_HTTP_LAST); return rc; }`
-6. 跳到步骤4，直到获取完整的文件
+    - 如果请求结束，发送 LAST 结束请求： `if (ctx->start >= ctx->end) ngx_http_set_ctx(r, NULL, _http_slice_filter_module); ngx_http_send_special(r, NGX_HTTP_LAST); return rc; }`
+6. 跳到步骤 4，直到获取完整的文件

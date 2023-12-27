@@ -48,7 +48,7 @@ Nginx 的一个特色就是内存泄漏不是那么的容易，它是如何做�
 但是这个也导致一个问题就是 Valgrind 这种内存检查工具无法正常工作。
 
 为了让 Valgrind 能够正常工作，那么就需要破坏 Nginx 内存池的这个优秀特性，让每次申请内存都是向内存分配器申请。
-为此， OpenResty 增加了一个 [no-pool.patch](https://github.com/openresty/openresty/blob/master/patches/nginx-1.23.0-no_pool.patch) 的补丁。OpenResty 的 模块使用 [ngx-build](https://github.com/openresty/openresty-devel-utils/blob/master/ngx-build#L262) 编译默认都是会打上 no-pool 的补丁。
+为此，OpenResty 增加了一个 [no-pool.patch](https://github.com/openresty/openresty/blob/master/patches/nginx-1.23.0-no_pool.patch) 的补丁。OpenResty 的 模块使用 [ngx-build](https://github.com/openresty/openresty-devel-utils/blob/master/ngx-build#L262) 编译默认都是会打上 no-pool 的补丁。
 
 一个 ngx-build 编译的例子是在 [lua-nginx-module 的 build.sh](https://github.com/openresty/lua-nginx-module/blob/master/util/build.sh#L27)。摘抄部分出来
 
@@ -154,7 +154,7 @@ prove -I./ -Itest-nginx/lib -Itest-nginx/inc -r t/
 
 遇到这样的情况该如何是好呢？
 
-1. 首先检查是不是所有的调试符号的安装包都已经安装了。（rpm 对应 debuginfo， deb 对应 dbgsym）
+1. 首先检查是不是所有的调试符号的安装包都已经安装了。（rpm 对应 debuginfo，deb 对应 dbgsym）
 1. 这个也可能是 LuaJIT 通过动态加载 so 导致的问题，可以通过 LD_PRELAOD 将这个 so 预加载来解决该问题。
 
 比如：
@@ -195,7 +195,7 @@ Lua 是带 GC 功能的语言，不需要程序员自己处理内存释放的问
 确认内存对象已经没有人使用以后才会释放。一般情况下 Lua 自身管理的内存比较少出现问题，但是由于
 Lua 和 C 交换直接的内存生命期的管理上存在问题可能就导致内存改写，释放后访问等各种经典内存问题。
 
-为了让案发现场（软件崩溃）和导致问题的代码更加接近，应该让 GC的执行更加的频繁。
+为了让案发现场（软件崩溃）和导致问题的代码更加接近，应该让 GC 的执行更加的频繁。
 为此有一个专门的测试模式是 `每语句 GC` -- 也就是说每执行一条 Lua 语句就进行一次完整的 GC 回收操作。
 
 ```shell
@@ -211,10 +211,10 @@ prove -I./ -Itest-nginx/lib -Itest-nginx/inc -r t/
 有四种事件可以触发钩子：
 1. 调用事件在 Lua 每次调用函数时发生；
 1. 返回事件在函数每次返回时发生；
-1. 行事件在Lua开始执行新的一行代码时发生；
+1. 行事件在 Lua 开始执行新的一行代码时发生；
 1. 计数事件在一定数量的指令后发生。
 
-Lua调用钩子时只有一个参数，一个描述产生调用的事件的字符串。"调用"、"返回"、"行 "或 "计数"。此外，对于行事件，它还传递第二个参数，即新的行号。我们可以随时使用 debug.getinfo 来获取钩子内部的更多信息。
+Lua 调用钩子时只有一个参数，一个描述产生调用的事件的字符串。"调用"、"返回"、"行 "或 "计数"。此外，对于行事件，它还传递第二个参数，即新的行号。我们可以随时使用 debug.getinfo 来获取钩子内部的更多信息。
 
 # mock 测试
 
@@ -224,7 +224,7 @@ Lua调用钩子时只有一个参数，一个描述产生调用的事件的字�
 
 这个模块就是通过 `LD_PRELOAD` 劫持 "poll", "close", "send" 和 "writev" 这些系统调用，替换成模块内部的接口来实现恶劣网络缓解的模拟。
 
-使用方法 [README.md](https://github.com/openresty/mockeagain) 有详细的介绍。主要是两点，一个是修改 Nginx 的配置文件，增加 `env LD_PRELOAD;`, 因为 Nginx 为了安全性，默认是会删除所有的环境变量。另一个是在启动 Nginx 前添加 LD_PRELOAD， 比如： `MOCKEAGAIN=w LD_PRELOAD=/path/to/mockeagain.so`。
+使用方法 [README.md](https://github.com/openresty/mockeagain) 有详细的介绍。主要是两点，一个是修改 Nginx 的配置文件，增加 `env LD_PRELOAD;`, 因为 Nginx 为了安全性，默认是会删除所有的环境变量。另一个是在启动 Nginx 前添加 LD_PRELOAD，比如： `MOCKEAGAIN=w LD_PRELOAD=/path/to/mockeagain.so`。
 
 我们测试一般都是结合 test-nginx 中进行的，因此多数情况下使用下面的命令。
 
@@ -239,7 +239,7 @@ prove -I./ -Itest-nginx/lib -Itest-nginx/inc -r t/
 
 # 内存泄漏模式
 
-Valgrind 虽然可以比较准确的检测内存泄漏，但是有些内存泄漏用 Valgrind 也检测不出来。 比如 Nginx 内存池中的内存泄漏在内存池释放的时候就会被正常释放了。如果一个内存池存生命周期很长，并且不停的从内存池申请内存，那么这个内存池就会消耗很多的内存，而这些内存无法被复用。
+Valgrind 虽然可以比较准确的检测内存泄漏，但是有些内存泄漏用 Valgrind 也检测不出来。比如 Nginx 内存池中的内存泄漏在内存池释放的时候就会被正常释放了。如果一个内存池存生命周期很长，并且不停的从内存池申请内存，那么这个内存池就会消耗很多的内存，而这些内存无法被复用。
 
 test-nginx 中有专门的一个内存泄漏模式 TEST_NGINX_CHECK_LEAK。
 
@@ -261,10 +261,10 @@ OpenResty 每次发版都执行很多不同的模式来保障发版软件的质�
 
 这是一个列表：
 
-1. TEST_NGINX_BENCHMARK: 使用 ab/weighttp 命令执行性能测试, 可以比较不同版本之间的性能差异
+1. TEST_NGINX_BENCHMARK: 使用 ab/weighttp 命令执行性能测试，可以比较不同版本之间的性能差异
 1. TEST_NGINX_BENCHMARK_WARMUP: 性能测试前请求个数，消除冷启动的异常数据
 1. TEST_NGINX_BINARY: 指定 nginx 这个可执行文件的路径
-1. TEST_NGINX_EVENT_TYPE: Nginx 多种事件模型, select, poll, epoll, kqueue 等
+1. TEST_NGINX_EVENT_TYPE: Nginx 多种事件模型，select, poll, epoll, kqueue 等
 1. TEST_NGINX_FAST_SHUTDOWN: 默认情况下是发送 QUIT 信号退出，设置后发送 TERM 信号让 Nginx 退出
 1. TEST_NGINX_FORCE_RESTART_ON_TEST: 强制 Nginx 用例之间 重启 Nginx 进程
 1. TEST_NGINX_INIT_BY_LUA: 在每语句 GC 模式中已经介绍
@@ -275,8 +275,8 @@ OpenResty 每次发版都执行很多不同的模式来保障发版软件的质�
 1. TEST_NGINX_NO_SHUFFLE: 顺序执行测试用例
 1. TEST_NGINX_POSTPONE_OUTPUT: Nginx 配置加上 `postpone_output 1;` 这样的配置
 1. TEST_NGINX_RANDOMIZE: 并发测试的时候需要加上该选项
-1. TEST_NGINX_REUSE_PORT: 给Listen 加上 `reusport` 的选项
-1. TEST_NGINX_SLEEP: 一般 Valgrind 模式使用，防止 Nginx进程还没有准备好，连接失败打印大量的错误信息
+1. TEST_NGINX_REUSE_PORT: 给 Listen 加上 `reusport` 的选项
+1. TEST_NGINX_SLEEP: 一般 Valgrind 模式使用，防止 Nginx 进程还没有准备好，连接失败打印大量的错误信息
 1. TEST_NGINX_TIMEOUT: 等待进程退出的最长事件。如果测试 Valgrind，那么这个事件需要调整大一点，否则不少用例无法通过
 1. TEST_NGINX_USE_HUP: 多个测试用例之间使用 HUP Reload 模式来加载新的配置
 1. TEST_NGINX_VERBOSE: 一般是在调试 test-nginx 本身使用
@@ -286,7 +286,7 @@ OpenResty 每次发版都执行很多不同的模式来保障发版软件的质�
 Address Sanity 也是检测内存操作的强有力的工具，因此 OpenResty 官方发布的版本也有一个专门的 asan 的版本供大家在遇到问题时候使用该版本进行问题分析。
 
 如果大家自己编译 asan 版本，记得所有依赖的组件都得重新编译。
-比如：lua-cjson，luajit，openssl，pcre等。
+比如：lua-cjson，luajit，openssl，pcre 等。
 
 编译的时候注意需要给 CFLAGS 增加 `-fno-omit-frame-pointer -g` 选项，否则无法得到完整的调用栈，在排查内存问题时候就搞不清楚是什么样的调用顺序。
 
@@ -314,7 +314,7 @@ prove -I. -I../test-nginx/inc -I../test-nginx/lib t/
 ASAN_OPTIONS=detect_leaks=0 ./sbin/nginx -t
 ```
 
-如果是线上跑服务的 nginx 后台进程，那么需要让asan日志写入指定文件，可以这么执行。
+如果是线上跑服务的 nginx 后台进程，那么需要让 asan 日志写入指定文件，可以这么执行。
 
 ```shell
 mkdir -p /var/asan; chmod a+w /var/asan
