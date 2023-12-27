@@ -11,7 +11,7 @@ tags: [Nginx, OpenResty]
 
 我们修改 nginx 的配置之后，为了让新的配置生效，我们需要重新载在 nginx 的配置文件。
 为了让配置生效，我们需要执行 `nginx -s reload` 这样的命令。根据实际情况可能会有所不同，
-比如有的系统上是 `systemctl reload nginx`, 如果是 openresty，那么是 `systemctl reload openresty`。
+比如有的系统上是 `systemctl reload nginx`, 如果是 OpenResty，那么是 `systemctl reload openresty`。
 这些命令最后都是向 nginx 的 master 进程发送 SIGHUP 信号，可以参考 [Controlling nginx](http://nginx.org/en/docs/control.html) 进一步了解。
 
 在执行 reload 后，旧的 nginx worker 进程会进入 shutting down 状态。比如：
@@ -28,7 +28,7 @@ nobody    100314  0.0  0.0  74636  7148 ?        S    14:06   0:00 nginx: worker
 我们希望 nginx worker 进程可以在规定的时间退出，而不是无限制的等待下去。
 因此我们在配置文件中增加了 `worker_shutdown_timeout 15` 这样一条配置。
 验证的时候确认这个命令是可以正常工作的，但是一上线就发现不能在规定的时间正常退出了。
-经过分析确认是 openresty cosocket 创建的连接没有关闭导致 nginx worker 进程无法退出。
+经过分析确认是 OpenResty cosocket 创建的连接没有关闭导致 nginx worker 进程无法退出。
 因此我们来了解一下 nginx 的 worker_shutdown_timeout 是如何工作的。
 
 # worker_shutdown_timeout 的实现原理

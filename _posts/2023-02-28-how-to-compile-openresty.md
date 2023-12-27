@@ -15,7 +15,7 @@ tags: [OpenResty, packaging, How-To]
 因此这里介绍以下 OpenResty 官方是如何打包的。
 
 
-# 下载 openresty 的 tar 包
+# 下载 OpenResty 的 tar 包
 
 ```shell
 cd ~

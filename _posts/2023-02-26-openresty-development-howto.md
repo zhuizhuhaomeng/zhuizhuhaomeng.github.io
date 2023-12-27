@@ -157,8 +157,8 @@ git clone git@github.com:openresty/openresty-devel-utils.git
 
 1. 因为 orxray 依赖 python3。为了防止残留导致后续开发遇到问题，下面脚本给 python2 做软链，使用完后立即删除
 2. 使用脚本需要注意，这个跟脚本并没有随 travis 更新，遇到问题需要排查一下。比如依赖的库是否齐全，版本号是否一致
-3. 这里将依赖下载，依赖库编译，openresty 编译分成三个函数。开发中第一次全部执行，后续基本只需要执行 openresty 编译即可。
-4. 因为 openresty 相关的库经常有更新，比如 lua-resty-core。因此不重新下载库的情况下最好经常更新相关的库。
+3. 这里将依赖下载，依赖库编译，OpenResty 编译分成三个函数。开发中第一次全部执行，后续基本只需要执行 OpenResty 编译即可。
+4. 因为 OpenResty 相关的库经常有更新，比如 lua-resty-core。因此不重新下载库的情况下最好经常更新相关的库。
 
 ```shell
 
@@ -448,13 +448,11 @@ https://openresty.org/en/c-coding-style-guide.html
 
 https://github.com/openresty/openresty-devel-utils.git
 
-ngx-releng 检查 openresty 相关的 C 代码（文件名称需要以 ngx_开头）
+ngx-releng 检查 OpenResty 相关的 C 代码（文件名称需要以 ngx_开头）
 
-lua-releng  检查 openresty 相关的 lua 代码
+lua-releng  检查 OpenResty 相关的 lua 代码
 
-
-
-因为 ngx-releng 只检查 ngx 开头的代码文件，因此如果不是 openresty 相关的工程，但是又要符合 openresty 的规范，那么可以用 ngx-style.pl 来检查，不过比 ngx-releng 少检查一点。
+因为 ngx-releng 只检查 ngx 开头的代码文件，因此如果不是 OpenResty 相关的工程，但是又要符合 OpenResty 的规范，那么可以用 ngx-style.pl 来检查，不过比 ngx-releng 少检查一点。
 
 # 代码阅读
 

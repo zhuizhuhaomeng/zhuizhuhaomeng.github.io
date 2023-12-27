@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "openresty 集成 lfs 模块"
-description: "openresty 怎么集成 lfs 模块"
+title: "OpenResty 集成 lfs 模块"
+description: "OpenResty 怎么集成 lfs 模块"
 date: 2023-07-23
-tags: [openresty, logrotate]
+tags: [OpenResty, logrotate]
 ---
 
 

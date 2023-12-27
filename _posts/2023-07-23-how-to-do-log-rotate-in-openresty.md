@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "openresty 怎么做日志切割"
-description: "openresty 怎么做日志切割"
+title: "OpenResty 怎么做日志切割"
+description: "OpenResty 怎么做日志切割"
 date: 2023-07-23
-tags: [openresty, logrotate]
+tags: [OpenResty, logrotate]
 ---
 
 # logrotate in nginx
