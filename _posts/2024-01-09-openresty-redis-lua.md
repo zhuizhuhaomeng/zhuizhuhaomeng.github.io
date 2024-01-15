@@ -22,6 +22,8 @@ tags: [OpenResty, Lua Script]
 
 # OpenResty 让 Redis server 执行 Lua 脚本的例子
 
+## 直接执行脚本
+
 这是一个 Lua 脚本，这个脚本是给 OpenResty 执行的。
 
 ```lua
@@ -69,4 +71,54 @@ end
 
 ```shell
 resty test.lua
+```
+
+## 执行缓存的脚本
+
+```lua
+local redis = require "resty.redis"
+local red = redis:new()
+
+red:set_timeouts(1000, 1000, 1000) -- 1 sec
+
+local ok, err = red:connect("127.0.0.1", 6379)
+
+if not ok then
+    ngx.say("failed to connect: ", err)
+    return
+end
+
+local script = [[
+local i =  100
+local function set_key()
+    local res
+    math.randomseed(10000)
+    while (i > 0) do
+        local val = "res"
+        res = redis.call('set', KEYS[1], math.random())
+        i = i-1
+    end
+
+    return res
+end
+-- return set_key()
+local res = set_key()
+return res
+]]
+
+local sha, err = red:script("load", script)
+if not sha then
+    ngx.say("failed to set dog: ", err)
+    return
+end
+
+ngx.say(sha)
+
+for i = 1, 100000000 do
+    ok, err = red:evalsha(sha, 1, 2)
+    if not ok then
+        ngx.say("failed to set dog: ", err)
+        return
+    end
+end
 ```
