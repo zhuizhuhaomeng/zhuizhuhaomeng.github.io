@@ -250,6 +250,56 @@ nginx   1768 root  DEL       REG                0,1                  6 /dev/zero
 ...
 ```
 
+## 被删除的文件如何不被影响
+
+内核对于 inode 其实是做了引用计数，只有引用计数为 0 才会真正的删除文件。
+既然文件已经被删除，那么程序引用的被删除文件又如何不受影响呢？
+
+我们通过删除 nginx 的错误日志来观察一下。
+
+```shell
+$ sudo rm /usr/local/openresty/nginx/logs/error.lo
+$ sudo ls -l  /proc/15172/fd 
+total 0
+lrwx------ 1 root root 64 Jan 21 09:57 0 -> /dev/null
+lrwx------ 1 root root 64 Jan 21 09:57 1 -> /dev/null
+lrwx------ 1 root root 64 Jan 21 09:57 10 -> 'socket:[96342]'
+lrwx------ 1 root root 64 Jan 21 09:57 11 -> 'socket:[96343]'
+l-wx------ 1 root root 64 Jan 21 09:57 2 -> '/usr/local/openresty/nginx/logs/error.log (deleted)'
+lrwx------ 1 root root 64 Jan 21 09:57 3 -> 'socket:[96340]'
+l-wx------ 1 root root 64 Jan 21 09:57 4 -> '/usr/local/openresty/nginx/logs/error.log (deleted)'
+l-wx------ 1 root root 64 Jan 21 09:57 5 -> /usr/local/openresty/nginx/logs/access.log
+lrwx------ 1 root root 64 Jan 21 09:57 6 -> 'socket:[94606]'
+lrwx------ 1 root root 64 Jan 21 09:57 7 -> 'socket:[94607]'
+lrwx------ 1 root root 64 Jan 21 09:57 8 -> 'socket:[94608]'
+lrwx------ 1 root root 64 Jan 21 09:57 9 -> 'socket:[96341]'
+```
+
+可以看到，在 proc 文件系统下，进程引用的文件名称变成了 '/usr/local/openresty/nginx/logs/error.log (deleted)'。
+我们可以执行 cat 指令查看一下这个被删除的文件。
+
+```shell
+$ sudo cat /proc/15172/fd/4            
+2024/01/21 09:56:29 [notice] 14646#14646: using the "epoll" event method
+2024/01/21 09:56:29 [notice] 14646#14646: openresty/1.21.4.3
+2024/01/21 09:56:29 [notice] 14646#14646: built by gcc 11.3.1 20221121 (Red Hat 11.3.1-4) (GCC) 
+2024/01/21 09:56:29 [notice] 14646#14646: OS: Linux 5.14.0-362.8.1.el9_3.x86_64
+2024/01/21 09:56:29 [notice] 14646#14646: getrlimit(RLIMIT_NOFILE): 1024:524288
+2024/01/21 09:56:29 [notice] 14651#14651: start worker processes
+2024/01/21 09:56:29 [notice] 14651#14651: start worker process 14652
+2024/01/21 09:56:29 [notice] 14651#14651: start cache manager process 14653
+2024/01/21 09:56:29 [notice] 14651#14651: start cache loader process 14654
+2024/01/21 09:56:29 [notice] 14652#14652: sched_setaffinity(): using cpu #0
+2024/01/21 09:57:29 [notice] 14654#14654: http file cache: /usr/local/openresty/nginx/cache 0.000M, bsize: 4096
+2024/01/21 09:57:29 [notice] 14651#14651: signal 17 (SIGCHLD) received from 14654
+2024/01/21 09:57:29 [notice] 14651#14651: cache loader process 14654 exited
+...
+```
+
+上面清楚的看到的被删除的错误日志。
+
+所以，有时候误删除文件的情况下，如果文件还有被其它进程访问，那么就可以通过 proc 系统来进行还原。虽然这种情况非常少见，但是有时候也能救命。
+
 # 压缩包的升级
 
 很多公司没有使用标准的打包软件，而是直接将目标文件放入压缩包。
