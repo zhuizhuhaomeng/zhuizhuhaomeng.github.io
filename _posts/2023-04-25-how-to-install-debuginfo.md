@@ -21,6 +21,16 @@ tags: [debuginfo, debuginfo-install, rpm, deb, debuginfod, gdb]
 rpm -qf $(which nginx)
 ```
 
+反过来，如果你要查询一个软件包包含了哪些文件，可以使用
+
+```shell
+rpm -qpl the-pkg-name.rpm
+
+#或者
+
+rpm -ql the-pkg-name
+```
+
 Fedora 安装调试信息报的方式非常的简单，只要使用 DNF 默认已经安装好的 debuginfo-install 插件即可。 
 通过运行命令 `sudo dnf debuginfo-install $package` 来安装：
 
@@ -145,6 +155,16 @@ sudo apt update
 
 ```shell
 dpkg -S $(which nginx)
+```
+
+如果想知道一个软件包包含哪些文件，可以使用命令
+
+```shell
+dpkg -c the-package-name.deb
+
+# 或者
+
+dpkg -L the-package-name
 ```
 
 和 Debian 类似，有些调试包以 -dbg 为后缀，有些以 -dbgsym 作为后缀。
