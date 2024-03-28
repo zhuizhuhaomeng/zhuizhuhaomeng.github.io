@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "试用 git pre-commit hooks 做好代码提交前的检查"
+title: "使用 git pre-commit hooks 做好代码提交前的检查"
 description: "不想再犯错，配置好 git 的检查钩子"
 date: 2024-03-26
 tags: [git, hooks]
