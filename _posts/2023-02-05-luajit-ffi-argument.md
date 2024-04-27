@@ -66,6 +66,7 @@ Unix 的命令行参数刚好是一个字符串数组，因此我们用 `execv` 
 
 
 ```lua
+local ffi = require "ffi"
 ffi.cdef[[
 int execv(const char *path, char *const argv[]);
 ]]
@@ -79,6 +80,23 @@ end
 
 execv("/usr/bin/echo", "hello", "world")
 ```
+
+可以修改 cdef 里面的定义，变成这样子
+
+```lua
+ffi.cdef[[
+int execv(const char *path, const char *argv[]);
+]]
+
+function execv(...)
+    local arg = {...}
+    arg = ffi.new("const char*[?]", #arg+1, arg)
+    return ffi.C.execv(arg[0], arg)
+end
+
+execv("/usr/bin/echo", "hello", "world")
+```
+
 
 这里有一个可以优化的地方是不需要每一次都给参数分配内存。因此可以使用类似下面这样的优化方法。这里面通过将参数数组缓存在 cached_args 这个 upvalue 中消除了每次分配内存的开销。
 
