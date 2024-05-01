@@ -318,6 +318,78 @@ listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
 比如 NAT conntrack 的过期时间为 5 分钟，在超过 5 分钟没有报文的情况下，conntrack flow 被删除。
 然后，这时候 NAT 收到了已经删除了的 TCP 连接的报文，这时候就会发送 reset 报文出去。
 
+# 客户端连接后马上关闭
+
+客户端连接服务器，然后马上关闭 socket， 那么在收到服务端的 SYN/ACK 后会向服务端发送 reset。
+
+
+连接服务端马上关闭连接的代码示例：
+
+```C
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+
+#define SERVER_IP "121.204.250.223"
+#define SERVER_PORT 8080
+
+int main() {
+    int sockfd;
+    struct sockaddr_in server_addr;
+    char message[] = "Hello, server!";
+
+    // 创建套接字
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd == -1) {
+        perror("Socket creation failed");
+        exit(EXIT_FAILURE);
+    }
+
+    // 将套接字设置为非阻塞模式
+    int flags = fcntl(sockfd, F_GETFL, 0);
+    if (flags == -1) {
+        perror("Failed to get socket flags");
+        exit(EXIT_FAILURE);
+    }
+    if (fcntl(sockfd, F_SETFL, flags | O_NONBLOCK) == -1) {
+        perror("Failed to set socket to non-blocking mode");
+        exit(EXIT_FAILURE);
+    }
+
+    // 设置服务器地址信息
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_port = htons(SERVER_PORT);
+    if (inet_pton(AF_INET, SERVER_IP, &(server_addr.sin_addr)) <= 0) {
+        perror("Invalid address/ Address not supported");
+        exit(EXIT_FAILURE);
+    }
+
+    // 连接到服务器
+    if (connect(sockfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
+        perror("Connection failed");
+        exit(EXIT_FAILURE);
+    }
+
+    // 关闭套接字
+    close(sockfd);
+
+    return 0;
+}
+```
+
+tcpdump 命令抓包
+
+```shell
+$ sudo tcpdump -i any host 121.204.250.223 -nn
+
+14:16:18.601202 enp1s0 Out IP 192.168.0.203.27380 > 121.204.250.223.8080: Flags [S], seq 2056645866, win 64240, options [mss 1460,sackOK,TS val 2991531992 ecr 0,nop,wscale 7], length 0
+14:16:18.609243 enp1s0 In  IP 121.204.250.223.8080 > 192.168.0.203.27380: Flags [S.], seq 1666115154, ack 2056645867, win 28960, options [mss 1460,sackOK,TS val 301770881 ecr 2991531992,nop,wscale 6], length 0
+14:16:18.609284 enp1s0 Out IP 192.168.0.203.27380 > 121.204.250.223.8080: Flags [R], seq 2056645867, win 0, length 0
+```
 
 # 参考文档
 
