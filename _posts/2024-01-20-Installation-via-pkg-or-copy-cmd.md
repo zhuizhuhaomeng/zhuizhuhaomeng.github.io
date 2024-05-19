@@ -309,3 +309,10 @@ $ sudo cat /proc/15172/fd/4
 在这种情况下，就需要使用先删除后替换的方式。
 
 所以，在软件世界里看起来很简单的事情，其实背后一点也不简单。
+
+# 一个案例
+
+nginx reload 的时候，在 Lua VM 卸载动态库的时候进程崩溃的。
+这种是非常难查的问题，很多时候都是通过对比，减少变化因素来分析问题。
+
+![](../img/installation-via-pkg-or-copy-cmd/nginx-crash-on-reload.png)
