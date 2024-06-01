@@ -51,3 +51,42 @@ Google 出品的 TCmalloc 和 Facebook 出品的 [Jemalloc](https://github.com/j
 2. 确认内存优化的目标：是提升分配的速度还是降低内存额外开销
 3. 设计测试场景，覆盖常用情况和极端情况
 4. 使用各种内存分配器对内存分配进行测试
+
+# 内存回收优化
+
+对于长期运行的程序，经常会有内存碎片的的烦恼，如何减少内存碎片变成一个很重要的问题。
+
+## Jemalloc
+
+点击 [Jemalloc 内存回收优化参数](https://github.com/jemalloc/jemalloc/blob/master/TUNING.md) 可以查看具体的内存优化参数。
+把主要的参数摘抄如下：
+
+- background_thread
+
+  Enabling jemalloc background threads generally improves the tail latency for application threads, since unused memory purging is shifted to the dedicated background threads. In addition, unintended purging delay caused by application inactivity is avoided with background threads.
+
+  Suggested: background_thread:true when jemalloc managed threads can be allowed.
+
+- metadata_thp
+
+  Allowing jemalloc to utilize transparent huge pages for its internal metadata usually reduces TLB misses significantly, especially for programs with large memory footprint and frequent allocation / deallocation activities. Metadata memory usage may increase due to the use of huge pages.
+
+  Suggested for allocation intensive programs: metadata_thp:auto or metadata_thp:always, which is expected to improve CPU utilization at a small memory cost.
+
+- dirty_decay_ms and muzzy_decay_ms
+
+  Decay time determines how fast jemalloc returns unused pages back to the operating system, and therefore provides a fairly straightforward trade-off between CPU and memory usage. Shorter decay time purges unused pages faster to reduces memory usage (usually at the cost of more CPU cycles spent on purging), and vice versa.
+
+  Suggested: tune the values based on the desired trade-offs.
+
+- narenas
+
+  By default jemalloc uses multiple arenas to reduce internal lock contention. However high arena count may also increase overall memory fragmentation, since arenas manage memory independently. When high degree of parallelism is not expected at the allocator level, lower number of arenas often improves memory usage.
+
+  Suggested: if low parallelism is expected, try lower arena count while monitoring CPU and memory usage.
+
+- percpu_arena
+
+  Enable dynamic thread to arena association based on running CPU. This has the potential to improve locality, e.g. when thread to CPU affinity is present.
+
+  Suggested: try percpu_arena:percpu or percpu_arena:phycpu if thread migration between processors is expected to be infrequent.
