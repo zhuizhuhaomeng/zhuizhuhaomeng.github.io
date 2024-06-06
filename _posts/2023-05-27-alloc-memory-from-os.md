@@ -539,7 +539,10 @@ page size: 4096
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include "tlpi_hdr.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
 #define MAP_SIZE 4096
 #define WRITE_SIZE 10
@@ -547,55 +550,75 @@ page size: 4096
 int
 main(int argc, char *argv[])
 {
-    if (argc != 2 || strcmp(argv[1], "--help") == 0)
-        usageErr("%s file\n", argv[0]);
+    if (argc != 2 || strcmp(argv[1], "--help") == 0) {
+        fprintf(stderr, "%s file\n", argv[0]);
+        exit(1);
+    }
+
+    long sz = sysconf(_SC_PAGESIZE);
+    printf("page size %ld\n", sz);
 
     setbuf(stdout, NULL);
-
     unlink(argv[1]);
     int fd = open(argv[1], O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
-    if (fd == -1)
-        errExit("open");
 
-    for (int j = 0; j < MAP_SIZE; j++)
+    if (fd == -1) {
+        perror("open");
+        exit(1);
+    }
+
+    for (int j = 0; j < MAP_SIZE; j++) {
         write(fd, "a", 1);
-    if (fsync(fd) == -1)
-        errExit("fsync");
-    close(fd);
+    }
 
+    if (fsync(fd) == -1) {
+        perror("fsync");
+        exit(1);
+    }
+
+    close(fd);
     fd = open(argv[1], O_RDWR);
-    if (fd == -1)
-        errExit("open");
+
+    if (fd == -1) {
+        perror("open");
+        exit(1);
+    }
 
     char *addr = mmap(NULL, MAP_SIZE, PROT_READ | PROT_WRITE,
                       MAP_PRIVATE, fd, 0);
-    if (addr == MAP_FAILED)
-        errExit("mmap");
+
+    if (addr == MAP_FAILED) {
+        perror("mmap");
+        exit(1);
+    }
 
     printf("After mmap:          ");
     write(STDOUT_FILENO, addr, WRITE_SIZE);
     printf("\n");
 
     /* Copy-on-write semantics mean that the following modification
-       will create private copies of the pages for this process */
+     * will create private copies of the pages for this process */
 
-    for (int j = 0; j < MAP_SIZE; j++)
+    for (int j = 0; j < MAP_SIZE; j++) {
         addr[j]++;
+    }
 
     printf("After modification:  ");
     write(STDOUT_FILENO, addr, WRITE_SIZE);
     printf("\n");
 
     /* After the following, the mapping contents revert to the original file
-       contents (if MADV_DONTNEED has destructive semantics, as on Linux) */
+     * contents (if MADV_DONTNEED has destructive semantics, as on Linux)
+     */
 
-    if (madvise(addr, MAP_SIZE, MADV_DONTNEED) == -1)
-        errExit("madvise");
+    if (madvise(addr, MAP_SIZE, MADV_DONTNEED) == -1) {
+        perror("madvise");
+        exit(1);
+    }
 
     printf("After MADV_DONTNEED: ");
     write(STDOUT_FILENO, addr, WRITE_SIZE);
     printf("\n");
-
     exit(EXIT_SUCCESS);
 }
 ```
