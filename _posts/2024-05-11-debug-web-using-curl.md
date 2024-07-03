@@ -6,6 +6,10 @@ date: 2024-05-12
 tags: [curl, Web ]
 ---
 
+# All you need to know about curl
+
+https://everything.curl.dev/http/redirects.html
+
 # Connect to the specific host
 
 You should always use the --resolve to connecto the the specific host.
