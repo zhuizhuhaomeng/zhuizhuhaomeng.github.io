@@ -35,7 +35,7 @@ yum install -y redis
 yum install -y memcached
 yum install -y mysql-server
 yum install -y wget
-yum install -y autoconf 
+yum install -y autoconf
 yum install -y cmake
 yum install -y automake
 yum install -y libtool
@@ -63,7 +63,7 @@ cd .. && rm -fr axel-2.17.9
 
 #安装 Test::Nginx IPC::Run
 cpanm --notest Test::Nginx IPC::Run
-cpanm JSON::XS 
+cpanm JSON::XS
 ```
 
 # 配置软件
@@ -108,6 +108,17 @@ echo "kernel.pid_max = 10000" | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p
 ```
 
+如果我们想要丢包，但是又不希望应用层立即感知，那么应该使用 tc 来实现。
+
+这个例子将本机发出去的，目的地址为 127.0.0.44 的数据包丢弃了。
+
+``` shell
+sudo iptables -t mangle -A OUTPUT -d 127.0.0.44 -j MARK --set-mark 44
+sudo tc qdisc add dev lo root handle 1: prio
+sudo tc qdisc add dev lo parent 1:3 handle 30: netem loss 100%
+sudo tc filter add dev lo protocol ip parent 1:0 prio 3 handle 44 fw flowid 1:3
+```
+
 # github 设置
 
 ## 添加 ssh 的公钥
@@ -119,7 +130,7 @@ ssh-keygen
 cat ~/.ssh/id_rsa.pub
 ```
 
-将上述公钥添加到 https://github.com/settings/keys 
+将上述公钥添加到 https://github.com/settings/keys
 
 如果是拷贝其它机器的密码，那么需要注意把私钥的权限修改为 600.也就是
 
@@ -347,21 +358,21 @@ OPTIONS="-U 11211 -l 127.0.0.1,::1"
 ```perl
    # vim:set ft= ts=4 sw=4 et fdm=marker:
    use t::TestJsonb;
-   
+
    repeat_each(1);
-   
+
    plan tests => repeat_each() * (blocks() * 3);
 
 ```
 
-出现如下错误，就是用例个数对不上。预期应该是 3 的倍数，基本可以判断是某个用例有 4 个测试判断，所以变成了 40 个。因此上面的 paln tests 可以修改成 repeat_each() * (blocks() * 3 + 1)。 
+出现如下错误，就是用例个数对不上。预期应该是 3 的倍数，基本可以判断是某个用例有 4 个测试判断，所以变成了 40 个。因此上面的 paln tests 可以修改成 repeat_each() * (blocks() * 3 + 1)。
 
 当然最好是每个用例保持 3 个测试判断比较合适。
 
 ```shell
 t/iter.t .. 29/39 # Looks like you planned 39 tests but ran 40.
 t/iter.t .. Dubious, test returned 255 (wstat 65280, 0xff00)
-All 39 subtests passed 
+All 39 subtests passed
 
 Test Summary Report
 -------------------

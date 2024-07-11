@@ -64,3 +64,14 @@ Run `sudo crontab -e` and add the following line to the crontab.
 ```text
 * * * * * /bin/bash /bin/get-win10-spice.sh
 ```
+
+# config disk as write through mode
+
+``` xml
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2' cache='writethrough' discard='unmap'/>
+      <source file='/kvm-pools/build-farm/fed32-dev-130g.qcow2'/>
+      <target dev='sda' bus='scsi'/>
+      <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+    </disk>
+```
