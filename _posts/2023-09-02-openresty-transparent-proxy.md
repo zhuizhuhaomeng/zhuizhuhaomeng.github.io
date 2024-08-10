@@ -161,7 +161,8 @@ stream {
                         if err ~= "closed" then
                             ngx.log(ngx.ERR, "failed to receive from downstream: ", err)
                         end
-                            return
+
+                        return
                     end
 
                     local bytes, err = upstream_sock:send(data)

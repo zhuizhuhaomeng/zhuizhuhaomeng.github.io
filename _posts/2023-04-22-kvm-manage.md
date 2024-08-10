@@ -3,6 +3,7 @@ layout: post
 title: "KVM manage"
 description: "KVM manage"
 date: 2023-04-22
+modified: 2024-08-10
 tags: [KVM]
 ---
 
@@ -74,4 +75,31 @@ Run `sudo crontab -e` and add the following line to the crontab.
       <target dev='sda' bus='scsi'/>
       <address type='drive' controller='0' bus='0' target='0' unit='0'/>
     </disk>
+```
+
+# deal with the permission deny error
+
+
+Unfortunately, I've encountered this error.
+I can not add another disk for my VM.
+
+```log
+$ cat /var/log/syslog | grep qemu
+Aug 10 10:17:02 ljl-X99 libvirtd[1667]: internal error: qemu unexpectedly closed the monitor: 2024-08-10T02:17:02.234897Z qemu-system-x86_64: -blockdev {"driver":"file","filename":"/1t/200GB.qcow2","node-name":"libvirt-1-storage","auto-read-only":true,"discard":"unmap"}: Could not open '/1t/200GB.qcow2': Permission denied
+```
+
+Fortunately, I found the following link that solved my problem.
+[qemu with pool/volume storage: Could not open ‘xxxxxxx’: Permission denied](https://zhensheng.im/2019/02/06/qemu-with-pool-volume-storage-could-not-open-xxxxxxx-permission-denied.meow)
+
+
+Modify file /etc/libvirt/qemu.conf, change the security_driver to "none".
+
+```config
+security_driver = "none"
+```
+
+After finishing the above step, restart libvirtd.
+
+```shell
+systemctl restart libvirtd
 ```
