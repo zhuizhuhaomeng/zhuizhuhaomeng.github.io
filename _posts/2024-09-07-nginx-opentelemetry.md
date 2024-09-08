@@ -8,13 +8,15 @@ tags: [Nginx, Shared Memory]
 
 # 安装 nginx-otel 模块
 
-https://github.com/nginxinc/nginx-otel/blob/main/README.md
+安装 Nginx 模块参考 https://github.com/nginxinc/nginx-otel/blob/main/README.md
 
 
 
 # 配置 Nginx
 
-为了方便日志采集，将日志输出为 json 这种结构化的格式。注意 log_format 中指定 escape 为 json。
+1. 为了方便日志采集，将日志输出为 json 这种结构化的格式。注意 log_format 中指定 escape 为 json。
+2. location /t 配置了推送 trace 信息到 127.0.0.1:4317
+3. /status 配置了访问规则，拒绝 127.0.0.1 以后的访问
 
 ```nginx
 load_module /usr/lib64/nginx/modules/ngx_otel_module.so;
@@ -42,8 +44,8 @@ http {
     otel_exporter {
         endpoint 127.0.0.1:4317;
         interval    1s;
-        batch_size  64;
-        batch_count 1;
+        batch_size  1024;
+        batch_count 16;
     }
 
     server {
@@ -52,6 +54,8 @@ http {
         server_tokens off;
 
         location /status {
+            allow 127.0.0.1;
+            deny  all;
             access_log off;
             stub_status on;
         }
