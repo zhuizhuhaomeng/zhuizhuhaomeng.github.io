@@ -137,6 +137,8 @@ coroutine 0:
 1. 日志先配置 multiline 这个进行分割, 防止正则表达式无法匹配所有的错误日志。
 2. 使用 regex_parser 这个运算符将各个字段解析出来
 
+当然，多行日志也可以用 recombine 这个 operator，但是感觉不方便。具体参考 https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/pkg/stanza/docs/operators/recombine.md。
+
 ```yaml
 receivers:
   filelog:
@@ -152,6 +154,17 @@ receivers:
           layout: '%Y/%m/%d %H:%M:%S'
         severity:
           parse_from: attributes.level
+          preset: none
+          mapping:
+            debug: debug
+            info: info
+            info1: notice
+            warn: warn
+            error: error
+            fatal: crit
+            fatal2: alert
+            fatal3: emerg
+
     nginx:
       endpoint: "http://127.0.0.1:8080/status"
       collection_interval: 60s
@@ -246,6 +259,16 @@ receivers:
           layout: '%Y/%m/%d %H:%M:%S'
         severity:
           parse_from: attributes.level
+          preset: none
+          mapping:
+            debug: debug
+            info: info
+            info1: notice
+            warn: warn
+            error: error
+            fatal: crit
+            fatal2: alert
+            fatal3: emerg
 
   otlp:
     protocols:
@@ -301,14 +324,14 @@ otelcol-contrib  --config=file:error.yaml
 ```log
 2024-09-08T21:52:18.207+0800	info	LogsExporter	{"kind": "exporter", "data_type": "logs", "name": "debug", "resource logs": 1, "log records": 1}
 2024-09-08T21:52:18.208+0800	info	ResourceLog #0
-Resource SchemaURL: 
+Resource SchemaURL:
 ScopeLogs #0
-ScopeLogs SchemaURL: 
-InstrumentationScope  
+ScopeLogs SchemaURL:
+InstrumentationScope
 LogRecord #0
 ObservedTimestamp: 2024-09-08 13:52:18.065184632 +0000 UTC
 Timestamp: 1970-01-01 00:00:00 +0000 UTC
-SeverityText: 
+SeverityText:
 SeverityNumber: Unspecified(0)
 Body: Str({"source": "nginx", "time": 1725803538.050, "resp_body_size": 150, "host": "127.0.0.1:8080", "address": "127.0.0.1", "request_length": 81, "method": "GET", "uri": "/403", "status": 403,  "user_agent": "curl/7.76.1", "resp_time": 0.000, "upstream_addr": ""})
 Attributes:
@@ -325,18 +348,18 @@ Attributes:
      -> user_agent: Str(curl/7.76.1)
      -> resp_time: Double(0)
      -> status: Double(403)
-Trace ID: 
-Span ID: 
+Trace ID:
+Span ID:
 Flags: 0
 	{"kind": "exporter", "data_type": "logs", "name": "debug"}
 
 
 2024-09-08T21:52:18.809+0800	info	LogsExporter	{"kind": "exporter", "data_type": "logs", "name": "debug", "resource logs": 1, "log records": 1}
 2024-09-08T21:52:18.810+0800	info	ResourceLog #0
-Resource SchemaURL: 
+Resource SchemaURL:
 ScopeLogs #0
-ScopeLogs SchemaURL: 
-InstrumentationScope  
+ScopeLogs SchemaURL:
+InstrumentationScope
 LogRecord #0
 ObservedTimestamp: 2024-09-08 13:52:18.664561882 +0000 UTC
 Timestamp: 2024-09-08 13:52:18 +0000 UTC
@@ -356,8 +379,8 @@ Attributes:
      -> connection_id: Str(2)
      -> message: Str([lua] content_by_lua(nginx.conf:133):2: 403)
      -> tid: Str(247444)
-Trace ID: 
-Span ID: 
+Trace ID:
+Span ID:
 Flags: 0
 	{"kind": "exporter", "data_type": "logs", "name": "debug"}
 
@@ -365,22 +388,22 @@ Flags: 0
 
 2024-09-08T21:52:19.011+0800	info	TracesExporter	{"kind": "exporter", "data_type": "traces", "name": "debug", "resource spans": 1, "spans": 1}
 2024-09-08T21:52:19.011+0800	info	ResourceSpans #0
-Resource SchemaURL: 
+Resource SchemaURL:
 Resource attributes:
      -> service.name: Str(test:openresty)
 ScopeSpans #0
-ScopeSpans SchemaURL: 
+ScopeSpans SchemaURL:
 InstrumentationScope nginx 1.27.1
 Span #0
     Trace ID       : 0ab6bfb877fb06edec782e43af3fc202
-    Parent ID      : 
+    Parent ID      :
     ID             : b9a488acb3c8d559
     Name           : /403
     Kind           : Server
     Start time     : 2024-09-08 13:52:18.05 +0000 UTC
     End time       : 2024-09-08 13:52:18.05 +0000 UTC
     Status code    : Unset
-    Status message : 
+    Status message :
 Attributes:
      -> http.method: Str(GET)
      -> http.target: Str(/403)
@@ -400,9 +423,9 @@ Attributes:
 
 2024-09-08T22:16:08.046+0800	info	MetricsExporter	{"kind": "exporter", "data_type": "metrics", "name": "debug", "resource metrics": 1, "metrics": 4, "data points": 7}
 2024-09-08T22:16:08.048+0800	info	ResourceMetrics #0
-Resource SchemaURL: 
+Resource SchemaURL:
 ScopeMetrics #0
-ScopeMetrics SchemaURL: 
+ScopeMetrics SchemaURL:
 InstrumentationScope github.com/open-telemetry/opentelemetry-collector-contrib/receiver/nginxreceiver 0.108.1
 Metric #0
 Descriptor:
