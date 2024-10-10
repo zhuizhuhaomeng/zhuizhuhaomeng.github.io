@@ -20,6 +20,14 @@ end
 这个是因为 `ptr` 是一个 `cdata` 类型的数据，不同的数据类型的数据比较总是不相等。
 只有在 `ptr == nil` 或者 `ptr ~= nil` 这种显示的比较的时候，luajit 才扩展这个语义。
 
+如果是下面这种判断的方式也是错误的:
+
+```lua
+if not ptr then
+    print("ptr is null")
+end
+```
+
 
 # 引用语义和值语义
 
@@ -38,4 +46,98 @@ nil-equality-of-pointers: https://luapower.com/luajit-notes#nil-equality-of-poin
 
 ```shell
 init_worker_by_lua_block { require "jit.dump".on("tbirsm", "/tmp/traces.txt." .. ngx.worker.pid()) }
+```
+
+# 案例代码
+
+## 判断 cdata
+
+### C 代码
+
+```C
+#include <stdlib.h>
+
+void *get_null(void)
+{
+    return NULL;
+}
+```
+
+编译 C 代码的命令: 
+```shell
+gcc -shared  -o test.so test.c
+```
+
+### Lua 代码
+
+```lua
+local new_tab = require "table.new"
+local ffi = require "ffi"
+
+local load_shared_lib
+do
+    local string_gmatch = string.gmatch
+    local string_match = string.match
+    local io_open = io.open
+    local io_close = io.close
+
+    local cpath = package.cpath
+
+    function load_shared_lib(so_name)
+        local tried_paths = new_tab(32, 0)
+        local i = 1
+
+        for k, _ in string_gmatch(cpath, "[^;]+") do
+            local fpath = string_match(k, "(.*/)")
+            fpath = fpath .. so_name
+            -- Don't get me wrong, the only way to know if a file exist is
+            -- trying to open it.
+            local f = io_open(fpath)
+            if f ~= nil then
+                io_close(f)
+                return ffi.load(fpath)
+            end
+
+            tried_paths[i] = fpath
+            i = i + 1
+        end
+
+        return nil, tried_paths
+    end  -- function
+end  -- do
+
+
+local test , tried_paths = load_shared_lib("test.so")
+if not test then
+    error("could not load librestysignal.so from the following paths:\n" ..
+          table.concat(tried_paths, "\n"), 2)
+end
+
+ffi.cdef[[
+void *get_null(void);
+]]
+
+local cdata = test.get_null()
+print(tostring(cdata))
+
+if not cdata then
+    print("`not cdata` works")
+else
+    print("`not cdata` can not work")
+end
+
+if n == nil then
+    print("`cdata == nil` works")
+else
+    print("`cdata == nil` can not work")
+end
+```
+
+### 测试结果
+
+```shell
+$ luajit t.lua 
+cdata<void *>: NULL
+`not cdata` can not work
+`cdata == nil` works
 ```
