@@ -3,7 +3,7 @@ layout: post
 title: "Print function name when entering a function using GDB"
 description: "print function name when entering a function using GDB"
 date: 2024-11-27
-tags: [GDB]
+tags: [GDB, reading code]
 ---
 
 Reading code is a very important skill for software developers.
