@@ -7,7 +7,22 @@ modified: 2025-01-18
 tags: [Performance]
 ---
 
-# loop unroll
+# Table of Contents
+1. [Introduction](#introduction)
+2. [Loop Unroll](#loop-unroll)
+3. [Branch Prediction](#branch-prediction)
+4. [Inline C Routines](#inline-c-routines)
+5. [Efficient Number Converter](#efficient-number-converter)
+6. [Efficient Memory Manager](#efficient-memory-manager)
+7. [Table Lookup](#table-lookup)
+8. [Zero copy](#zero-copy)
+9. [Inline assemble indication](#inline-assembler-indication)
+
+# Introduction
+
+This article will explore the reasons for the high performance of YYJSON.
+
+# Loop unroll
 
 ```C
 #define repeat2(x)  { x x }
@@ -37,9 +52,9 @@ static_inline bool read_string(u8 **ptr,
 }
 ```
 
-# branch prediction 
+# Branch prediction
 
-## manually prediction instructions 
+## Manually prediction instructions
 
 ```C
 /* Macros used to provide branch prediction information for compiler. */
@@ -55,7 +70,7 @@ static_inline bool read_string(u8 **ptr,
 Because this is the most common case.
 - In the `read_string` function, we can see that it test the three bytes utf8 first, because it is the most common case.
 
-# inline C routines
+# Inline C routines
 
 ```C
 /* Macros used to provide inline information for compiler. */
@@ -65,7 +80,7 @@ Because this is the most common case.
 #define static_noinline static yyjson_noinline
 ```
 
-# efficient number converter
+# Efficient number converter
 
 ```C
 /**
@@ -84,16 +99,16 @@ static_inline bool read_number(u8 **ptr,
                                const char **msg)
 ```
 
-# efficient memory manager
+# Efficient memory manager
 
 Memory allocation is always is a hot spot of the software.
 Memory pool is a common skill to reduce the overhead of memory allocation
 Go to https://github.com/ibireme/yyjson/blob/master/src/yyjson.c#L1036 for more details.
 
 
-# table lookup
+# Table lookup
 
-## convert hex char to num
+## Convert hex char to num
 
 ```C
 static const u8 hex_conv_table[256] = {
@@ -152,7 +167,7 @@ static_inline bool read_hex_u16(const u8 *cur, u16 *val) {
 
 The function is also very interesting. There is not `if` when testing if the `\uabcd` is valid.
 
-## char type judgement
+## Char type judgement
 
 ```C
 /** Character type table (generate with misc/make_tables.c) */
@@ -204,10 +219,10 @@ static_inline bool char_is_space(u8 c) {
 ....
 ```
 
-# don't copy if no needed
+# Zero copy
 
 From the function `read_string`, we can found that it first try to skip ascii and utf8 characters.
-Because most of the time, the string are compose of ascii and characters. 
+Because most of the time, the string are compose of ascii and characters.
 
 For example: "Hellow, world!"
 
@@ -279,3 +294,23 @@ skip_utf8:
     dst = src;
     copy_escape:
 }
+```
+
+# Inline assembler indication
+
+Why can he/she know the behavior of the GCC?
+Maybe he has lookup the assembler code of the function.
+
+```C
+    /*
+     GCC may store src[i] in a register at each line of expr_jump(i) above.
+     These instructions are useless and will degrade performance.
+     This inline asm is a hint for gcc: "the memory has been modified,
+     do not cache it".
+
+     MSVC, Clang, ICC can generate expected instructions without this hint.
+     */
+#if YYJSON_IS_REAL_GCC
+    __asm__ volatile("":"=m"(*src));
+#endif
+```
