@@ -103,3 +103,16 @@ After finishing the above step, restart libvirtd.
 ```shell
 systemctl restart libvirtd
 ```
+
+# query state
+
+```shell
+virsh domstate fed32-ktest
+```
+
+# snapshot
+
+```shell
+virsh snapshot-delete vm-name --snapshotname init
+virsh snapshot-create-as vm-name --atomic --name init
+```
