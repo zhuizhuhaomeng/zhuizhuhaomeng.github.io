@@ -100,3 +100,11 @@ $ sudo docker inspect -f "[[ .State.Pid ]]" 378dd3233752  # 这里是大括号�
 $ sudo nsenter --target 2868 --uts
 $ hostname "biz-app-03"
 ```
+
+# 重置容器
+
+如果使用了 podman 作为容器管理器，可以使用下面的命令来重启
+
+```shell
+podman system reset
+```
