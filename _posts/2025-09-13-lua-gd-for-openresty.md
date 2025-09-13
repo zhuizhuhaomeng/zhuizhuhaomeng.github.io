@@ -35,7 +35,7 @@ sudo make install
 
 ```patch
 diff --git a/Makefile b/Makefile
-index 21f1d6f..e4cd60e 100644
+index 21f1d6f..34a01df 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -29,7 +29,7 @@
@@ -62,7 +62,7 @@ index 21f1d6f..e4cd60e 100644
  
  GDFEATURES=-DGD_XPM -DGD_JPEG -DGD_FONTCONFIG -DGD_FREETYPE -DGD_PNG -DGD_GIF
 -LFLAGS=-shared `pkg-config $(LUAPKG) --libs` -lgd
-+LFLAGS=-shared `pkg-config $(LUAPKG) --libs` -lgd -L/usr/local/openresty/luajit/lib -lluajit-5.1
++LFLAGS=-shared `pkg-config $(LUAPKG) --libs` -Wl,-rpath,/usr/local/openresty/luajit/lib -lgd -L/usr/local/openresty/luajit/lib -lluajit-5.1
 +
  
  INSTALL_PATH := `pkg-config $(LUAPKG) --variable=INSTALL_CMOD`
