@@ -119,6 +119,13 @@ sudo tc qdisc add dev lo parent 1:3 handle 30: netem loss 100%
 sudo tc filter add dev lo protocol ip parent 1:0 prio 3 handle 44 fw flowid 1:3
 ```
 
+修改 mariadb 的默认密码类型 /etc/my.cnf.d/mariadb-server.cnf
+
+```
+[mysqld]
+default_authentication_plugin=mysql_native_password
+```
+
 # github 设置
 
 ## 添加 ssh 的公钥
