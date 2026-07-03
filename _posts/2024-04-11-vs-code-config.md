@@ -25,3 +25,52 @@ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1
 bear -- make
 ```
 
+# Lua 配置
+
+## Navigate to a directory where you want to store the type definitions
+
+```shell
+mkdir -p ~/.local/share/lua-language-server/meta
+cd ~/.local/share/lua-language-server/meta
+git clone https://github.com/LuaCATS/openresty
+```
+
+## Config vscode
+
+Press `ctrl + shift + p`  and then type `Preferences: Open User Settings (JSON)`
+
+```json
+{
+    "cSpell.userWords": [
+        "cjson",
+        "lrucache",
+        "resty",
+        "aliyun",
+        "addrs",
+        "httpc",
+        "HTTPDNS",
+        "receiveany",
+        "preread",
+        "NOAUTH",
+        "nbytes",
+        "plen",
+        "atyp",
+        "mbits",
+        "agentzh",
+        "lshift",
+        "rshift",
+        "tohex",
+        "cdef",
+        "settimeout",
+        "settimeouts",
+        "shdict",
+        "lmdb",
+        "nkeys"
+    ],
+    "Lua.workspace.library": [
+      "${3rd}/openresty/library"
+    ],
+    "Lua.diagnostics.globals": ["ngx"],
+    "Lua.runtime.version": "LuaJIT",
+}
+```

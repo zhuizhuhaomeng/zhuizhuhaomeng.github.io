@@ -113,6 +113,7 @@ virsh domstate fed32-ktest
 # snapshot
 
 ```shell
-virsh snapshot-delete vm-name --snapshotname init
-virsh snapshot-create-as vm-name --atomic --name init
+sudo virsh snapshot-list centos7-min
+sudo virsh snapshot-delete vm-name --snapshotname init
+sudo virsh snapshot-create-as vm-name --atomic --name init
 ```
